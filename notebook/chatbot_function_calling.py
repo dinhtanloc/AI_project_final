@@ -6,6 +6,8 @@ import os
 from dotenv import load_dotenv
 from openai import OpenAI
 import pandas as pd
+from datetime import datetime
+
 load_dotenv()
 
 client = OpenAI(api_key =os.getenv('OPEN_API_KEY'))
@@ -107,7 +109,7 @@ def run_conversation(content):
   messages = [
       {
             "role":"system",
-            "content": "Base on the information return by function calling to answer question."
+            "content": f"Today is {datetime.now().strftime('%Y-%m-%d')}. Base on the information return by function calling to answer question."
         },
       {
           "role": "user", 
@@ -234,7 +236,7 @@ def run_conversation(content):
     return second_response
 
 if __name__ == "__main__":
-  question = "The current stock situation of VCI today 2024-08-20, what is the index?"
+  question = "The current stock situation of VCI today , what is the index?"
   response = run_conversation(question)
   for chunk in response:
     print(chunk.choices[0].delta.content or "", end='', flush=True)
