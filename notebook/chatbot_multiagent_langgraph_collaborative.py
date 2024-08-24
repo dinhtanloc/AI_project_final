@@ -2,6 +2,8 @@ import functools
 from langchain_core.messages import AIMessage, ToolMessage, HumanMessage
 from langchain_community.agent_toolkits import create_sql_agent
 from autogen import RAGAgent
+from langchain_core.prompts import ChatPromptTemplate
+
 from langchain.retrievers import ChromaRetriever
 from langchain.embeddings import ChromaEmbedder
 from langchain import LLMChain
@@ -34,18 +36,49 @@ class Multiply(BaseModel):
 # Initialize tools
 tools = [Add, Multiply]
 
+examples = [
+    HumanMessage("What's the product of 317253 and 128472 plus four", name="example_user"),
+    AIMessage("", name="example_assistant", tool_calls=[{"name": "multiply", "args": {"x": 317253, "y": 128472}, "id": "1"}]),
+    ToolMessage("16505054784", tool_call_id="1"),
+    AIMessage("", name="example_assistant", tool_calls=[{"name": "add", "args": {"x": 16505054784, "y": 4}, "id": "2"}]),
+    ToolMessage("16505054788", tool_call_id="2"),
+    AIMessage("The product of 317253 and 128472 plus four is 16505054788", name="example_assistant"),
+]
+
+
 # Create language model
 llm = ChatOpenAI(model="gpt-4-1106-preview")
+llm_with_tools = llm.bind_tools(tools)
+
+# Define few-shot prompt template
+system = """You are bad at math but are an expert at using a calculator. 
+Use past tool usage as an example of how to correctly use the tools."""
+
+few_shot_prompt = ChatPromptTemplate.from_messages(
+    [
+        ("system", system),
+        *examples,
+        ("human", "{query}"),
+    ]
+)
 
 # Define RAGAgent
 chroma_retriever = ChromaRetriever(
     collection_name="my_collection",  # Replace with actual collection name
     embedding_function=ChromaEmbedder().embed_text
 )
+# llm_chain = LLMChain(
+#     prompt_template="Provide detailed information about the query: {query}",
+#     llm=llm
+# )
+
 llm_chain = LLMChain(
-    prompt_template="Provide detailed information about the query: {query}",
+    prompt_template=few_shot_prompt,
     llm=llm
 )
+
+# chain = {"query": RunnablePassthrough()} | few_shot_prompt | llm_with_tools
+
 
 def agent_node(state, agent, name):
     result = agent.invoke(state)
