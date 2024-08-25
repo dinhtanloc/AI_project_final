@@ -4,7 +4,7 @@ import json
 import numpy as np
 import pandas as pd
 from langchain_core.runnables import RunnablePassthrough
-
+from models.lstm_stock_price import model
 from langchain_core.messages import AIMessage, ToolMessage, HumanMessage
 from langchain_community.agent_toolkits import create_sql_agent
 from autogen import RAGAgent
@@ -20,6 +20,10 @@ import os
 from langchain.sql_database import SQLDatabase
 from langgraph.prebuilt import ToolNode, StateGraph, AgentState
 from typing import Literal
+from datetime import datetime, timedelta
+from scipy.optimize import minimize
+
+
 
 
 os.environ["OPENAI_API_KEY"] = getpass.getpass("Please provide your OPENAI_API_KEY:")
@@ -42,6 +46,11 @@ def calculate_expected_utility(probabilities: np.ndarray, utilities: np.ndarray)
     expected_utility = np.dot(probabilities, utilities)
     return expected_utility
 
+
+@tool
+def porfolio_optimize_EUT():
+    pass
+
 ###MVP
 @tool
 def calculate_portfolio_return(returns: np.ndarray, weights: np.ndarray) -> float:
@@ -61,6 +70,37 @@ def calculate_sharpe_ratio(returns: np.ndarray, weights: np.ndarray, risk_free_r
     sharpe_ratio = (port_return - risk_free_rate) / port_volatility
     return sharpe_ratio
 
+@tool
+def portfolio_optimize(returns, sharpe_ratio_or_variance=True):
+    """
+    Tối ưu hóa danh mục đầu tư dựa trên tỷ lệ Sharpe hoặc biến động.
+    
+    Parameters:
+    - returns (pd.DataFrame): DataFrame chứa lợi suất của các cổ phiếu.
+    - sharpe_ratio_or_variance (bool): Nếu True, tối ưu hóa theo tỷ lệ Sharpe; nếu False, tối ưu hóa theo biến động.
+    
+    Returns:
+    - optimal_weights (dict): Tỷ trọng tối ưu của các cổ phiếu trong danh mục đầu tư dưới dạng từ điển.
+    """
+    returns = json.loads(returns)
+    returns = pd.DataFrame([returns])
+    # returns=returns[returns.columns[1:]]
+    # print(returns)
+    num_assets = len(returns.columns)
+    # print('haha',num_assets)
+    init_guess = num_assets * [1. / num_assets]
+    bounds = tuple((0, 1) for asset in range(num_assets))
+    constraints = ({'type': 'eq', 'fun': lambda x: np.sum(x) - 1})
+    
+    if sharpe_ratio_or_variance:
+        result = minimize(lambda x: -calculate_sharpe_ratio(x, returns), init_guess, method='SLSQP', bounds=bounds, constraints=constraints)
+    else:
+        result = minimize(lambda x: calculate_portfolio_volatility(x, returns), init_guess, method='SLSQP', bounds=bounds, constraints=constraints)
+    
+    # Chuyển đổi tỷ trọng tối ưu thành từ điển với tên cổ phiếu
+    optimal_weights = dict(zip(returns.columns, result.x))
+    
+    return optimal_weights
 
 ### CAPM
 @tool
@@ -75,6 +115,67 @@ def calculate_capm(risk_free_rate: float, beta: float, market_return: float) -> 
     """Calculate the expected return of an asset using the CAPM formula."""
     expected_return = risk_free_rate + beta * (market_return - risk_free_rate)
     return expected_return
+
+
+#### Make prediction
+@tool
+def predict_future_prices(symbols, n):
+    """
+    Dự đoán giá cổ phiếu trong tương lai dựa trên dữ liệu đầu vào.
+    
+    Parameters:
+    - data (list of dict): Danh sách các từ điển chứa dữ liệu với cột 'idx_time', 'AAA', và 'A32'.
+    - n (int): Số tháng từ ngày hiện tại để dự đoán.
+    
+    Returns:
+    - future_df (pd.DataFrame): DataFrame chứa dự đoán giá cổ phiếu trong tương lai.
+    """
+    data=get_api_portfolio(symbols)
+
+    try:
+        df = pd.DataFrame(eval(data))
+    except ValueError as e:
+        print(f"Error creating DataFrame: {e}")
+        return
+    
+    if df.empty or not {'idx_time', 'AAA', 'A32'}.issubset(df.columns):
+        print("Data không hợp lệ. Đảm bảo dữ liệu chứa các cột 'idx_time', 'AAA', và 'A32'.")
+        return
+    
+    df['idx_time'] = pd.to_datetime(df['idx_time'] + '-01', format='%Y-%m-%d')
+    
+    df['days'] = (df['idx_time'] - df['idx_time'].min()).dt.days
+    
+    df = df.dropna(subset=['AAA', 'A32'])
+    
+    degree = 2
+    
+    coeffs_AAA = np.polyfit(df['days'], df['AAA'], degree)
+    coeffs_A32 = np.polyfit(df['days'], df['A32'], degree)
+    
+    # Tạo dãy tháng trong tương lai
+    future_dates = pd.date_range(start=pd.to_datetime('today').replace(day=1), periods=n, freq='MS')
+    future_days = (future_dates - df['idx_time'].min()).days
+    
+    # Dự đoán giá cho cả hai cổ phiếu
+    predicted_AAA = np.polyval(coeffs_AAA, future_days)
+    predicted_A32 = np.polyval(coeffs_A32, future_days)
+    
+    # Tạo DataFrame cho kết quả dự đoán
+    future_df = pd.DataFrame({
+        'idx_time': future_dates.strftime('%Y-%m'),  # Giữ định dạng tháng-năm
+        'AAA': predicted_AAA,
+        'A32': predicted_A32,
+    })
+    last_prediction = future_df.loc[len(future_df)-1]
+    # print(last_prediction)
+    result = {
+        'idx_time': last_prediction['idx_time'],
+        'AAA': last_prediction['AAA'],
+        'A32': last_prediction['A32']
+    }
+    
+    return json.dumps(result, default=str)
 
 ####Get API
 @tool
@@ -143,6 +244,46 @@ def get_api_income_statement(symbols):
     
     return json.dumps(result)
 
+@tool 
+def get_api_portfolio(symbols):
+    endday = datetime.now()
+    startday = endday - timedelta(days=365)
+    
+    data = pd.DataFrame()
+    for symbol in symbols:
+        stock = Vnstock().stock(symbol=symbol, source='TCBS')
+        try:
+            df = stock.quote.history(start=startday.strftime('%Y-%m-%d'), 
+                                     end=endday.strftime('%Y-%m-%d'), 
+                                     interval='1D')
+            if df.empty:
+                return {"error": "No data found for symbol {}".format(symbol)}
+            
+            df['time'] = pd.to_datetime(df['time'])
+            df = df.sort_values(by='time', ascending=False)
+            
+            df['month'] = df['time'].dt.month
+            df['year'] = df['time'].dt.year
+            
+            df['idx_time'] = df['time'].dt.to_period('M')
+                        
+            df.set_index('idx_time', inplace=True)          
+            df = df[['close']]
+            df.columns = [symbol]
+            data = pd.concat([data, df], axis=1)
+        except Exception as e:
+            return {"error": "Error for symbol {}: {}".format(symbol, str(e))}
+    if data.empty:
+        return {"error": "No data found for the given symbols and range"}
+    
+    data = data.groupby(data.index).mean()
+    print(data)
+    rets = np.log(data / data.shift(1)).dropna()
+    
+    result = rets.reset_index().to_dict(orient='records')
+    
+    return result
+
 @tool
 def get_api_balance_sheet(symbols):
     stock = Vnstock().stock(symbol=symbols, source='TCBS')
@@ -176,8 +317,9 @@ tools = [
 examples = [
     [
         HumanMessage("Hiện nay, một danh mục đầu tư của tôi bao gồm các mã cổ phiếu của sàn VNINDEX như là AAM, XPH, YEG, AAT. Tôi nên tối ưu hóa danh mục đầu tư như thế nào? ", name="example_user"),
-        AIMessage("", name="example_assistant", tool_calls=[{"name": "multiply", "args": {"x": 317253, "y": 128472}, "id": "1"}]),
+        AIMessage("", name="example_assistant", tool_calls=[{"name": "get_api_stock", "args": {"symbols": 'AAM', "start_day": 128472, "end_day":''}, "id": "1"}]),
         ToolMessage("16505054784", tool_call_id="1"),
+        AIMessage("", name="example_assistant", tool_calls=[{"name": "multiply", "args": {"x": 317253, "y": 128472}, "id": "1"}]),
         AIMessage("", name="example_assistant", tool_calls=[{"name": "add", "args": {"x": 16505054784, "y": 4}, "id": "2"}]),
         ToolMessage("16505054788", tool_call_id="2"),
         AIMessage("The product of 317253 and 128472 plus four is 16505054788", name="example_assistant"),
