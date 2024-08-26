@@ -4,25 +4,26 @@ import json
 import numpy as np
 import pandas as pd
 from langchain_core.runnables import RunnablePassthrough
-from models.lstm_stock_price import model
+# from models.lstm_stock_price import model
 from langchain_core.messages import AIMessage, ToolMessage, HumanMessage
 from langchain_community.agent_toolkits import create_sql_agent
-from autogen import RAGAgent
+# from autogen import RAGAgent
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.tools import tool
-from langchain.retrievers import ChromaRetriever
-from langchain.embeddings import ChromaEmbedder
+# from langchain.retrievers import ChromaRetriever
+# from langchain.embeddings import ChromaEmbedder
 from langchain import LLMChain
 from langchain_core.pydantic_v1 import BaseModel, Field
 from langchain_openai import ChatOpenAI
 import getpass
 import os
+from dotenv import load_dotenv, find_dotenv
 from langchain.sql_database import SQLDatabase
-from langgraph.prebuilt import ToolNode, StateGraph, AgentState
-from typing import Literal
+from langgraph.prebuilt import ToolNode
+from typing import Literal, List
 from datetime import datetime, timedelta
 from scipy.optimize import minimize
-
+load_dotenv(find_dotenv())
 
 
 
@@ -38,7 +39,7 @@ def calculate_utility(outcome: float, risk_aversion: float) -> float:
     """Calculate utility based on the outcome and risk aversion coefficient."""
     return outcome ** (1 - risk_aversion) / (1 - risk_aversion)
 @tool
-def calculate_expected_utility(probabilities: np.ndarray, utilities: np.ndarray) -> float:
+def calculate_expected_utility(probabilities: List[float], utilities: List[float]) -> float:
     """Calculate the expected utility."""
     if len(probabilities) != len(utilities):
         raise ValueError("Probabilities and utilities must have the same length.")
@@ -53,17 +54,17 @@ def porfolio_optimize_EUT():
 
 ###MVP
 @tool
-def calculate_portfolio_return(returns: np.ndarray, weights: np.ndarray) -> float:
+def calculate_portfolio_return(returns: List[float], weights: List[float]) -> float:
     """Calculate the annualized portfolio return."""
     return np.dot(returns.mean(), weights) * 252
 
 @tool
-def calculate_portfolio_volatility(returns: np.ndarray, weights: np.ndarray) -> float:
+def calculate_portfolio_volatility(returns: List[float], weights: List[float]) -> float:
     """Calculate the annualized portfolio volatility."""
     return np.dot(weights, np.dot(returns.cov() * 252, weights)) ** 0.5  # Annualized volatility
 
 @tool
-def calculate_sharpe_ratio(returns: np.ndarray, weights: np.ndarray, risk_free_rate: float) -> float:
+def calculate_sharpe_ratio(returns: List[float], weights: List[float], risk_free_rate: float) -> float:
     """Calculate the Sharpe ratio of the portfolio."""
     port_return = calculate_portfolio_return(returns, weights)
     port_volatility = calculate_portfolio_volatility(returns, weights)
@@ -104,7 +105,7 @@ def portfolio_optimize(returns, sharpe_ratio_or_variance=True):
 
 ### CAPM
 @tool
-def calculate_beta(asset_returns: np.ndarray, market_returns: np.ndarray) -> float:
+def calculate_beta(asset_returns: List[float], market_returns: List[float]) -> float:
     """Calculate the beta of an asset."""
     covariance_matrix = np.cov(asset_returns, market_returns)
     beta = covariance_matrix[0, 1] / covariance_matrix[1, 1]
