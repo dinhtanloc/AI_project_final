@@ -1,1 +1,0 @@
-{"model_type": "time_series_transformer", "input_dim": 1, "hidden_dim": 64, "num_layers": 5, "output_dim": 1, "num_epochs": 500}
