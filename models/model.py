@@ -316,21 +316,29 @@ tools = [
 
 examples = [
     [
-        HumanMessage("Hiện nay, một danh mục đầu tư của tôi bao gồm các mã cổ phiếu của sàn VNINDEX như là AAM, XPH, YEG, AAT. Tôi nên tối ưu hóa danh mục đầu tư như thế nào? ", name="example_user"),
-        AIMessage("", name="example_assistant", tool_calls=[{"name": "get_api_stock", "args": {"symbols": 'AAM', "start_day": 128472, "end_day":''}, "id": "1"}]),
-        ToolMessage("16505054784", tool_call_id="1"),
-        AIMessage("", name="example_assistant", tool_calls=[{"name": "multiply", "args": {"x": 317253, "y": 128472}, "id": "1"}]),
-        AIMessage("", name="example_assistant", tool_calls=[{"name": "add", "args": {"x": 16505054784, "y": 4}, "id": "2"}]),
-        ToolMessage("16505054788", tool_call_id="2"),
-        AIMessage("The product of 317253 and 128472 plus four is 16505054788", name="example_assistant"),
+        HumanMessage("Hiện nay, một danh mục đầu tư của tôi bao gồm các mã cổ phiếu của sàn VNINDEX như là AAM, XPH, YEG, AAT. Tôi nên phân bổ vốn của mình như nào để tối ưu hóa danh mục đầu tư sao cho lợi nhuận được tối đa nhất trong chiến lược đầu tư dài hạn 6 tháng tới như thế nào? ", name="example_user"),
+        AIMessage("", name="example_assistant", tool_calls=[{"name": "predict_future_prices", "args": {"symbols": ['AAM', 'XPH', 'YEG', 'AAT'], "n": 6}, "id": "1"}]),
+        ToolMessage({'AAM':123, 'XPH':123, 'YEG':12, 'AAT':134}, tool_call_id="1"),
+        AIMessage("", name="example_assistant", tool_calls=[{"name": "portfolio_optimize", "args": {"return": {'AAM':123, 'XPH':123, 'YEG':12, 'AAT':134}, "sharpe_ratio_or_variance": True}, "id": "2"}]),
+        # AIMessage("", name="example_assistant", tool_calls=[{"name": "add", "args": {"x": 16505054784, "y": 4}, "id": "2"}]),
+        ToolMessage({'AAM':0.25, 'XPH':0.25, 'YEG':0.25, 'AAT':0.25}, tool_call_id="2"),
+        AIMessage("Có thể thấy, sau khi chạy mô hình dự đoán của hệ thống, tình hình cổ phiếu sẽ có sự biến động khá cao. Như vậy dựa vào kết quả dự đoán tình hình từng mã sau 6 tháng tới, bạn cần phân bố đều vốn cá nhân 25% ứng với mỗi loại cổ phiếu, để có được lợi nhuận cao nhất", name="example_assistant"),
     ],
     [
-        HumanMessage("Theo bạn hiện nay, tình hình công ty mã A32 có chuyển biến như thế nào, liệu có nên đầu tư cho vào nó không"),
-        AIMessage("", name="example_assistant", tool_calls=[{"name": "multiply", "args": {"x": 3, "y": 2}, "id": "1"}]),
-        ToolMessage("6", tool_call_id="1"),
-        AIMessage("", name="example_assistant", tool_calls=[{"name": "add", "args": {"x": 5, "y": 6}, "id": "2"}]),
-        ToolMessage("11", tool_call_id="2"),
-        AIMessage("5 plus 3 times 2 is 11", name="example_assistant"),
+        HumanMessage("Hiện nay, một danh mục đầu tư của tôi bao gồm các mã cổ phiếu của sàn VNINDEX như là AAM, XPH, YEG, AAT. Tôi nên phân bổ vốn của mình như nào để tối ưu hóa danh mục đầu tư sao giảm thiểu rủi ro nhất trong chiến lược đầu tư dài hạn 6 tháng tới như thế nào? ", name="example_user"),
+        AIMessage("", name="example_assistant", tool_calls=[{"name": "predict_future_prices", "args": {"symbols": ['AAM', 'XPH', 'YEG', 'AAT'], "n": 6}, "id": "1"}]),
+        ToolMessage({'AAM':123, 'XPH':123, 'YEG':12, 'AAT':134}, tool_call_id="1"),
+        AIMessage("", name="example_assistant", tool_calls=[{"name": "portfolio_optimize", "args": {"return": {'AAM':123, 'XPH':123, 'YEG':12, 'AAT':134}, "sharpe_ratio_or_variance": False}, "id": "2"}]),
+        # AIMessage("", name="example_assistant", tool_calls=[{"name": "add", "args": {"x": 16505054784, "y": 4}, "id": "2"}]),
+        ToolMessage({'AAM':0.15, 'XPH':-0.05, 'YEG':0.45, 'AAT':0.45}, tool_call_id="2"),
+        AIMessage("Có thể thấy, sau khi chạy mô hình dự đoán của hệ thống, tình hình cổ phiếu sẽ có sự biến động khá cao. Như vậy dựa vào kết quả dự đoán tình hình từng mã sau 6 tháng tới, bạn cần phân bố đều vốn cá nhân lần lượt là, đầu tiên, rút 5% vốn hiện tại khỏi XPH, sử dụng 15% vốn vào AAM, 45% vốn cho cả YEG và AAT ứng với mỗi loại cổ phiếu, để có được lợi nhuận cao nhất", name="example_assistant"),
+    ],
+    [
+        HumanMessage("Đánh giá công ty mã AAA có hoạt động ổn định hay không trong suốt 6 tháng qua, check lại sự kiện kèm tin tức để đánh giá mức độ của công ty."),
+        AIMessage("Để đánh giá công ty, tôi sẽ kiểm tra các chỉ số tài chính chính của công ty trong 6 tháng qua và xem xét các sự kiện quan trọng, cũng như tin tức ảnh hưởng đến công ty. Hãy chờ trong giây lát..."),
+        AIMessage("", name="example_assistant", tool_calls=[{"name": "get_company_information", "args": {"symbol": "AAA"}, "id": "1"}]),
+        ToolMessage("", tool_call_id=1),
+        AIMessage("Sau khi phân tích các chỉ số tài chính, xem xét các sự kiện và tin tức gần đây, công ty có vẻ hoạt động ổn định trong 6 tháng qua. Các yếu tố tài chính không cho thấy biến động lớn nào, và tin tức cũng không đề cập đến sự kiện nào gây ảnh hưởng nghiêm trọng.")
     ],
     [
         HumanMessage("Bạn hãy điều tra và tóm tắt về tiểu sử công ty mã A32 cùng với tình hình kinh doanh công ty trong suốt sáu tháng qua"),
@@ -340,14 +348,14 @@ examples = [
         ToolMessage("11", tool_call_id="2"),
         AIMessage("5 plus 3 times 2 is 11", name="example_assistant"),
     ],
-    [
-        HumanMessage("Đánh giá công ty này có hoạt động ổn định hay không trong suốt 6 tháng quá, check lại sự kiện kèm tin tức để đánh giá mức độ của công ty"),
-        AIMessage("", name="example_assistant", tool_calls=[{"name": "multiply", "args": {"x": 3, "y": 2}, "id": "1"}]),
-        ToolMessage("6", tool_call_id="1"),
-        AIMessage("", name="example_assistant", tool_calls=[{"name": "add", "args": {"x": 5, "y": 6}, "id": "2"}]),
-        ToolMessage("11", tool_call_id="2"),
-        AIMessage("5 plus 3 times 2 is 11", name="example_assistant"),
-    ],
+    # [
+    #     HumanMessage("Đánh giá công ty này có hoạt động ổn định hay không trong suốt 6 tháng quá, check lại sự kiện kèm tin tức để đánh giá mức độ của công ty"),
+    #     AIMessage("", name="example_assistant", tool_calls=[{"name": "multiply", "args": {"x": 3, "y": 2}, "id": "1"}]),
+    #     ToolMessage("6", tool_call_id="1"),
+    #     AIMessage("", name="example_assistant", tool_calls=[{"name": "add", "args": {"x": 5, "y": 6}, "id": "2"}]),
+    #     ToolMessage("11", tool_call_id="2"),
+    #     AIMessage("5 plus 3 times 2 is 11", name="example_assistant"),
+    # ],
 ]
 
 
