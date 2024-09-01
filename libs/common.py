@@ -1,3 +1,4 @@
+from dotenv import load_dotenv, find_dotenv 
 #-----DATA-PREPROCESSING-------
 import pandas as pd
 from vnstock3 import Vnstock
@@ -13,8 +14,7 @@ from langchain.agents import AgentExecutor
 from langchain_openai import ChatOpenAI
 from langchain.sql_database import SQLDatabase
 from langchain.chains import create_sql_query_chain
-from langchain_google_vertexai import ChatVertexAI
+# from langchain_google_vertexai import ChatVertexAI
 
-from dotenv import load_dotenv, find_dotenv # pip install load-dotenv
 
-import psycopg2 # pip install psycopg-binary
+import psycopg2 
