@@ -16,26 +16,26 @@ const Layout =() =>{
 
 
 
-    useEffect(() => {
-      fetchStaffChecking();
-    }, []);
+    // useEffect(() => {
+    //   fetchStaffChecking();
+    // }, []);
 
-    const fetchStaffChecking = async () => {
-        try {
-            const response = await isStaff.get('accounts/staff/');
-            // setUserProfile(response.data);
-            checkStaff(response.data.is_staff);
-            ListstaffInfo(response.data.staff)
+    // const fetchStaffChecking = async () => {
+    //     try {
+    //         const response = await isStaff.get('accounts/staff/');
+    //         // setUserProfile(response.data);
+    //         checkStaff(response.data.is_staff);
+    //         ListstaffInfo(response.data.staff)
             
-        } catch (error) {
-            console.error('Error fetching user profile:', error);
-        }
-    };
+    //     } catch (error) {
+    //         console.error('Error fetching user profile:', error);
+    //     }
+    // };
     
     
-    if(!checkedStaff){
-      return(<div>You can not access here</div>);
-    }
+    // if(!checkedStaff){
+    //   return(<div>You can not access here</div>);
+    // }
     return(
         <Fragment>
 
