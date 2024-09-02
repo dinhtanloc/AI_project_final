@@ -1,18 +1,69 @@
+import React, { Fragment, useState, useContext, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import AuthContext from '@context/AuthContext.jsx';
+import useAxios from "@utils/useAxios.js";
+// import Header from "../Header/Header";
+// import Footer from "../Footer/Footer";
+import Login from "@pages/Login";
+import Routers from "@routers/Routers";
+import axios from 'axios';
+import backgroundImage from '@public/media/background_login.png'; 
 import "@styles/page.css"
-import { useEffect, useState, Fragment } from "react";
 import { useMode } from "@theme";
-
-import Routers from "@routers/Router";
 import Topbar from "../global/Topbar"
 import ProSlidebar from "../global/ProSidebar"
-import useAxios from "@utils/useAxios";
 
-const Layout =() =>{
-    const [theme, colorMode] = useMode();
-    const [isSidebar, setIsSidebar] = useState(true);
+axios.defaults.xsrfCookieName = 'csrftoken';
+axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+axios.defaults.withCredentials = true;
+
+const Layout = () => {
+  const [theme, colorMode] = useMode();
+  const [isSidebar, setIsSidebar] = useState(true);
+  const location = useLocation();
+  const { logined } = useContext(AuthContext);
+  const [currentUser, setCurrentUser] = useState(null);
+  // const [searchTerm, setSearchTerm] = useState("");
+  const staffInfo={data:{profile:{full_name:'Mi mi', image:'abc.png'}}}
+  const api = useAxios();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await api.get("accounts/test/");
+        setCurrentUser(true);
+      } catch (error) {
+        setCurrentUser(false);
+        console.error('Có lỗi xảy ra khi truy cập dữ liệu:', error);
+      }
+    };
+    fetchUser();
+  }, []);
+
+  // const handleSearch = (term) => {
+  //   setSearchTerm(term);
+  // };
+
+  const isLoginPage = location.pathname === "/login" || location.pathname === "/register";
 
 
-    return(
+  return (
+    <>
+      {isLoginPage ? (
+        <div
+          className="login_outside"
+          style={{
+            width: '100vw',
+            height: '100vh',
+            background: `linear-gradient(rgba(0, 13, 107, 0.5), rgba(0, 13, 107, 0.5)), url("${backgroundImage}")`,
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: 'cover',
+          }}
+        >
+          <Login />
+        </div>
+      ) : (
         <Fragment>
         <div className="app">
           <ProSlidebar isSidebar={isSidebar}  data={staffInfo} />
@@ -22,8 +73,9 @@ const Layout =() =>{
           </main>
         </div>
         </Fragment>
-    )
+      )}
+    </>
+  );
+};
 
-}
-
-export default Layout
+export default Layout;

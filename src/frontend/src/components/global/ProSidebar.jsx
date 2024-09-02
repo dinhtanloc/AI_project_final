@@ -20,6 +20,7 @@ import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  console.log(colors)
   return (
     <MenuItem
       active={selected === title}
@@ -50,7 +51,7 @@ const ProSidebar = (data) => {
           height:`100vh`,
         },
         "& .pro-icon-wrapper": {
-          backgroundColor: "transparent !important",
+          backgroundColor: "transparent  !important",
         },
         "& .pro-inner-item": {
           padding: "5px 35px 5px 20px !important",
@@ -98,7 +99,7 @@ const ProSidebar = (data) => {
                   alt="profile-user"
                   width="100px"
                   height="100px"
-                  src={data.data.profile.image}
+                  // src={data.data.profile.image}
                   style={{ cursor: "pointer", borderRadius: "50%" }}
                 />
               </Box>
@@ -109,7 +110,7 @@ const ProSidebar = (data) => {
                   fontWeight="bold"
                   sx={{ m: "10px 0 0 0" }}
                 >
-                  {data.data.profile.full_name}
+                  {/* {data.data.profile.full_name} */}
                 </Typography>
                 <Typography variant="h5" color={colors.greenAccent[500]}>
                   Shop Assistant
