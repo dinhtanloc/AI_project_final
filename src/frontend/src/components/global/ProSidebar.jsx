@@ -64,7 +64,9 @@ const ProSidebar = (data) => {
         },
       }}
     >
-      <Sidebar collapsed={isCollapsed}>
+      <Sidebar 
+        collapsed={isCollapsed}
+        backgroundColor="transparent">
         <Menu iconShape="square">
           {/* LOGO AND MENU ICON */}
           <MenuItem

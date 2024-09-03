@@ -11,8 +11,8 @@ import backgroundImage from '@public/media/background_login.png';
 import "@styles/page.css"
 import { useMode } from "@theme";
 import Topbar from "../global/Topbar"
-import ProSlidebar from "../global/ProSidebar"
-
+import ProSidebar from "../global/ProSidebar"
+import HomePage from "@pages/HomePage"
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 axios.defaults.withCredentials = true;
@@ -45,6 +45,7 @@ const Layout = () => {
   // };
 
   const isLoginPage = location.pathname === "/login" || location.pathname === "/register";
+  const isHomePage = location.pathname === "/home";
 
 
   return (
@@ -64,15 +65,21 @@ const Layout = () => {
           <Login />
         </div>
       ) : (
+        isHomePage ? (
+          <HomePage/>
+            
+      ) : (
         <Fragment>
-        <div className="app">
-          <ProSlidebar isSidebar={isSidebar}  data={staffInfo} />
-          <main className="content">
-            <Topbar setIsSidebar={setIsSidebar} />
-            <Routers/>
-          </main>
-        </div>
+          <div className="app">
+            <ProSidebar isSidebar={isSidebar}  data={staffInfo} />
+            <main className="content">
+              <Topbar setIsSidebar={setIsSidebar} />
+              <Routers/>
+            </main>
+          </div>
         </Fragment>
+
+      )
       )}
     </>
   );
