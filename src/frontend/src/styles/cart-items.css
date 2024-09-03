@@ -1,0 +1,221 @@
+
+
+
+.shopping-cart {
+    width: 60vw;
+    overflow-y: auto;
+    height: 423px;
+    max-height: 450px;
+    /* margin: 1px auto; */
+    background: #FFFFFF;
+    box-shadow: 1px 2px 3px 0px rgba(0,0,0,0.10);
+    border-radius: 6px;
+   
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* .title {
+    height: 60px;
+    border-bottom: 1px solid #E1E8EE;
+    padding: 20px 30px;
+    color: #5E6977;
+    font-size: 18px;
+    font-weight: 400;
+} */
+
+.item {
+padding: 20px 30px;
+height: 120px;
+display: flex;
+}
+
+/* .item:nth-child(3) {
+border-top:  1px solid #E1E8EE;
+border-bottom:  1px solid #E1E8EE;
+} */
+
+.item:not(:last-child) {
+  border-bottom: 1px solid #E1E8EE;
+}
+
+.buttons {
+    position: relative;
+    padding-top: 30px;
+    margin-right: 60px;
+  }
+  .delete-btn,
+  .like-btn {
+    display: inline-block;
+    Cursor: pointer;
+  }
+  .delete-btn {
+    width: 18px;
+    height: 17px;
+    background: url(&amp;amp;quot;delete-icn.svg&amp;amp;quot;) no-repeat center;
+}
+
+.like-btnc {
+
+position: flex;
+top: 9px;
+left: 0px;
+width: 60px;
+height: 60px;
+background-size: 2900%;
+background-repeat: no-repeat;
+}
+
+@keyframes trashExplode {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  /* 100% { transform: scale(2); } */
+}
+
+.trash-icon {
+  margin-left: 15px;
+  /* Thêm hiệu ứng transition */
+  transition: transform 0.3s ease-in-out;
+}
+.heart-icon{
+  transition: transform 0.3s ease-in-out;
+}
+
+.heart-icon:hover,.trash-icon:hover {
+  /* Khi rê chuột vào biểu tượng, áp dụng animation */
+  animation: trashExplode 0.8s;
+}
+
+.is-active {
+animation-name: animate;
+animation-duration: .8s;
+animation-iteration-count: 1;
+animation-timing-function: steps(28);
+animation-fill-mode: forwards;
+}
+
+@keyframes explode {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.5); }
+  100% { transform: scale(2); }
+}
+
+
+@keyframes animate {
+0%   { background-position: left;  }
+50%  { background-position: right; }
+100% { background-position: right; }
+}
+
+.image {
+  display: flex;
+  width: 210px;
+  /* justify-content: center; */
+  /* align-items: flex-start; */
+  /* height: 100px; */
+
+    margin-right: 0px;
+    /* width: 20px;
+    height: 20px; */
+  }
+  
+  .image img {
+    width: 60%; /* Điều chỉnh kích thước theo chiều rộng của thẻ div */
+    height: auto; /* Giữ tỷ lệ của hình ảnh */
+    max-width: 260px; /* Điều chỉnh giá trị này theo kích thước mong muốn */
+  }
+
+  .description {
+    padding-top: 10px;
+    margin-right: 60px;
+    width: 115px;
+  }
+   
+  .description span {
+    display: block;
+    font-size: 14px;
+    color: #43484D;
+    font-weight: 400;
+  }
+   
+  .description span:first-child {
+    margin-bottom: 5px;
+  }
+  .description span:last-child {
+    font-weight: 300;
+    margin-top: 8px;
+    color: #86939E;
+  }
+
+
+  .quantity {
+    padding-top: 20px;
+    margin-right: 60px;
+  }
+  .quantity input {
+    -webkit-appearance: none;
+            appearance: none;
+    border: none;
+    text-align: center;
+    width: 32px;
+    font-size: 16px;
+    color: #43484D;
+    font-weight: 300;
+  }
+   
+  button[class*=btnc] {
+    width: 30px;
+    height: 30px;
+    background-color: #E1E8EE;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+  }
+  .minus-btn img {
+    margin-bottom: 3px;
+  }
+  .plus-btn img {
+    margin-top: 2px;
+  }
+   
+  button:focus,
+  input:focus {
+    outline:0;
+  }
+
+
+  .total-price {
+    width: 83px;
+    padding-top: 27px;
+    text-align: center;
+    font-size: 16px;
+    color: #43484D;
+    font-weight: 300;
+  }
+
+  @media (max-width: 800px) {
+    .shopping-cart {
+      width: 100%;
+      height: auto;
+      overflow: hidden;
+    }
+    .item {
+      height: auto;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .image img {
+      width: 50%;
+    }
+    .image,
+    .quantity,
+    .description {
+      width: 100%;
+      text-align: center;
+      margin: 6px 0;
+    }
+    .buttons {
+      margin-right: 20px;
+    }
+  }

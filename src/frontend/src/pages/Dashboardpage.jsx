@@ -1,21 +1,22 @@
-// import React, { useEffect, useContext,useState } from "react";
-// import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
-// import { tokens } from "@theme";
-// import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
-// import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
-// import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
-// import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
-// import PersonAddIcon from "@mui/icons-material/PersonAdd";
-// import InventoryIcon from '@mui/icons-material/Inventory';
-// import Header from "./Header";
+import React, { useEffect, useContext,useState } from "react";
+import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
+import { tokens } from "@theme";
+import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
+import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import InventoryIcon from '@mui/icons-material/Inventory';
+import Header from "./HeaderDashboard";
+import numeral from 'numeral';
+import useAxios from "@utils/useAxios"
+import StockChart from "@components/UI/StockChart"
 // import {SummaryLineChart} from "@components/UI/LineChart";
 // import GeographyChart from "@components/UI/GeographyChart";
 // import BarChart from "@components/UI/BarChart";
 // import StatBox from "@components/UI/StatBox";
 // import ProgressCircle from "@components/UI/ProgressCircle";
-// import useAxios from "@utils/useAxios"
 // import RecentTransactions from "@components/UI/RecentTransactions";
-// import numeral from 'numeral';
 
 // import downloadExcel from "../utils/downloadExcel";
 

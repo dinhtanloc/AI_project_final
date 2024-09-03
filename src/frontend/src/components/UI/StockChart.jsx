@@ -27,7 +27,7 @@ import {
   withDeviceRatio,
   withSize
 } from "react-financial-charts";
-import { initialData } from "./data";
+import { initialData } from "@assets/data/stockData";
 
 // const StockChart = () => {
 //     return(

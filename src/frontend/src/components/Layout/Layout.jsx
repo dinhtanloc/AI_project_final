@@ -9,21 +9,23 @@ import Routers from "@routers/Routers";
 import axios from 'axios';
 import backgroundImage from '@public/media/background_login.png'; 
 import "@styles/page.css"
-import { useMode } from "@theme";
+// import { useMode } from "@theme";
 import Topbar from "../global/Topbar"
 import ProSidebar from "../global/ProSidebar"
 import HomePage from "@pages/HomePage"
+import Header from "@components/Header/Header";
+import Footer from "@components/Footer/Footer"
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 axios.defaults.withCredentials = true;
 
 const Layout = () => {
-  const [theme, colorMode] = useMode();
+  // const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
   const location = useLocation();
   const { logined } = useContext(AuthContext);
   const [currentUser, setCurrentUser] = useState(null);
-  // const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const staffInfo={data:{profile:{full_name:'Mi mi', image:'abc.png'}}}
   const api = useAxios();
 
@@ -40,14 +42,15 @@ const Layout = () => {
     fetchUser();
   }, []);
 
-  // const handleSearch = (term) => {
-  //   setSearchTerm(term);
-  // };
+  const handleSearch = (term) => {
+    setSearchTerm(term);
+  };
 
   const isLoginPage = location.pathname === "/login" || location.pathname === "/register";
-  const isHomePage = location.pathname === "/home";
+  const isDashboard = location.pathname === "/dashboard";
 
 
+  {console.log(isDashboard)}
   return (
     <>
       {isLoginPage ? (
@@ -65,18 +68,25 @@ const Layout = () => {
           <Login />
         </div>
       ) : (
-        isHomePage ? (
-          <HomePage/>
+        isDashboard ? (
+          <Fragment>
+            <div className="app">
+              <ProSidebar isSidebar={isSidebar}  data={staffInfo} />
+              <main className="content">
+                <Topbar setIsSidebar={setIsSidebar} />
+                <Routers isDashboard ={isDashboard}/>
+              </main>
+            </div>
+          </Fragment>
+          // <HomePage/>
             
       ) : (
         <Fragment>
-          <div className="app">
-            <ProSidebar isSidebar={isSidebar}  data={staffInfo} />
-            <main className="content">
-              <Topbar setIsSidebar={setIsSidebar} />
-              <Routers/>
-            </main>
-          </div>
+          <Header onSearch={handleSearch} />
+          <Routers isDashboard ={isDashboard} />
+          
+          {/* <ChatPopup /> */}
+          <Footer />
         </Fragment>
 
       )
