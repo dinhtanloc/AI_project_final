@@ -2,7 +2,7 @@ import React from "react";
 import "@styles/become-driver.css";
 import { Container, Row, Col } from "reactstrap";
 
-import driverImg from "@assets/all-images/toyota-offer-2.png";
+import driverImg from "/media/our_product.png";
 
 const BecomeDriverSection = () => {
   return (

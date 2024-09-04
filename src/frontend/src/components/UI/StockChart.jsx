@@ -19,6 +19,7 @@ import {
   lastVisibleItemBasedZoomAnchor,
   XAxis,
   YAxis,
+  Cursor,
   CrossHairCursor,
   EdgeIndicator,
   MouseCoordinateX,
@@ -28,6 +29,8 @@ import {
   withSize
 } from "react-financial-charts";
 import { initialData } from "@assets/data/stockData";
+// import { Helmet, HelmetProvider  } from "react-helmet";
+
 
 // const StockChart = () => {
 //     return(
@@ -54,12 +57,12 @@ import { initialData } from "@assets/data/stockData";
 //     return nums;
 //   };
   
-  const StockChart = () => {
+  const StockChart = ({w, h}) => {
     const ScaleProvider = discontinuousTimeScaleProviderBuilder().inputDateAccessor(
       (d) => new Date(d.date)
     );
-    const height = 700;
-    const width = 900;
+    const height = h;
+    const width = w;
     const margin = { left: 0, right: 48, top: 0, bottom: 24 };
   
     const ema12 = ema()
@@ -148,6 +151,8 @@ import { initialData } from "@assets/data/stockData";
     };
   
     return (
+      // <HelmetProvider>
+
       <ChartCanvas
         height={height}
         ratio={3}
@@ -170,8 +175,8 @@ import { initialData } from "@assets/data/stockData";
           <BarSeries fillStyle={volumeColor} yAccessor={volumeSeries} />
         </Chart>
         <Chart id={3} height={chartHeight} yExtents={candleChartExtents}>
-          <XAxis showGridLines showTickLabel={false} />
-          <YAxis showGridLines tickFormat={pricesDisplayFormat} />
+          <XAxis showGridLines gridLinesStrokeStyle="#e91717" showTickLabel={false} />
+          <YAxis showGridLines gridLinesStrokeStyle="#e91717" tickFormat={pricesDisplayFormat} tickLabelFill="#e91717" />
           <CandlestickSeries />
           <LineSeries yAccessor={ema26.accessor()} strokeStyle={ema26.stroke()} />
           <CurrentCoordinate
@@ -213,7 +218,7 @@ import { initialData } from "@assets/data/stockData";
             ]}
           />
   
-          <ZoomButtons />
+          {/* <ZoomButtons /> */}
           <OHLCTooltip origin={[8, 16]} />
         </Chart>
         <Chart
@@ -223,8 +228,8 @@ import { initialData } from "@assets/data/stockData";
           origin={elderRayOrigin}
           padding={{ top: 8, bottom: 8 }}
         >
-          <XAxis showGridLines gridLinesStrokeStyle="#e0e3eb" />
-          <YAxis ticks={4} tickFormat={pricesDisplayFormat} />
+          <XAxis showGridLines gridLinesStrokeStyle="#e91717" />
+          <YAxis ticks={4} gridLinesStrokeStyle="#e91717" tickFormat={pricesDisplayFormat} tickLabelFill="#e91717" />
   
           <MouseCoordinateX displayFormat={timeDisplayFormat} />
           <MouseCoordinateY
@@ -245,8 +250,10 @@ import { initialData } from "@assets/data/stockData";
             origin={[8, 16]}
           />
         </Chart>
-        <CrossHairCursor />
+        {/* <CrossHairCursor /> */}
+        <Cursor crosshair />
       </ChartCanvas>
+      // </HelmetProvider>
     );
   };
 

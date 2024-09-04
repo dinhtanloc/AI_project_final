@@ -69,7 +69,7 @@ const HomePage = () => {
               </Col>
 
               <Col lg="5" md="5" sm="12">
-                <FindCarForm />
+                {/* <FindCarForm /> */}
                 <Form className="form"  onSubmit={handleFindCar}>
                   <div className=" d-flex align-items-center justify-content-between flex-wrap">
                     <FormGroup className="form__group" style={{width:"65%"}}>
@@ -141,7 +141,7 @@ const HomePage = () => {
       {/* =========== car offer section ============= */}
       <section>
         <Container>
-          <Row>
+          {/* <Row>
             <Col lg="12" className="text-center mb-5">
               <h6 className="section__subtitle">Come with</h6>
               <h2 className="section__title">Hot Offers</h2>
@@ -150,7 +150,7 @@ const HomePage = () => {
             {carData.slice(0, 6).map((item) => (
               <CarItem item={item} key={item.id} />
             ))}
-          </Row>
+          </Row> */}
         </Container>
       </section>
       {/* =========== become a driver section ============ */}

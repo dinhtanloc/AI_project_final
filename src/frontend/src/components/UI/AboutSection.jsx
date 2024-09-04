@@ -1,7 +1,7 @@
 import React from "react";
 import { Container, Row, Col } from "reactstrap";
 import "@styles/about-section.css";
-import aboutImg from "@assets/all-images/cars-img/bmw-offer.png";
+import aboutImg from "/media/bitcoin.png";
 
 const AboutSection = ({ aboutClass }) => {
   return (
@@ -18,7 +18,7 @@ const AboutSection = ({ aboutClass }) => {
           <Col lg="6" md="6">
             <div className="about__section-content">
               <h4 className="section__subtitle">About Us</h4>
-              <h2 className="section__title">Welcome to car saler service</h2>
+              <h2 className="section__title">Welcome to Histock</h2>
               <p className="section__description">
               The pleasures of these are among the most dignified labor
               work. Come, with the body's commitments, search for truth
