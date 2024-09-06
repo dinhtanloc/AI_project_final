@@ -18,4 +18,5 @@ export default defineConfig({
       '@theme': path.resolve(__dirname, 'theme.js'),
     },
   },
+ 
 })

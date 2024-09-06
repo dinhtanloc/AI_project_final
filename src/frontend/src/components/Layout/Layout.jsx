@@ -7,7 +7,7 @@ import useAxios from "@utils/useAxios.js";
 import Login from "@pages/Login";
 import Routers from "@routers/Routers";
 import axios from 'axios';
-import backgroundImage from '@public/media/background_login.png'; 
+import backgroundImage from '/media/background_login.png'; 
 import "@styles/page.css"
 // import { useMode } from "@theme";
 import Topbar from "../global/Topbar"
@@ -74,7 +74,7 @@ const Layout = () => {
               <ProSidebar isSidebar={isSidebar}  data={staffInfo} />
               <main className="content">
                 <Topbar setIsSidebar={setIsSidebar} />
-                <Routers isDashboard ={isDashboard}/>
+                <Routers IsDashboard ={isDashboard}/>
               </main>
             </div>
           </Fragment>
@@ -83,7 +83,7 @@ const Layout = () => {
       ) : (
         <Fragment>
           <Header onSearch={handleSearch} />
-          <Routers isDashboard ={isDashboard} />
+          <Routers IsDashboard ={isDashboard} />
           
           {/* <ChatPopup /> */}
           <Footer />
