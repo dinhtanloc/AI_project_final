@@ -1,40 +1,40 @@
 const serviceData = [
   {
     id: 1,
-    title: "City Transfer",
-    icon: "ri-map-pin-2-line",
-    desc: "Reliable city transportation for meetings, sightseeing, and exploring. Professional drivers ensure a safe and comfortable journey.",
+    title: "Cloud storage",
+    icon: "fa fa-cloud",
+    desc: "Thanks to cloud computing integration, storage becomes effortless with massive capacity. Customers can easily access information quickly.",
   },
 
   {
     id: 2,
-    title: "Whole City Tour",
-    icon: "ri-community-line",
-    desc: "Explore the entire city hassle-free with our comprehensive tour service. Sit back, relax, and let us show you the best of the city's attractions.",
+    title: "Information security",
+    icon: "bi bi-person-check",
+    desc: "The infrastructure is secured with five-layer encryption, ensuring that customer information is always safe and protected.",
   },
   {
     id: 3,
-    title: "Unlimited Miles Car Rental",
-    icon: "ri-roadster-line",
-    desc: "Enjoy unlimited miles with our car rental service. Drive as much as you want without worrying about extra charges.",
+    title: "Continuous and secure",
+    icon: "bi bi-database-fill-check",
+    desc: "Data is continuously updated and accuracy is ensured, helping customers make quick and precise decisions.",
   },
   {
     id: 4,
-    title: "Fast & Easy Booking",
+    title: "Fast & Accurate",
     icon: "ri-timer-flash-line",
-    desc: "Book your ride quickly and effortlessly with our fast and easy booking system. Get on the road in no time!",
+    desc: "Histock can handle millions of requests in a short time, ensuring smooth and fast transactions.",
   },
   {
     id: 5,
-    title: "Many Pickup Locations",
+    title: "Secure Transactions",
     icon: "ri-map-pin-line",
-    desc: "Convenient pickup locations available throughout the city. Choose the location nearest to you for added convenience.",
+    desc: "Transactions are secure and protected, preventing fraud and scams. The system can automatically review and quickly identify fraudulent activities.",
   },
   {
     id: 6,
-    title: "Airport Transfer",
-    icon: "ri-flight-takeoff-line",
-    desc: "Seamless airport transfers to and from your destination. Start or end your journey stress-free with our reliable service.",
+    title: "Easy and convenient",
+    icon: "bi bi-bar-chart-line-fill",
+    desc: "Data is visualized from the market, making information easy to understand. The intelligent chatbot, along with numerous other features, makes Histock the most reliable advisor.",
   },
 ];
 

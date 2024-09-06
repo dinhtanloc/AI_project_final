@@ -10,6 +10,7 @@ import InventoryIcon from '@mui/icons-material/Inventory';
 import Header from "./HeaderDashboard";
 import numeral from 'numeral';
 import useAxios from "@utils/useAxios"
+import StockAgChart from "@components/UI/StockAgChart";
 import StockChart from "@components/UI/StockChart"
 // import {SummaryLineChart} from "@components/UI/LineChart";
 // import GeographyChart from "@components/UI/GeographyChart";
@@ -230,7 +231,7 @@ const Dashboard = () => {
         >
        
           <Box height="250px" m="10px 0 0 0">
-            <StockChart w={1220} h={430}  />
+            <StockAgChart   />
           </Box>
         </Box>
         {/* <Box

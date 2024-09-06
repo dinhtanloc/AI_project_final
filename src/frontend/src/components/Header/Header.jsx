@@ -157,17 +157,6 @@ const Header = ({ onSearch }) => {
 
             <Col lg="6" md="6" sm="6">
               <div className="header__top__right d-flex align-items-center justify-content-end gap-3">
-              {checkedStaff ? (
-                <Link to="/admin" className="d-flex align-items-center gap-1" onClick={handleClick}>
-                  <i className="ri-staff-line"></i> Admin
-                </Link>
-
-              ) : (
-
-                <Link to="/confirmation" className="d-flex align-items-center gap-1">
-                  <i className="ri-shopping-cart-line"></i> Order
-                </Link>
-              )}
               {currentUser ? (
                   <>
                     {/* <span>Welcome, {currentUser.name}</span> */}
@@ -217,7 +206,7 @@ const Header = ({ onSearch }) => {
               <div className="logo">
                 <h1>
                   <Link to="/home" className=" d-flex align-items-center gap-2">
-                    <i className="ri-car-line"></i>
+                    <i className="ri-stock-line"></i>
                     <span>
                     Online Financial <br /> Advisor
                     </span>

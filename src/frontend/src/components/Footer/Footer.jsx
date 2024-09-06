@@ -41,7 +41,7 @@ const Footer = () => {
             <div className="logo footer__logo">
               <h1>
                 <Link to="/home" className=" d-flex align-items-center gap-2">
-                  <i className="ri-car-line"></i>
+                  <i className="ri-stock-line"></i>
                   <span>
                   Online Financial <br /> Advisor
                   </span>
@@ -49,7 +49,7 @@ const Footer = () => {
               </h1>
             </div>
             <p className="footer__logo-content">
-            Established since October 26th, 2004, Lstore asserts its position as the provider of the most luxurious, high-quality, and cutting-edge car models worldwide. If you need a high-quality car at an affordable price, come to Lstore today!
+            Founded on October 26th, 2022, Histock is your go-to platform for expert stock investment advice. With top-tier insights and personalized recommendations, Histock helps you invest smartly and confidently. Choose Histock for smarter investments today!
             </p>
           </Col>
 
