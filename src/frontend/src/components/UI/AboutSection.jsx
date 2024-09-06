@@ -9,8 +9,8 @@ const AboutSection = ({ aboutClass }) => {
       className="about__section"
       style={
         aboutClass === "aboutPage"
-          ? { marginTop: "0px" }
-          : { marginTop: "280px" }
+          ? { marginTop: "0px", backgroundColor:'#fff' }
+          : { marginTop: "280px", backgroundColor:'#fff' }
       }
     >
       <Container>

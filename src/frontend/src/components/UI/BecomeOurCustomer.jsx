@@ -4,7 +4,7 @@ import { Container, Row, Col } from "reactstrap";
 
 import driverImg from "/media/our_product.png";
 
-const BecomeDriverSection = () => {
+const BecomeOurCustomer = () => {
   return (
     <section className="become__driver">
       <Container>
@@ -28,4 +28,4 @@ const BecomeDriverSection = () => {
   );
 };
 
-export default BecomeDriverSection;
+export default BecomeOurCustomer;

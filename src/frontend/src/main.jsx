@@ -11,9 +11,9 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import App from './App.jsx'
 import './index.css'
-console.log(import.meta.env.VITE_AG_CHART)
-console.warn = () => {};  // Tắt cảnh báo
-console.error = () => {}; // Tắt lỗi
+// console.log(import.meta.env.VITE_AG_CHART)
+// console.warn = () => {};  // Tắt cảnh báo
+// console.error = () => {}; // Tắt lỗi
 
 createRoot(document.getElementById('root')).render(
   // <StrictMode>

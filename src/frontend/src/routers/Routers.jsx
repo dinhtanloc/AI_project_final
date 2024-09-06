@@ -1,28 +1,35 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Dashboard from "@pages/Dashboardpage";
 import HomePage from "@pages/HomePage";
 import LoadingPage from "@components/UI/LoadingPage";
-import Login from "@pages/Login"
-const Routers = ({IsDashboard}) => {
+import Login from "@pages/Login";
+import StockMarket from "@pages/StockMarket";
+import BlogDetails from "@pages/BlogDetails";
+import Blog from "@pages/Blog";
+import About from "@pages/About";
+import MainLayout from "@components/UI/MainLayout";
+import RadarChart from "../components/UI/RadarChart";
+const Routers = ({ IsDashboard }) => {
   const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
-  
 
   useEffect(() => {
-        setIsLoading(true);
-    
-        const timer = setTimeout(() => {
-          setIsLoading(false);
-        }, 1000); // Giả lập thời gian tải trang
-    
-        return () => clearTimeout(timer);
-      }, [location]);
-    
+    setIsLoading(true);
+
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000); // Giả lập thời gian tải trang
+
+    return () => clearTimeout(timer);
+  }, [location]);
+
   if (isLoading) {
     return <LoadingPage />;
   }
-  console.log(IsDashboard)
+  
+  console.log(IsDashboard);
+
   return (
     <Routes>
       {IsDashboard ? (
@@ -32,16 +39,21 @@ const Routers = ({IsDashboard}) => {
           {/* <Route path="/login" element={<Login />} /> */}
         </>
       ) : (
-        <>
+        <Route element={<MainLayout />}>
           <Route path="/" element={<Navigate to="/home" />} />
           <Route path="/home" element={<HomePage />} />
           {/* <Route path="/dashboard" element={<Dashboard />} /> */}
           <Route path="/register" element={<Login />} />
           <Route path="/login" element={<Login />} />
-        </>
+          <Route path="/stock-market" element={<StockMarket />} />
+          <Route path="/blogs" element={<Blog />} />
+          <Route path="/blogs/:slug" element={<BlogDetails />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/rada" element={<RadarChart />} />
+        </Route>
       )}
     </Routes>
   );
-  };
-  
-  export default Routers;
+};
+
+export default Routers;

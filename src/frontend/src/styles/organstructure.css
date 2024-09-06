@@ -1,0 +1,15 @@
+#chart_div .google-visualization-orgchart-linebottom {
+    border-bottom: 4px solid magenta;
+  }
+  
+  #chart_div .google-visualization-orgchart-lineleft {
+    border-left: 4px solid magenta;
+  }
+  
+  #chart_div .google-visualization-orgchart-lineright {
+    border-right: 4px solid magenta;
+  }
+  
+  #chart_div .google-visualization-orgchart-linetop {
+    border-top: 4px solid magenta;
+  }
