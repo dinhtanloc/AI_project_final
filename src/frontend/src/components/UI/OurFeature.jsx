@@ -1,28 +1,15 @@
-import React from "react";
-
-import CommonSection from "@components/UI/CommonSection";
-import Helmet from "@components/Helmet/Helmet";
-import AboutSection from "@components/UI/AboutSection";
+import RadarChart from "@components/UI/RadarChart"
 import { Container, Row, Col } from "reactstrap";
-import BecomeOurCustomer from "@components/UI/BecomeOurCustomer";
 
-import driveImg from "@assets/all-images/drive.jpg";
-import OurMembers from "@components/UI/OurMembers";
-import "@styles/about.css";
-import OrgStructure from '@components/UI/OrgStructure';
-import OurFeature from "@components/UI/OurFeature";
-const About = () => {
-  return (
-    <Helmet title="About">
-      <CommonSection title="About Us" />
-      <AboutSection aboutClass="aboutPage" />
-
-      <section className="about__page-section" style={{backgroundColor:'#fff'}}>
+const OurFeature = ()=>{
+    return(
+        <section className="about__page-section" style={{backgroundColor:'#fff'}}>
         <Container>
           <Row>
             <Col lg="6" md="6" sm="12">
               <div className="about__page-img">
-                <img src={driveImg} alt="" className="w-100 rounded-3" />
+                {/* <img src={driveImg} alt="" className="w-100 rounded-3" /> */}
+                <RadarChart/>;
               </div>
             </Col>
 
@@ -55,26 +42,6 @@ const About = () => {
           </Row>
         </Container>
       </section>
-
-      <OrgStructure />
-      
-      <OurFeature/>
-
-      {/* <BecomeOurCustomer /> */}
-
-      <section>
-        <Container>
-          <Row>
-            <Col lg="12" className="mb-5 text-center">
-              <h6 className="section__subtitle">Experts</h6>
-              <h2 className="section__title">Our Members</h2>
-            </Col>
-            <OurMembers />
-          </Row>
-        </Container>
-      </section>
-    </Helmet>
-  );
+    );
 };
-
-export default About;
+export default OurFeature;
