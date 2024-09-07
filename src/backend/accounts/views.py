@@ -37,7 +37,7 @@ class UserViewSet(viewsets.ViewSet):
         ]
         return Response(routes)
 
-    @action(detail=False, methods=['get', 'post'], permission_classes=[IsAuthenticated], url_path='test')
+    @action(detail=False, methods=['get', 'post'], permission_classes=[IsAuthenticated], url_path='current-user')
     def test_endpoint(self, request):
         if request.method == 'GET':
             user_info = {

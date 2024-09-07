@@ -32,7 +32,7 @@ const Layout = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await api.get("accounts/test/");
+        const res = await api.get("accounts/user/current-user/");
         setCurrentUser(true);
       } catch (error) {
         setCurrentUser(false);

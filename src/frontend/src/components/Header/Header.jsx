@@ -92,42 +92,42 @@ const Header = ({ onSearch }) => {
 
     useEffect(() => {
     const fetchUser = async () => {
-      // try {
-      //   const res = await api.get("accounts/test/");
-      //   setCurrentUser(true);
-      //   const name_login = res.data.response.username;
-      //   setName(name_login)
-      // } catch (error) {
-      //   setCurrentUser(false);
-      //   console.error('Có lỗi xảy ra khi truy cập dữ liệu:', error);
+      try {
+        const res = await api.get("accounts/user/current-user/");
+        setCurrentUser(true);
+        const name_login = res.data.response.username;
+        setName(name_login)
+      } catch (error) {
+        setCurrentUser(false);
+        console.error('Có lỗi xảy ra khi truy cập dữ liệu:', error);
 
-      // }
+      }
     };
 
     const fetchProfile = async () => {
-      // try {
-      //   const res = await api.get("accounts/profile/");
-      //   setCurrentUser(true);
-      //   const profile = res.data;
-      //   var imgUrl = profile.image
-      //   setImage(imgUrl)
-      //   // setName(profile)
-      // } catch (error) {
-      //   setCurrentUser(false);
-      //   console.error('Có lỗi xảy ra khi truy cập dữ liệu:', error);
+      try {
+        const res = await api.get("accounts/user/profile/");
+        setCurrentUser(true);
+        const profile = res.data;
+        var imgUrl = profile.image
+        setImage(imgUrl)
+        // setName(profile)
+      } catch (error) {
+        setCurrentUser(false);
+        console.error('Có lỗi xảy ra khi truy cập dữ liệu:', error);
 
-      // }
+      }
     };
 
     const fetchStaffChecking = async () => {
-      // try {
-      //     const response = await api.get('accounts/staff/');
-      //     // setUserProfile(response.data);
-      //     checkStaff(response.data.is_staff);
+      try {
+          const response = await api.get('accounts/user/staff/');
+          // setUserProfile(response.data);
+          checkStaff(response.data.is_staff);
           
-      // } catch (error) {
-      //     console.error('Error fetching user profile:', error);
-      // }
+      } catch (error) {
+          console.error('Error fetching user profile:', error);
+      }
   };
 
     fetchUser();
@@ -135,7 +135,7 @@ const Header = ({ onSearch }) => {
     fetchStaffChecking();
   }, []);
 
-
+console.log(currentUser)
   const menuRef = useRef(null);
   // import img from './default.jpg'
 
@@ -160,7 +160,7 @@ const Header = ({ onSearch }) => {
               {currentUser ? (
                   <>
                     {/* <span>Welcome, {currentUser.name}</span> */}
-                    {/* <span>{nameuser}</span> */}
+                    {/* <span>{nameuser}</span>  */}
                     
                     <Link to="/profile" className=" d-flex align-items-center gap-1">
                       <img src={img} style ={{width:'20px',height:'20px', marginBottom:'2px'}} alt="Default Image" ></img>

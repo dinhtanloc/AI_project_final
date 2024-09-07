@@ -1,10 +1,10 @@
 import React, { useState, useContext } from 'react';
-import "../styles/login.css";
+import "@styles/login.css";
 import axios from 'axios'
 import { jwtDecode }  from "jwt-decode";
-import AuthContext from '../context/AuthContext'
-import  AuthLoginContext  from '../context/AuthLoginContext';
-import useAxios from "../utils/useAxios"
+import AuthContext from '@context/AuthContext'
+import  AuthLoginContext  from '@context/AuthLoginContext';
+import useAxios from "@utils/useAxios"
 
 import { useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
@@ -58,19 +58,16 @@ const Login = () => {
   }
 
   function submitLogin(e) {
-    e.preventDefault()
-    // const email = e.target.email.value
-    // const password = e.target.password.value
+    e.preventDefault();
+    console.log(email,password)
+    if (email.length > 0) {
+        loginUser(email, password); 
+        setCurrentUser(true);
+    } else {
+        console.log("Email or password is empty");
+    }
+}
 
-    email.length > 0 && loginUser(email, password)
-    setCurrentUser(true)
-   
-
-  
-  }
-
-
-  // Tạo một biến để lưu trạng thái "right-panel-active"
   const containerClassName = isSignUpActive ? 'container_title right-panel-active' : 'container_title';
   return (
     <>
