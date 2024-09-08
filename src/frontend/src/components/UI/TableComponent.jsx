@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 // import { CryptoContext } from "./../context/CryptoContext";
 import Pagination from "./Pagination";
 // import { StorageContext } from "./../context/StorageContext";
-
+import cryptoData from "@assets/data/cryptoData"
 const SaveBtn = ({ data }) => {
 //   const { saveCoin, allCoins, removeCoin } = useContext(StorageContext);
 
@@ -50,20 +50,26 @@ const SaveBtn = ({ data }) => {
   );
 };
 
-const TableComponent = () => {
-  let { cryptoData, currency,error } = useContext(CryptoContext);
+const TableComponent = ({width, height}) => {
+  const currency = 'VND';
+  // let { cryptoData, currency,error } = useContext(CryptoContext);
+  
 
   return (
     <>
-      <div className="flex flex-col mt-9 border border-gray-100 rounded">
+      <div className="flex flex-col mt-9 border border-gray-100 rounded"  style={{
+        width: width || "100%", // default to full width if not specified
+        height: height || "auto", // default to auto height if not specified
+        overflow: "auto", // add scrollbars if needed
+      }}>
         {cryptoData ? (
-          <table className="w-full table-auto">
+          <table className="w-full table-auto" style={{color:"black"}}>
             <thead
               className="capitalize text-base text-gray-100 
             font-medium border-b border-gray-100
             "
             >
-              <tr>
+              <tr style={{color:'black'}}>
                 <th className="py-1">asset</th>
                 <th className="py-1">symbol</th>
                 <th className="py-1">price</th>
@@ -182,7 +188,7 @@ const TableComponent = () => {
             CoinGecko
           </a>
         </span> */}
-        <Pagination />
+        {/* <Pagination /> */}
       </div>
     </>
   );

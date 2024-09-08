@@ -13,6 +13,7 @@ import RadarChart from "@components/UI/RadarChart";
 import BollingerStock from "@components/UI/BollingerStock";
 import CandleStickChartWithBollingerBandOverlay from "@components/UI/CandleStickChartWithBollingerBandOverlay";
 import getData from "@assets/data/stockData"
+import TableComponent from "@components/UI/TableComponent"
 // import StockMarket from "@pages/" 
 const Routers = ({ IsDashboard }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -56,6 +57,7 @@ const Routers = ({ IsDashboard }) => {
           <Route path="/stock-market" element={<StockMarket />} />
           <Route path="/bollinger" element={<BollingerStock />} />
           <Route path="/candle" element={<CandleStickChartWithBollingerBandOverlay data={getData()} width={850} ratio={1} />} />
+          <Route path="/table" element={<TableComponent />} />
           {/* <Route path="/candle" element={<CandleStickChartWithBollingerBandOverlay data={getData()} width={850} ratio={1} />} /> */}
         </Route>
       )}

@@ -41,6 +41,7 @@
     "react-stockcharts": "^0.7.8",
     "reactstrap": "^9.2.2",
     "remixicon": "^4.3.0",
+    "rsuite": "^5.70.1",
     "shortid": "^2.2.16",
     "slick-carousel": "^1.8.1",
     "sweetalert2": "^11.12.4"

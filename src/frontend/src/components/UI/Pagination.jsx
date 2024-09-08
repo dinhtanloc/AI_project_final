@@ -1,19 +1,19 @@
 import React, { useContext, useRef } from "react";
-import paginationArrow from "../assets/pagination-arrow.svg";
-import { CryptoContext } from "./../context/CryptoContext";
-import submitIcon from "../assets/submit-icon.svg";
+import paginationArrow from "@assets/pagination-arrow.svg";
+// import { CryptoContext } from "./../context/CryptoContext";
+import submitIcon from "@assets/submit-icon.svg";
 
 const PerPage = () => {
-  const { setPerPage } = useContext(CryptoContext);
+  // const { setPerPage } = useContext(CryptoContext);
   const inputRef = useRef(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    let val = inputRef.current.value;
-    if (val !== 0) {
-      setPerPage(val);
-      inputRef.current.value = val;
-    }
+    // let val = inputRef.current.value;
+    // if (val !== 0) {
+    //   setPerPage(val);
+    //   inputRef.current.value = val;
+    // }
   };
 
   return (
@@ -51,8 +51,8 @@ const PerPage = () => {
 };
 
 const Pagination = () => {
-  let { page, setPage, totalPages, perPage, cryptoData } =
-    useContext(CryptoContext);
+  // let { page, setPage, totalPages, perPage, cryptoData } =
+    // useContext(CryptoContext);
 
   const TotalNumber = Math.ceil(totalPages / perPage);
 

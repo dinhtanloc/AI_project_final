@@ -11,7 +11,7 @@ import Header from "./HeaderDashboard";
 import numeral from 'numeral';
 import useAxios from "@utils/useAxios"
 import StockAgChart from "@components/UI/StockAgChart";
-import StockChart from "@components/UI/StockChart"
+// import StockChart from "@components/UI/StockChart"
 // import {SummaryLineChart} from "@components/UI/LineChart";
 // import GeographyChart from "@components/UI/GeographyChart";
 // import BarChart from "@components/UI/BarChart";

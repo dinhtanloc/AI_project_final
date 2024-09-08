@@ -8,7 +8,7 @@ const BollingerStock = () => {
   const [k, setK] = useState(2);  // Deviations
   const plotRef = useRef(null);
   const [aaplData,setData] = useState(getData())
-  console.log(aaplData)
+  // console.log(aaplData)
 
   useEffect(() => {
     if (plotRef.current) {
@@ -17,6 +17,8 @@ const BollingerStock = () => {
 
       // Render the plot
       const plot = Plot.plot({
+        width: 850,
+        height:300,
         y: { grid: true, label: "Stock Price (APPL)" },
         x: { label: "Date" },
         marks: [
@@ -34,7 +36,7 @@ const BollingerStock = () => {
 
   return (
     <div>
-      <div>
+      {/* <div>
         <label>Periods (N):</label>
         <input
           type="range"
@@ -57,7 +59,7 @@ const BollingerStock = () => {
           onChange={(e) => setK(Number(e.target.value))}
         />
         <span>{k}</span>
-      </div>
+      </div> */}
       <div ref={plotRef}></div>
     </div>
   );

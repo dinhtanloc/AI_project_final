@@ -1,0 +1,98 @@
+/* TableComponent.css */
+
+.table-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 2rem;
+    border: 1px solid #e5e7eb; /* border-gray-100 */
+    border-radius: 0.375rem; /* rounded */
+  }
+  
+  .table {
+    width: 50%;
+    border-collapse: collapse;
+  }
+  
+  .table thead {
+    text-transform: capitalize;
+    font-size: 1rem; /* text-base */
+    color: #f3f4f6; /* text-gray-100 */
+    font-weight: 500; /* font-medium */
+    border-bottom: 1px solid #e5e7eb; /* border-b border-gray-100 */
+  }
+  
+  .table th {
+    padding: 0.25rem; /* py-1 */
+  }
+  
+  .table tbody {
+    text-align: center;
+    font-size: 1rem; /* text-base */
+  }
+  
+  .table tbody tr {
+    border-bottom: 1px solid #e5e7eb; /* border-b border-gray-100 */
+  }
+  
+  .table tbody tr:hover {
+    background-color: #f3f4f6; /* hover:bg-gray-200 */
+  }
+  
+  .table tbody td {
+    padding: 1rem; /* py-4 */
+  }
+  
+  .table tbody td img {
+    width: 1.2rem; /* w-[1.2rem] */
+    height: 1.2rem; /* h-[1.2rem] */
+    margin: 0 0.375rem; /* mx-1.5 */
+  }
+  
+  .save-btn {
+    outline: none;
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+  
+  .save-btn svg {
+    width: 1.5rem; /* w-[1.5rem] */
+    margin-left: 0.375rem; /* ml-1.5 */
+    fill: #e5e7eb; /* fill-gray-100 */
+  }
+  
+  .save-btn svg:hover {
+    fill: #06b6d4; /* hover:fill-cyan */
+  }
+  
+  .text-green {
+    color: #22c55e; /* text-green */
+  }
+  
+  .text-red {
+    color: #ef4444; /* text-red */
+  }
+  
+  .spinner {
+    width: 2rem; /* w-8 */
+    height: 2rem; /* h-8 */
+    border: 0.25rem solid #06b6d4; /* border-4 border-cyan */
+    border-top: 0.25rem solid #e5e7eb; /* border-b-gray-200 */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .message {
+    min-height: 60vh;
+    font-size: 1.125rem; /* text-lg */
+    color: #ef4444; /* text-red */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
