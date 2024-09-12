@@ -15,6 +15,15 @@
   border-radius: 5px;
 }
 
+.textarea {
+  width: 100%;
+  padding: 10px 15px;
+  color: #7c8a97;
+  border: 1px solid #7c8a972a;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
 @media only screen and (max-width: 768px) {
   .contact__btn {
     margin-bottom: 40px;

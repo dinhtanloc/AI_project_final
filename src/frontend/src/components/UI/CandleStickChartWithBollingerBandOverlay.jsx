@@ -35,6 +35,7 @@ const bbStroke = {
 const bbFill = "#4682B4";
 
 const CandleStickChartWithBollingerBandOverlay = ({ type, data: initialData, width, ratio }) => {
+    
     const ema20 = ema()
         .options({
             windowSize: 20, // optional will default to 10

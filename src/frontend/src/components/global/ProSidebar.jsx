@@ -138,21 +138,21 @@ const ProSidebar = (data) => {
               Data
             </Typography>
             <Item
-              title="Manage Team"
+              title="Market Analysys"
               to="admin/team"
               icon={<PeopleOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
-              title="Product Inventory"
+              title="Stock Predictions"
               to="/admin/products"
               icon={<ContactsOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
-              title="Order Listing"
+              title="Stock Autoadvisor"
               to="admin/orders"
               icon={<ReceiptOutlinedIcon />}
               selected={selected}
@@ -164,7 +164,7 @@ const ProSidebar = (data) => {
               color={colors.grey[300]}
               sx={{ m: "15px 0 5px 20px" }}
             >
-              Pages
+              Set up
             </Typography>
             {/* <Item
               title="Staff Dashboard"
@@ -174,55 +174,27 @@ const ProSidebar = (data) => {
               setSelected={setSelected}
             /> */}
             <Item
-              title="Product Dashboard"
+              title="Help"
               to="admin/product-dashboard"
               icon={<CalendarTodayOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
-              title="Order Dashboard"
+              title="Activity"
+              to="admin/order-dashboard"
+              icon={<HelpOutlineOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            <Item
+              title="Settings"
               to="admin/order-dashboard"
               icon={<HelpOutlineOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
 
-            {/* <Typography
-              variant="h6"
-              color={colors.grey[300]}
-              sx={{ m: "15px 0 5px 20px" }}
-            >
-              Charts
-            </Typography>
-            <Item
-              title="Bar Chart"
-              to="/admin/bar"
-              icon={<BarChartOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Pie Chart"
-              to="/admin/pie"
-              icon={<PieChartOutlineOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Line Chart"
-              to="/admin/line"
-              icon={<TimelineOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Geography Chart"
-              to="/admin/geography"
-              icon={<MapOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            /> */}
           </Box>
         </Menu>
       </Sidebar>

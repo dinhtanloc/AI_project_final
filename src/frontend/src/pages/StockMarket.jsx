@@ -168,7 +168,7 @@ const StockMarket = () => {
         </Box>
         {/* Row 2 */}
                             <Box
-                                gridColumn="span 10"
+                                gridColumn="span 15"
                                 gridRow="span 4"
                                 backgroundColor={"#f0f3f7"}
                                 // ref={boxRef}
@@ -178,9 +178,9 @@ const StockMarket = () => {
                                 height="450"
                             >
                                 {/* <StockChart w={chartWidth - 100} h={390} /> */}
-                                <CandleStickChartWithBollingerBandOverlay data={getData()} width={980} ratio={1}/>
+                                <CandleStickChartWithBollingerBandOverlay data={getData()} width={1320} ratio={10}/>
                             </Box>
-                            <Box
+                            {/* <Box
                                 gridColumn="span 5"
                                 gridRow="span 4"
                                 backgroundColor={"#f0f3f7"}
@@ -189,7 +189,7 @@ const StockMarket = () => {
                                 justifyContent="center"
                                 alignItems="center"
                                 height="450"
-                            ></Box>
+                            ></Box> */}
                             {/* Row 3 */}
                             <Box
                                 gridColumn="span 9"
@@ -202,7 +202,7 @@ const StockMarket = () => {
                             >
                                 {/* <StockChart w={chartWidth - 100} h={390} /> */}
                                 {/* <CandleStickChartWithBollingerBandOverlay data={getData()} width={1200} ratio={1}/> */}
-                                <BollingerStock/>
+                                <BollingerStock n={n} k={k}/>
                             </Box>
                             <Box
                                 gridColumn="span 6"

@@ -3,9 +3,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import * as Plot from '@observablehq/plot';
 import getData from '@assets/data/stockData'; // Giả sử bạn đã có dữ liệu APPL
 
-const BollingerStock = () => {
-  const [n, setN] = useState(20); // Periods
-  const [k, setK] = useState(2);  // Deviations
+const BollingerStock = ({n,k}) => {
+  // const [n, setN] = useState(20); // Periods
+  // const [k, setK] = useState(2);  // Deviations
   const plotRef = useRef(null);
   const [aaplData,setData] = useState(getData())
   // console.log(aaplData)
