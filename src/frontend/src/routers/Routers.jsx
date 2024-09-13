@@ -15,6 +15,9 @@ import CandleStickChartWithBollingerBandOverlay from "@components/UI/CandleStick
 import getData from "@assets/data/stockData"
 import Contact from "@pages/Contact";
 import TableComponent from "@components/UI/TableComponent"
+import PredictionDashboard from '@pages/PredictionDashboard'
+import Chatbot from '@components/UI/Chatbot'
+import PrivateRoute from '@utils/PrivateRoute'
 // import StockMarket from "@pages/" 
 const Routers = ({ IsDashboard }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -41,11 +44,18 @@ const Routers = ({ IsDashboard }) => {
       {IsDashboard ? (
         <>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard/prediction" element={<PredictionDashboard />} />
+          <Route path="/dashboard/chatbot" element={<Chatbot />} />
           {/* <Route path="/dashboard/abc" element={<Login />} /> */}
           {/* <Route path="/login" element={<Login />} /> */}
         </>
       ) : (
         <Route element={<MainLayout />}>
+
+          {/* <Route exact path='/profile/' element={<PrivateRoute/>}>
+            <Route exact path='/profile/' element={<Profile/>}/>
+          </Route> */}
+
           <Route path="/" element={<Navigate to="/home" />} />
           <Route path="/home" element={<HomePage />} />
           {/* <Route path="/dashboard" element={<Dashboard />} /> */}
@@ -60,6 +70,7 @@ const Routers = ({ IsDashboard }) => {
           {/* <Route path="/candle" element={<CandleStickChartWithBollingerBandOverlay data={getData()} width={800} ratio={8} />} /> */}
           <Route path="/table" element={<TableComponent />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/prediction" element={<PredictionDashboard />} />
           {/* <Route path="/candle" element={<CandleStickChartWithBollingerBandOverlay data={getData()} width={850} ratio={1} />} /> */}
         </Route>
       )}

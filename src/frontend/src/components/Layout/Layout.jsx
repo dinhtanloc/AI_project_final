@@ -47,7 +47,9 @@ const Layout = () => {
   };
 
   const isLoginPage = location.pathname === "/login" || location.pathname === "/register";
-  const isDashboard = location.pathname === "/dashboard";
+  // const isDashboard = location.pathname === "/dashboard";
+  const isDashboard = location.pathname.startsWith("/dashboard");
+
 
 
   {console.log(isDashboard)}

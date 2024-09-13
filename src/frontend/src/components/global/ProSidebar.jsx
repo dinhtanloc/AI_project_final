@@ -29,9 +29,11 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
       }}
       onClick={() => setSelected(title)}
       icon={icon}
+      component={<Link to={to} />}
+
     >
       <Typography>{title}</Typography>
-      <Link to={to} />
+      {/* <Link to={to} /> */}
     </MenuItem>
   );
 };
@@ -124,7 +126,7 @@ const ProSidebar = (data) => {
           <Box paddingLeft={isCollapsed ? undefined : "10%"}>
             <Item
               title="Dashboard"
-              to="/"
+              to="/dashboard"
               icon={<HomeOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
@@ -146,14 +148,14 @@ const ProSidebar = (data) => {
             />
             <Item
               title="Stock Predictions"
-              to="/admin/products"
+              to="/dashboard/prediction"
               icon={<ContactsOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
               title="Stock Autoadvisor"
-              to="admin/orders"
+              to="/dashboard/chatbot"
               icon={<ReceiptOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
@@ -166,13 +168,7 @@ const ProSidebar = (data) => {
             >
               Set up
             </Typography>
-            {/* <Item
-              title="Staff Dashboard"
-              to="admin/staff-dashboard"
-              icon={<PersonOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            /> */}
+           
             <Item
               title="Help"
               to="admin/product-dashboard"

@@ -10,6 +10,9 @@ import "remixicon/fonts/remixicon.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import App from './App.jsx'
+import { Provider } from "@context/dataContext";
+import ContextProvider from '@context/ChatbotContext.jsx'
+
 import './index.css'
 // console.log(import.meta.env.VITE_AG_CHART)
 // console.warn = () => {};  // Tắt cảnh báo
@@ -24,8 +27,13 @@ createRoot(document.getElementById('root')).render(
       <AuthProvider>
         <AuthLoginProvider>
             <NextUIProvider>
+              <ContextProvider>
+                <Provider>
+                  <App />
 
-              <App />
+                </Provider>
+
+              </ContextProvider>
             </NextUIProvider>
 
           

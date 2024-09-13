@@ -7,7 +7,7 @@ AgChartsEnterprise.setLicenseKey(import.meta.env.VITE_AG_CHART);
 import "ag-charts-enterprise";
 import getData from "@assets/data/stockData"
 // import { AgFinancialChartOptions } from "ag-charts-enterprise";
-
+console.log(import.meta.env.VITE_AG_CHART)
 const StockAgChart = () => {
   const [options, setOptions] = useState({
     data: getData(),
