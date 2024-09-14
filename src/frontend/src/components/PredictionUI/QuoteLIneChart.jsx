@@ -14,14 +14,11 @@ import {
 } from "date-fns";
 
 export default function QuoteLIneChart() {
-  // Getting circles data (max value by year)
   const [circules, setCircules] = useState([]);
   
   function getCircules() {
     if (parseData.length > 0) {
       const groupsYear = {};
-      
-      // Grouping data by year
       parseData.forEach((val) => {
         const date = getYear(val.date);
         if (groupsYear[date]) {
@@ -31,7 +28,6 @@ export default function QuoteLIneChart() {
         }
       });
 
-      // Extracting max values by year
       const dataCircules = Object.values(groupsYear).map((val) => {
         return val.reduce((prev, current) => (prev.value > current.value ? prev : current));
       });
@@ -40,28 +36,22 @@ export default function QuoteLIneChart() {
     }
   }
 
-  // Destructuring data and methods from context
   const { priceHistory, timeSeries, getParseData } = useData();
 
-  // Parsing price history into usable format
   const parseData = priceHistory.map((value, ind) => ({
     date: new Date(timeSeries[ind]),
     value,
   }));
 
-  // Setting parsed data into context on load
   useEffect(() => {
     getParseData(parseData);
   }, [getParseData, parseData]);
 
-  // Calculating circles data whenever price history changes
   useEffect(() => {
     getCircules();
   }, [priceHistory]);
 
-  // Measuring the SVG dimensions for D3 rendering
   const [ref, bounds] = useMeasure();
-
   const height = bounds.height;
   const width = bounds.width;
   const margin = {
@@ -71,12 +61,10 @@ export default function QuoteLIneChart() {
     left: 30,
   };
 
-  // Date intervals for the x-axis
   const startDay = startOfMonth(parseData[0]?.date || new Date());
   const endDay = endOfMonth(parseData[parseData.length - 1]?.date || new Date());
   const months = eachYearOfInterval({ start: startDay, end: endDay });
 
-  // Scales for x and y axes
   const xScale = d3
     .scaleTime()
     .domain([startDay, endDay])
@@ -87,7 +75,6 @@ export default function QuoteLIneChart() {
     .domain(d3.extent(parseData.map((d) => d.value)))
     .range([height - margin.bottom, margin.top]);
 
-  // Line generator for D3 path
   const line = d3
     .line()
     .x((d) => xScale(d.date))
@@ -95,7 +82,6 @@ export default function QuoteLIneChart() {
 
   const pathData = line(parseData);
 
-  // Pulsating circle animation
   useEffect(() => {
     drawPulsatingCircle();
   }, []);
@@ -144,7 +130,7 @@ export default function QuoteLIneChart() {
           }}
           viewBox={`0 0 ${bounds.width} ${bounds.height}`}
         >
-          {/* Y Axis ticks and lines */}
+
           {yScale.ticks().map((max) => (
             <g key={max}>
               <line
@@ -165,7 +151,6 @@ export default function QuoteLIneChart() {
             </g>
           ))}
 
-          {/* X Axis labels */}
           {months.map((date, i) => (
             <g key={i} transform={`translate(${xScale(date)},0)`}>
               {i % 2 === 1 && (
@@ -187,7 +172,7 @@ export default function QuoteLIneChart() {
             </g>
           ))}
 
-          {/* Line chart */}
+
           <motion.path
             className="shadow"
             initial={{ pathLength: 0 }}
@@ -198,7 +183,6 @@ export default function QuoteLIneChart() {
             stroke="#03FFF9"
           />
 
-          {/* Circles on line chart */}
           {circules.map((d) => (
             <Tooltip
               key={d.value}

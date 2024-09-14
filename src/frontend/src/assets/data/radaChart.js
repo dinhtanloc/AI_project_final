@@ -1,37 +1,37 @@
-let oginitialData =[
-    {
-      "name": "iPhone",
-      "Battery Life": 0.22,
-      "Brand": 0.28,
-      "Contract Cost": 0.29,
-      "Design And Quality": 0.17,
-      "Have Internet Connectivity": 0.22,
-      "Large Screen": 0.02,
-      "Price Of Device": 0.21,
-      "To Be A Smartphone": 0.5
-    },
-    {
-      "name": "Samsung",
-      "Battery Life": 0.27,
-      "Brand": 0.16,
-      "Contract Cost": 0.35,
-      "Design And Quality": 0.13,
-      "Have Internet Connectivity": 0.2,
-      "Large Screen": 0.13,
-      "Price Of Device": 0.35,
-      "To Be A Smartphone": 0.38
-    },
-    {
-      "name": "Nokia",
-      "Battery Life": 0.26,
-      "Brand": 0.1,
-      "Contract Cost": 0.3,
-      "Design And Quality": 0.14,
-      "Have Internet Connectivity": 0.22,
-      "Large Screen": 0.04,
-      "Price Of Device": 0.41,
-      "To Be A Smartphone": 0.3
-    }
-  ]
-  
-export default getData
+let phoneData = [
+  {
+    "name": "Chat GPT",
+    "Financial Knowledge": 0.3,
+    "Expert Support": 0.45,
+    "Friendly and Quality": 0.25,
+    "Modern and Professional": 0.45,
+    "Trend and Convenience": 0.39,
+    "Fast and Accurate Data Updates": 0.20,
+    "Smart, Reliable AI Integration": 0.48,
+    "Affordable Pricing": 0.30
+  },
+  {
+    "name": "Histock",
+    "Financial Knowledge": 0.45,
+    "Expert Support": 0.40,
+    "Friendly and Quality": 0.4,
+    "Modern and Professional": 0.35,
+    "Trend and Convenience": 0.41,
+    "Fast and Accurate Data Updates": 0.34,
+    "Smart, Reliable AI Integration": 0.4,
+    "Affordable Pricing": 0.32
+  },
+  {
+    "name": "Robinhood",
+    "Financial Knowledge": 0.4,
+    "Expert Support": 0.1,
+    "Friendly and Quality": 0.49,
+    "Modern and Professional": 0.45,
+    "Trend and Convenience": 0.40,
+    "Fast and Accurate": 0.45,
+    "Smart and Reliable": 0.25,
+    "Affordable Pricing": 0.3
+  }
+];
+
+export default phoneData;

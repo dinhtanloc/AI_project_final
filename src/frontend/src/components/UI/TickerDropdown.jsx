@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ticker from "@assets/data/tickerData";  // Đảm bảo đường dẫn chính xác
 import "@styles/dropdown.css"
+
 const TickerDropdown = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedTicker, setSelectedTicker] = useState('Select a ticker');
@@ -15,8 +16,11 @@ const TickerDropdown = (props) => {
   };
 
   return (
-    <div className="dropdown">
-      <button className="dropdown-toggle" onClick={toggleDropdown}>
+    <div className="dropdown" style={{width:'100%'}}>
+      <button
+        className={`dropdown-toggle ${isOpen ? 'active' : ''}`}
+        onClick={toggleDropdown}
+      >
         {selectedTicker}
       </button>
       {isOpen && (

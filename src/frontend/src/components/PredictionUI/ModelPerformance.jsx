@@ -35,7 +35,7 @@ export default function ModelPerformance() {
     price,
   } = useData();
 
-  // train data
+
   let trainData = [];
 
   priceTrain.forEach((value, ind) => {
@@ -44,7 +44,7 @@ export default function ModelPerformance() {
   });
   let rmseValue = rmse[0]?.toFixed(2);
 
-  // table data
+
   let tableData = [];
 
   let [ref, bounds] = useMeasure();
@@ -64,7 +64,7 @@ export default function ModelPerformance() {
     left: 30,
   };
 
-  // Train data line chart
+
   let startDay = startOfMonth(parseData?.[0]?.date);
   let endDay = endOfMonth(parseData?.[parseData.length - 1]?.date);
   let months = eachYearOfInterval({ start: startDay, end: endDay });
@@ -84,7 +84,7 @@ export default function ModelPerformance() {
     .x((d) => xScale(d.date))
     .y((d) => yScale(d.value));
 
-  // valid data
+
 
   let line2 = d3
     .line()
@@ -96,7 +96,7 @@ export default function ModelPerformance() {
     .x((d) => xScale(d.date))
     .y((d) => yScale(d.predict));
 
-  // lines chart
+
   let v = line2(tableData);
   let d = line(trainData);
   let p = line3(tableData);

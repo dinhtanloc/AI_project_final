@@ -13,7 +13,7 @@ const StockAgChart = () => {
     data: getData(),
     title: { text: "Acme Inc." },
     theme:'ag-financial-dark',
-    width:950,
+    width:1200,
     height:400,
     initialState: {
       annotations: [

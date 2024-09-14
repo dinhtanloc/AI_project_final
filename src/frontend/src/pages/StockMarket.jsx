@@ -19,6 +19,33 @@ import BollingerStock from "@components/UI/BollingerStock";
 import TableComponent from "@components/UI/TableComponent";
 import TickerDropdown from "@components/UI/TickerDropdown";
 
+const HorizontalSelection = () => {
+  // Trạng thái để lưu tùy chọn đang được chọn
+  const [selectedOption, setSelectedOption] = useState(null);
+
+  // Mảng chứa các tùy chọn
+  const options = ["1M", "3M", "6M", "YTD", "1Y", "All"];
+
+  // Hàm xử lý khi người dùng nhấp vào tùy chọn
+  const handleOptionClick = (option) => {
+    setSelectedOption(option);
+  };
+
+  return (
+    <div id="drink-holder">
+      {options.map(option => (
+        <div
+          key={option}
+          className={`option-item ${selectedOption === option ? 'selected' : ''}`}
+          onClick={() => handleOptionClick(option)}
+        >
+          {option}
+        </div>
+      ))}
+    </div>
+  );
+};
+
 
 const StockMarket = () => {
     const boxRef = useRef(null);
@@ -54,13 +81,22 @@ const StockMarket = () => {
                         >
                             {/* Row 1 */}
                                <Box
-          gridColumn="span 3"
-          backgroundColor={"#f0f3f7"}
+          gridColumn="span 9"
+          backgroundColor={"#fff"}
           display="flex"
           alignItems="center"
           justifyContent="center"
         >
-          <StatBox
+          {/* <div id="drink-holder" style={{width:'95%', height:'100%'}}>
+            <div class="option-item" style={{width:'30%', height:'100%', fontSize:'18px'}}>1M</div>
+            <div class="option-item" style={{width:'30%', height:'100%', fontSize:'18px'}}>3M</div>
+            <div class="option-item" style={{width:'30%', height:'100%', fontSize:'18px'}}>6M</div>
+            <div class="option-item" style={{width:'30%', height:'100%', fontSize:'18px'}}>YTD</div>
+            <div class="option-item" style={{width:'30%', height:'100%', fontSize:'18px'}}>1Y</div>
+            <div class="option-item" style={{width:'30%', height:'100%', fontSize:'18px'}}>All</div>
+        </div> */}
+        <HorizontalSelection/>
+          {/* <StatBox
             title="70000"
             subtitle="Total sale"
             progress="0.75"
@@ -70,9 +106,9 @@ const StockMarket = () => {
                 sx={{ color: "#f0f3f7", fontSize: "26px" }}
               />
             }
-          />
+          /> */}
         </Box>
-        <Box
+        {/* <Box
           gridColumn="span 3"
           backgroundColor={"#f0f3f7"}
           display="flex"
@@ -109,27 +145,7 @@ const StockMarket = () => {
               />
             }
           />
-        </Box>
-        <Box
-          gridColumn="span 3"
-          backgroundColor={"#f0f3f7"}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <TickerDropdown/>
-          {/* <StatBox
-            title={5}
-            subtitle="Out of stock"
-            progress="0.80"
-            increase="+43%"
-            icon={
-              <InventoryIcon
-                sx={{ color: "#f0f3f7", fontSize: "26px" }}
-              />
-            }
-          /> */}
-        </Box>
+        </Box> */}
         <Box
           gridColumn="span 3"
           backgroundColor={"#f0f3f7"}
@@ -165,6 +181,27 @@ const StockMarket = () => {
         {/* <span>{k}</span> */}
       </div>
          
+        </Box>
+        <Box
+          gridColumn="span 3"
+          backgroundColor={"#fff"}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          zIndex={10000}
+        >
+          <TickerDropdown/>
+          {/* <StatBox
+            title={5}
+            subtitle="Out of stock"
+            progress="0.80"
+            increase="+43%"
+            icon={
+              <InventoryIcon
+                sx={{ color: "#f0f3f7", fontSize: "26px" }}
+              />
+            }
+          /> */}
         </Box>
         {/* Row 2 */}
                             <Box

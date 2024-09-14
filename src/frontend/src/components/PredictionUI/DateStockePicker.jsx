@@ -18,36 +18,25 @@ import {
 } from "@mui/material";
 
 export default function DateStockPicker() {
-  // open Snack
   const [open, setOpen] = useState(false);
-  //Global variables
   const { getResourceData } = useRequestResource();
-  // Date picker ///////////////
-  // start date
   const [startDate, setStartDate] = useState("");
   const handleChangeStart = (start) => {
     setStartDate(format(new Date(start), "yyyy-MM-dd"));
   };
-  /////////////////////////
-
-  // end date ////////////////
   const [endDate, setEndDate] = useState("");
   const handleChangeEnd = (end) => {
     setEndDate(format(new Date(end), "yyyy-MM-dd"));
-  }; //////////////
-
-  // stock //////////
+  }; 
   const [stock, setStock] = useState("");
   const handleChangeStock = (event) => {
     setStock(event.target.value);
   };
 
-  // handle snackbar
   const handleClose = () => {
     setOpen(false);
   };
 
-  // set click request
   const [request, setRequest] = useState(false);
 
   const action = (
@@ -57,7 +46,7 @@ export default function DateStockPicker() {
       </Button>
     </React.Fragment>
   );
-  //////////////
+
 
   let totalDays =
     (new Date(endDate).getTime() - new Date(startDate).getTime()) /
@@ -73,9 +62,9 @@ export default function DateStockPicker() {
     }
   }, [stock, request]);
 
-  // Menu items
+
   const stockMenu = ["NFLX", "NVDA", "DIS", "AAPL", "MSFT"];
-  /////////////////////////
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Snackbar

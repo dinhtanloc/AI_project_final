@@ -1,3 +1,9 @@
+#chart_div{
+  color:'black'!important
+}
+#chart_div .google-visualization-orgchart-text{
+  color:'black' !important
+}
 #chart_div .google-visualization-orgchart-linebottom {
     border-bottom: 4px solid magenta;
   }

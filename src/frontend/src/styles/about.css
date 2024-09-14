@@ -9,3 +9,62 @@
     display: none;
   }
 }
+
+/* Reset margin and padding */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Container for the options */
+#drink-holder {
+  width: 95%;
+  height: 100%;
+  display: flex;
+  overflow-x: auto; /* Allows horizontal scrolling if needed */
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  background-color: #f8f8f8;
+  padding: 10px;
+  gap: 10px; /* Space between items */
+  white-space: nowrap; /* Prevents wrapping */
+  justify-content: center; /* Centers items horizontally */
+}
+
+/* Style for each option */
+.option-item {
+  display: flex;
+  align-items: center; /* Centers text vertically */
+  justify-content: center; /* Centers text horizontally */
+  background-color: #ffffff;
+  color: #333333;
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s;
+  font-size: 18px;
+  height: 100%;
+  flex: 1; /* Ensures all items have equal width */
+}
+
+/* Style for hovered options */
+.option-item:hover {
+  background-color: #e0e0e0;
+  border-color: #e4ebf3;
+}
+
+/* Style for selected option */
+/* .option-item.selected {
+  background-color: #007bff;
+  color: #ffffff;
+  border-color: #007bff;
+} */
+
+.option-item.selected {
+  font-weight: bold;
+  background-color: #497157;
+  color: #c81c1c;
+  border-color: #bfc7d0;
+}

@@ -15,6 +15,8 @@ export default function PredictionDashboard() {
   // console.log(priceHistory)
   // console.log(loading)
   return (
+    <div className="prediction-main">
+
     <Box
       sx={{
         display: "flex",
@@ -59,5 +61,6 @@ export default function PredictionDashboard() {
         <ModelPerformance />
       ) : null}
     </Box>
+    </div>
   );
 }

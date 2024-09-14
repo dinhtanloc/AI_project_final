@@ -50,7 +50,7 @@ const ProSidebar = (data) => {
    
         "& .pro-sidebar-inner": {
           background: `${colors.primary[400]} !important`,
-          height:`100vh`,
+          height:`145vh`,
         },
         "& .pro-icon-wrapper": {
           backgroundColor: "transparent  !important",

@@ -29,11 +29,11 @@ const About = () => {
             <Col lg="6" md="6" sm="12">
               <div className="about__page-content">
                 <h2 className="section__title">
-                We are committed to providing genuine brand vehicles.
+                Our mission is to help you have a safe and effective stock investment journey.
                 </h2>
 
                 <p className="section__description">
-                So far, many reputable automotive brands have partnered with our company, making us one of the trustworthy dealers providing high-quality products. You can rest assured and experience our services.
+                In reality, in the Vietnamese market, 95% of investors fail due to a lack of experience and being driven by "herd mentality," which leads to losses and an inability to learn from their mistakes. Histock was created as a mentor to guide you and serve as a compass, directing you towards successful investment strategies.
                 </p>
 
                 <p className="section__description">
