@@ -72,9 +72,9 @@ const Layout = () => {
       ) : (
         isDashboard ? (
           <Fragment>
-            <div className="app">
+            <div className="app" style={{display:'flex'}}>
               <ProSidebar isSidebar={isSidebar}  data={staffInfo} />
-              <main className="content">
+              <main className="content" style={{flex:'1', overflowY:'auto', padding:'20px'}}>
                 <Topbar setIsSidebar={setIsSidebar} />
                 <Routers IsDashboard ={isDashboard}/>
               </main>
