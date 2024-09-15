@@ -18,13 +18,13 @@ const StockAgChart = () => {
     title: { text: "VIC Inc." },
     theme: theme.agCharts.theme,
     navigator: true,
-    annotations: true,
-    rangeToolbar: true,
+    toolbar: true,
+    rangeButtons: true,
     volume: true,
     statusBar: true,
     zoom: true,
     width: 1200,
-    height: 400,
+    height: 420,
   });
 
   // useEffect để cập nhật `options` khi `theme.palette.mode` thay đổi

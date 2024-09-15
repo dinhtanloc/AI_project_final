@@ -7,6 +7,7 @@ import AuthContext from "@context/AuthContext";
 const baseURL = import.meta.env.VITE_DOMAIN_BACKEND;
 
 const useAxios = () => {
+  // console.log(baseURL)
   const { authTokens, setUser, setAuthTokens } = useContext(AuthContext);
 
   const axiosInstance = axios.create({

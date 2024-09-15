@@ -230,7 +230,7 @@ const Dashboard = () => {
           backgroundColor={colors.primary[400]}
         >
        
-          <Box height="250px" m="10px 0 0 0">
+          <Box height="250px" m="0px 0 0 0">
             <StockAgChart   />
           </Box>
         </Box>
