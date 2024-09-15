@@ -128,7 +128,6 @@ export const themeSettings = (mode) => {
       mode: mode,
       ...(mode === "dark"
         ? {
-            // palette values for dark mode
             primary: {
               main: colors.primary[500],
             },
@@ -145,7 +144,6 @@ export const themeSettings = (mode) => {
             },
           }
         : {
-            // palette values for light mode
             primary: {
               main: colors.primary[100],
             },
@@ -161,6 +159,9 @@ export const themeSettings = (mode) => {
               default: "#fcfcfc",
             },
           }),
+    },
+    agCharts: {
+      theme: mode === "dark" ? "ag-financial-dark" : "ag-financial",
     },
     typography: {
       fontFamily: ["Source Sans Pro", "sans-serif"].join(","),

@@ -1,75 +1,92 @@
 import { createContext, useState } from "react";
 import runChat from "@utils/gemini";
 
-export const Context = createContext();
+export const ChatbotContext = createContext();
 
-const ContextProvider = (props) => {
+const ChatbotContextProvider = (props) => {
     const [input, setInput] = useState("");
     const [recentPrompt, setRecentPrompt] = useState("");
     const [prevPrompts, setPrevPrompts] = useState([]);
     const [showResult, setShowResult] = useState(false);
     const [loading, setLoading] = useState(false);
     const [resultData, setResultData] = useState("");
-    const [messages, setMessages] = useState([]);
+    const [fullRes, setfullRes] = useState("");
+    const [output, setOutput] = useState("")
+    const [historyMessage, setHistoryMessage] = useState([]); // Lưu lịch sử hội thoại
+
+    const storeMessage = (userMessage, botMessage) => {
+        const messagePair = {
+            user: { sender: 'user', message: userMessage },
+            bot: { sender: 'bot', message: botMessage }
+        };
+        setHistoryMessage(prev => [...prev, messagePair]);
+    };
 
     const delayPara = (index, nextWord) => {
-        setTimeout(function () {
-            setResultData(prev => prev + nextWord);
-        }, 75 * index);
+        setTimeout(function (){
+            setResultData(prev=>prev+nextWord);
+        },75*index)
     }
 
     const newChat = () => {
-        setLoading(false);
-        setShowResult(false);
+        setLoading(false)
+        setShowResult(false)
     }
 
+    
     const onSent = async (prompt) => {
-        setResultData("");
-        setLoading(true);
-        setShowResult(true);
+        console.log(prevPrompts)
+        if(prevPrompts.length>0){
+            console.log(prevPrompts[prevPrompts.length -1])
+            console.log(output)
+            storeMessage(prevPrompts[prevPrompts.length - 1], output);
 
+        }
+        setResultData("")
+        setLoading(true)
+        setShowResult(true)
         let response;
-        if (prompt !== undefined) {
+        if (prompt != undefined) {
             response = await runChat(prompt);
-            setRecentPrompt(prompt);
-            setMessages(prev => [...prev, { text: prompt, isBot: false }]);
-        } else {
-            setPrevPrompts(prev => [...prev, input]);
-            setRecentPrompt(input);
-            setMessages(prev => [...prev, { text: input, isBot: false }]);
-            response = await runChat(input);
+            setRecentPrompt(prompt)
+        }
+        else
+        {
+            setPrevPrompts(prev=>[...prev, input])
+            setRecentPrompt(input)
+            response = await runChat(input)
         }
 
+        setInput("")
         let responseArray = response.split("**");
-        let newResponse = "";
-        for (let i = 0; i < responseArray.length; i++) {
-            if (i === 0 || i % 2 !== 1) {
+        let newResponse = "" ;
+        for(let i = 0; i < responseArray.length; i++)
+        {
+            if(i === 0 || i%2 !== 1) {
                 newResponse += responseArray[i];
-            } else {
-                newResponse += "<b>" + responseArray[i] + "</b>";
+            }
+            else {
+                newResponse += "<b>"+responseArray[i]+"</b>";
             }
         }
-        let newResponse2 = newResponse.split("*").join("</br>");
+        let newResponse2 = newResponse.split("*").join("</br>")
         let newResponseArray = newResponse2.split(" ");
-
-        // Add typing effect
-        setResultData(""); // Clear current resultData
-        for (let i = 0; i < newResponseArray.length; i++) {
+        for(let i = 0; i < newResponseArray.length; i++)
+        {
             const nextWord = newResponseArray[i];
-            delayPara(i, nextWord + " ");
+            delayPara(i,nextWord+" ") 
         }
-
-        // Update messages after typing effect
-        setLoading(false);
-        setInput("");
-        setMessages(prev => [...prev, { text: newResponse2, isBot: true }]);
-    };
-
+        setLoading(false)
+        // console.log(prompt)
+        // console.log(input)
+        setOutput(newResponse2)
+    }
+    
+    
     const contextValue = {
         prevPrompts,
+        fullRes,
         setPrevPrompts,
-        setMessages,
-        messages,
         onSent,
         setRecentPrompt,
         recentPrompt,
@@ -78,14 +95,15 @@ const ContextProvider = (props) => {
         resultData,
         input,
         setInput,
-        newChat
+        newChat,
+        historyMessage
     }
 
     return (
-        <Context.Provider value={contextValue}>
+        <ChatbotContext.Provider value={contextValue}>
             {props.children}
-        </Context.Provider>
+        </ChatbotContext.Provider>
     )
 }
 
-export default ContextProvider;
+export default ChatbotContextProvider;

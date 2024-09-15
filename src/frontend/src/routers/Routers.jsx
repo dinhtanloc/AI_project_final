@@ -18,6 +18,8 @@ import TableComponent from "@components/UI/TableComponent"
 import PredictionDashboard from '@pages/PredictionDashboard'
 import Chatbot from '@components/UI/Chatbot'
 import PrivateRoute from '@utils/PrivateRoute'
+import ChatbotContextProvider from '@context/ChatbotContext.jsx'
+
 // import StockMarket from "@pages/" 
 const Routers = ({ IsDashboard }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -45,7 +47,11 @@ const Routers = ({ IsDashboard }) => {
         <>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/prediction" element={<PredictionDashboard />} />
-          <Route path="/dashboard/chatbot" element={<Chatbot />} />
+          <Route path="/dashboard/chatbot" element={
+            <ChatbotContextProvider>
+              <Chatbot />
+            </ChatbotContextProvider>
+            } />
           {/* <Route path="/dashboard/abc" element={<Login />} /> */}
           {/* <Route path="/login" element={<Login />} /> */}
         </>
