@@ -1,16 +1,18 @@
 import React from "react";
-import "../../styles/our-member.css";
+import "@styles/our-member.css";
 import { Col } from "reactstrap";
 import { Link } from "react-router-dom";
-import ava01 from "/media/Loc_Dinh.jpg";
-import ava02 from "/media/chatGPT.jpg";
-import ava03 from "/media/Stack_overflow.jpg";
-import ava04 from "/media/google_web.jpg";
+import ava01 from "/media/member/Loc_Dinh.jpg";
+import ava02 from "/media/member/Chi_Tran.png";
+import ava03 from "/media/member/Huong_Nguyen.png";
+import ava04 from "/media/member/Ngoc_Le.png";
+import ava05 from "/media/member/Phat_Nguyen.png";
+import Slider from "react-slick";
 
 const OUR__MEMBERS = [
   {
     name: "Loc Tan Dinh",
-    experience: "Fullstack developer",
+    experience: "IT Department Header",
     fbUrl: import.meta.env.VITE_FACEBOOK,
     instUrl: "#",
     twitUrl: "#",
@@ -19,8 +21,8 @@ const OUR__MEMBERS = [
   },
 
   {
-    name: "Chat GPT",
-    experience: "Product advisor",
+    name: "Chi Tran Thi Kim",
+    experience: "Project Coordinator",
     fbUrl: "#",
     instUrl: "#",
     twitUrl: "#",
@@ -29,8 +31,8 @@ const OUR__MEMBERS = [
   },
 
   {
-    name: "Stack Overflow",
-    experience: "Debug advisor",
+    name: "Huong Nguyen Thi Thanh",
+    experience: "Design Manager",
     fbUrl: "#",
     instUrl: "#",
     twitUrl: "#",
@@ -39,19 +41,56 @@ const OUR__MEMBERS = [
   },
 
   {
-    name: "Google",
-    experience: "Frontend development",
+    name: "Ngoc Le Thi Bao",
+    experience: "Market Researcher",
     fbUrl: "#",
     instUrl: "#",
     twitUrl: "#",
     linkedinUrl: "#",
     imgUrl: ava04,
   },
+  {
+    name: "Phat Nguyen Van",
+    experience: "Research Assistant",
+    fbUrl: "#",
+    instUrl: "#",
+    twitUrl: "#",
+    linkedinUrl: "#",
+    imgUrl: ava05,
+  },
 ];
 
 const OurMembers = () => {
+  const settings = {
+    dots: true,
+    infinite: true,
+    autoplay: true,
+    speed: 1000,
+    swipeToSlide: true,
+    autoplaySpeed: 2000,
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 992,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          infinite: true,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 576,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
   return (
-    <>
+    <Slider {...settings}>
       {OUR__MEMBERS.map((item, index) => (
         <Col lg="3" md="3" sm="4" xs="6" key={index} className="mb-4">
           <div className="single__member">
@@ -83,7 +122,7 @@ const OurMembers = () => {
           </div>
         </Col>
       ))}
-    </>
+    </Slider>
   );
 };
 

@@ -6,7 +6,7 @@ import AboutSection from "@components/UI/AboutSection";
 import { Container, Row, Col } from "reactstrap";
 import BecomeOurCustomer from "@components/UI/BecomeOurCustomer";
 
-import driveImg from "@assets/all-images/drive.jpg";
+import driveImg from "@assets/all-images/upward.png";
 import OurMembers from "@components/UI/OurMembers";
 import "@styles/about.css";
 import OrgStructure from '@components/UI/OrgStructure';
@@ -22,7 +22,7 @@ const About = () => {
           <Row>
             <Col lg="6" md="6" sm="12">
               <div className="about__page-img">
-                <img src={driveImg} alt="" className="w-100 rounded-3" />
+                <img src={driveImg} alt="" className="w-100 rounded-3" style={{height:'500px'}} />
               </div>
             </Col>
 
@@ -33,7 +33,7 @@ const About = () => {
                 </h2>
 
                 <p className="section__description">
-                In reality, in the Vietnamese market, 95% of investors fail due to a lack of experience and being driven by "herd mentality," which leads to losses and an inability to learn from their mistakes. Histock was created as a mentor to guide you and serve as a compass, directing you towards successful investment strategies.
+                In reality, in the Vietnamese market, 95% of investors fail due to a lack of experience and being driven by "herd mentality," which leads to losses and an inability to learn from their mistakes. Moketo Gr. was created as a mentor to guide you and serve as a compass, directing you towards successful investment strategies.
                 </p>
 
                 <p className="section__description">

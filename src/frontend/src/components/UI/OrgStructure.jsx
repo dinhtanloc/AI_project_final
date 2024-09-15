@@ -37,7 +37,7 @@ console.warn = function (...args) {
               <h2 className="section__title">Company structure</h2>
             </Col>
               <p className="section__description">
-              To bring Histock to reality, we must acknowledge the dedicated team of the company, comprising passionate young professionals from the fields of technology and innovation at UEH University. Each department plays a crucial role in ensuring the project's success and its positive development.
+              To bring Moketo Gr. to reality, we must acknowledge the dedicated team of the company, comprising passionate young professionals from the fields of technology and innovation at UEH University. Each department plays a crucial role in ensuring the project's success and its positive development.
               </p>
 
               <p className="section__description">
@@ -67,7 +67,7 @@ console.warn = function (...args) {
           <Row>
             {/* <Col lg="6" md="6" sm="12"> */}
             {/* <h4 className="section__subtitle">About Us</h4> */}
-            {/* <h2 className="section__title">Welcome to Histock</h2> */}
+            {/* <h2 className="section__title">Welcome to </h2> */}
               <div className="about__page-img">
                 {/* <img src={driveImg} alt="" className="w-100 rounded-3" /> */}
                 <div className="w-100 rounded-3">
@@ -84,8 +84,8 @@ console.warn = function (...args) {
                       chartType="OrgChart"
                       data={data}
                       options={options}
-                      width="50vw"
-                      height="400px"
+                      // width="80vw"
+                      // height="900px"
                       // color='black'
                     />
 

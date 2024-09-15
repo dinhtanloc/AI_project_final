@@ -11,10 +11,6 @@ import Header from "./HeaderDashboard";
 import numeral from 'numeral';
 import useAxios from "@utils/useAxios"
 import StockAgChart from "@components/UI/StockAgChart";
-// import StockChart from "@components/UI/StockChart"
-// import {SummaryLineChart} from "@components/UI/LineChart";
-// import GeographyChart from "@components/UI/GeographyChart";
-// import BarChart from "@components/UI/BarChart";
 import StatBox from "@components/UI/StatBox";
 // import ProgressCircle from "@components/UI/ProgressCircle";
 // import RecentTransactions from "@components/UI/RecentTransactions";
@@ -36,12 +32,7 @@ const Dashboard = () => {
   const [orderRecent,setorderRecent] = useState([]);
   const api = useAxios();
   
-  useEffect(() => {
-    fetchTotalOrder();
-    fetchProductInventory();
-    fetchOrderList();
-  }, []);
-
+  
   const handleDownload = async () => {
     // try {
     //     const response = await fetch(`${import.meta.env.VITE_DOMAIN_BACKEND}/orders/download-excel/`, {

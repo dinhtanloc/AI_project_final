@@ -11,7 +11,7 @@ let phoneData = [
     "Affordable Pricing": 0.30
   },
   {
-    "name": "Histock",
+    "name": "Moketo Gr.",
     "Financial Knowledge": 0.45,
     "Expert Support": 0.40,
     "Friendly and Quality": 0.4,

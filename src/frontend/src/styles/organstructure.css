@@ -1,21 +1,22 @@
 #chart_div{
   color:'black'!important
 }
+
 #chart_div .google-visualization-orgchart-text{
   color:'black' !important
 }
 #chart_div .google-visualization-orgchart-linebottom {
-    border-bottom: 4px solid magenta;
+    border-bottom: 3px solid rgb(103, 38, 159);
   }
   
   #chart_div .google-visualization-orgchart-lineleft {
-    border-left: 4px solid magenta;
+    border-left: 3px solid rgb(103, 38, 159);
   }
   
   #chart_div .google-visualization-orgchart-lineright {
-    border-right: 4px solid magenta;
+    border-right: 3px solid rgb(103, 38, 159);
   }
   
   #chart_div .google-visualization-orgchart-linetop {
-    border-top: 4px solid magenta;
+    border-top: 3px solid rgb(103, 38, 159);
   }

@@ -1,65 +1,58 @@
 export const data = [
-  // Histock là người đứng đầu (không có cấp trên)
   [
     {
-      v: "Histock",
-      f: 'Histock<div style="color:red; font-style:italic; font-size:32px">President</div>',
+      v: "Moketo Gr.",
+      f: 'Moketo Gr.<div style="color:red; font-style:italic; font-size:32px">President</div>',
     },
-    "", // Không có cấp trên
+    "",
     "The President",
   ],
   
-  // Các phòng ban trực thuộc Histock
   [
     {
       v: "IT Department",
-      f: 'IT Department<div style="color:blue; font-style:italic">Head of IT</div>',
+      f: 'IT Department<div style="color:blue; font-style:italic">Manager <br/> Loc Dinh Tan</div>',
     },
-    "Histock", // Phòng IT trực thuộc Histock
-    "Head of IT",
-  ],
-  [
-    {
-      v: "HR Department",
-      f: 'HR Department<div style="color:green; font-style:italic">Head of HR</div>',
-    },
-    "Histock", // Phòng HR trực thuộc Histock
-    "Head of HR",
+    "Moketo Gr.", 
+    "Manager",
   ],
   [
     {
       v: "Product Department",
-      f: 'Product Department<div style="color:purple; font-style:italic">Head of Product</div>',
+      f: 'Product Department<div style="color:purple; font-style:italic">Manager </br>Huong Nguyen</div>',
     },
-    "Histock", // Phòng Product trực thuộc Histock
-    "Head of Product",
+    "Moketo Gr.", 
+    "Manager",
+  ],
+  [
+    {
+      v: "HR Department",
+      f: 'HR Department<div style="color:green; font-style:italic">Manager </br> Chi Tran</div>',
+    },
+    "Moketo Gr.", 
+    "Manager",
   ],
 
-  // Phòng ban tư vấn chuyên môn
   [
     {
       v: "Advisor Department",
-      f: 'Advisor Department<div style="color:orange; font-style:italic">Head of Consulting</div>',
+      f: 'Advisor Department<div style="color:orange; font-style:italic"></div>',
     },
-    "Histock", // Advisor Department trực thuộc Histock
+    "Moketo Gr.",
     "Head of Consulting",
   ],
 
-  // Các vị trí trong Advisor Department
-  ["Technology Advisor", "Advisor Department", ""],
-  ["Financial Advisor", "Advisor Department", ""],
+  ["Technology Advisor <div style='color:brown'>Dr. Tai Do</div>", "Advisor Department", ""],
+  ["Financial Advisor <div style='color:brown'> ThS. Anh Huynh</div>", "Advisor Department", ""],
 
-  // Các vị trí trong IT Department
   ["Frontend Developer", "IT Department", ""],
   ["Backend Developer", "IT Department", ""],
-  ["AI Engineer", "IT Department", ""],
+  ["AI Engineer", "IT Department", ""], 
   ["Data Scientist", "IT Department", ""],
 
-  // Các vị trí trong Product Department
-  ["Product Manager", "Product Department", ""],
-  ["Designer", "Product Department", ""],
-  ["Research Assistant (Product)", "Product Department", ""],
-
-  // Các vị trí trong HR Department
-  ["Research Assistant (HR)", "HR Department", ""],
+  ["Market Researcher <div style='color:purple'>Ngoc Le</div>", "Product Department", ""],
+  ["Designer <div style='color:purple'>Huong Nguyen</div>", "Product Department", ""],
+  ["Research Assistant <div style='color:purple'>Phat Nguyen</div", "Product Department", ""],
+ 
+  ["Project Cordinator", "HR Department", ""],
 ];

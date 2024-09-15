@@ -49,7 +49,7 @@ const Footer = () => {
               </h1>
             </div>
             <p className="footer__logo-content">
-            Founded on October 26th, 2022, Histock is your go-to platform for expert stock investment advice. With top-tier insights and personalized recommendations, Histock helps you invest smartly and confidently. Choose Histock for smarter investments today!
+            Founded on October 26th, 2022, Moketo Gr. is your go-to platform for expert stock investment advice. With top-tier insights and personalized recommendations, Moketo Gr. helps you invest smartly and confidently. Choose Moketo Gr. for smarter investments today!
             </p>
           </Col>
 

@@ -18,9 +18,9 @@ const AboutSection = ({ aboutClass }) => {
           <Col lg="6" md="6">
             <div className="about__section-content">
               <h4 className="section__subtitle">About Us</h4>
-              <h2 className="section__title">Welcome to Histock</h2>
+              <h2 className="section__title">Welcome to Moketo Gr.</h2>
               <p className="section__description">
-              Histock is a stock investment platform designed for Vietnamese investors. It is the first investment advisory application in Vietnam that uses AI and Machine Learning to automatically calculate indices quickly and accurately. The system also features an AI chatbot specifically trained for specialized advisory tasks for projects of all sizes.
+              Moketo Gr. is a stock investment platform designed for Vietnamese investors. It is the first investment advisory application in Vietnam that uses AI and Machine Learning to automatically calculate indices quickly and accurately. The system also features an AI chatbot specifically trained for specialized advisory tasks for projects of all sizes.
               </p>
 
               <div className="about__section-item d-flex align-items-center">

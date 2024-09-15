@@ -22,7 +22,7 @@ const serviceData = [
     id: 4,
     title: "Fast & Accurate",
     icon: "ri-timer-flash-line",
-    desc: "Histock can handle millions of requests in a short time, ensuring smooth and fast transactions.",
+    desc: "Moketo Gr. can handle millions of requests in a short time, ensuring smooth and fast transactions.",
   },
   {
     id: 5,
@@ -34,7 +34,7 @@ const serviceData = [
     id: 6,
     title: "Easy and convenient",
     icon: "bi bi-bar-chart-line-fill",
-    desc: "Data is visualized from the market, making information easy to understand. The intelligent chatbot, along with numerous other features, makes Histock the most reliable advisor.",
+    desc: "Data is visualized from the market, making information easy to understand. The intelligent chatbot, along with numerous other features, makes Moketo Gr. the most reliable advisor.",
   },
 ];
 
