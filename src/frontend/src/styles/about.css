@@ -20,7 +20,7 @@
 /* Container for the options */
 #drink-holder {
   width: 95%;
-  height: 100%;
+  height: 80%;
   display: flex;
   overflow-x: auto; /* Allows horizontal scrolling if needed */
   border: 2px solid #ccc;

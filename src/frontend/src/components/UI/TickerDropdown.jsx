@@ -16,7 +16,7 @@ const TickerDropdown = (props) => {
   };
 
   return (
-    <div className="dropdown" style={{width:'100%'}}>
+    <div className="dropdown" >
       <button
         className={`dropdown-toggle ${isOpen ? 'active' : ''}`}
         onClick={toggleDropdown}
