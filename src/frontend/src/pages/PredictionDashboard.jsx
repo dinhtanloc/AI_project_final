@@ -1,16 +1,19 @@
-// Import necessary modules and components
 import React from "react";
-import useRequestResource from "@utils/useRequestResource"; // Assuming this is still needed, though not used in the component
-import QuoteLIneChart from "@components/PredictionUI/QuoteLIneChart";
+import useRequestResource from "@utils/useRequestResource"; 
 import useData from "@context/dataContext";
 import { Box, Typography } from "@mui/material";
 import DateStockePicker from "@components/PredictionUI/DateStockePicker";
 import ModelPerformance from "@components/PredictionUI/ModelPerformance";
 import { DotLoader } from "react-spinners";
-import '@styles/predictions.css'
-
-// PredictionDashboard component
+import '@styles/predictions.css';
+import QuoteLIneChart from '@components/PredictionUI/QuoteLIneChart';
+import { useTheme } from "@mui/material";
+import { tokens } from "@theme";
 export default function PredictionDashboard() {
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+  console.log(colors.lightPred[100])
+
   const { priceHistory, parseData, loading } = useData();
   // console.log(priceHistory)
   // console.log(loading)
@@ -32,7 +35,8 @@ export default function PredictionDashboard() {
           variant="h5"
           sx={{
             mt: 10,
-            color: "rgba(255,255,255,0.3)",
+            // color: "rgba(88, 95, 138, 1)",
+            color: colors.lightPred[100],
             fontSize: { lg: 40, md: 35, sm: 20, xs: 15 },
           }}
         >
@@ -48,7 +52,8 @@ export default function PredictionDashboard() {
             alignItems: "center",
           }}
         >
-          <DotLoader color="#03FFF9" size={150} />
+          <DotLoader color={colors.lightPred[300]} size={150} />
+          {/* <Typography sx={{ color: colors.grey[100], mt: 3 }}> */}
           <Typography sx={{ color: "#03FFF9", mt: 3 }}>
             Model in training
           </Typography>

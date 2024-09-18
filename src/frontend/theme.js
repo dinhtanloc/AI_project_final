@@ -60,6 +60,26 @@ export const tokens = (mode) => ({
           800: "#2a2d64",
           900: "#151632",
         },
+        lightPred:{
+          100:'rgba(255,255,255,0.3)', //black
+          200:'#d7dbe0', //gray
+          300: '#03FFF9',
+          400:'rgba(255,255,255,0.7)',
+          500:'rgba(255,255,255,0.8)',
+          600:'#03FFF9',
+          700:'#03FFF9',
+          800:'#009CFF',
+          900:'#FD00B2',
+          1000:'#1A172C',
+          1100:'rgba(203,156,255,0.1)',
+          1200:'rgba(255,255,255,0.5)',
+          1300:'black',
+          1400:'rgba(0,0,0,0.2)',
+          1500:'#A4FCFF',
+          1600:'rgba(255,255,255,0.2)',
+          1700:'rgba(255,255,255,0.5)',
+          1800:'#03FFF9',
+        }
       }
     : {
         grey: {
@@ -77,7 +97,7 @@ export const tokens = (mode) => ({
           100: "#040509",
           200: "#080b12",
           300: "#0c101b",
-          400: "#f2f0f0", // manually changed
+          400: "#f2f0f0", 
           500: "#141b2d",
           600: "#1F2A40",
           700: "#727681",
@@ -117,6 +137,30 @@ export const tokens = (mode) => ({
           800: "#c3c6fd",
           900: "#e1e2fe",
         },
+        lightPred:{
+          100:'rgba(88, 95, 138, 1)', //black
+          200:'#d7dbe0', //gray
+          300:'#03fff9',
+          400:'rgb(22, 29, 111)', // seacr date
+          500:'rgb(22, 29, 111)', // close Price,
+          600:'rgb(22, 29, 111)', //close prediction
+          // 700:'', //train legend,chart
+          // 800:'', //price ..
+          // 900:'', //prediction,
+          700:'#4371ff',
+          800:'#009CFF',
+          900:'#FD00B2',
+          // soc ngang mau 
+          1000:'#EEEEEE',//background chart
+          1100:'#EEEEEE', //header table
+          1200:'rgb(22, 29, 111)', //date label
+          1300:'', //tool tips
+          1400:'#F2F2F2', //soc
+          1500:'#161D6F', //hinh tron qua cau tuyet
+          1600:'#cbcbcb', //soc ngang
+          1700:'rgb(22, 29, 111)', //x label
+          1800:'#0031dd' //hao quang
+        }
       }),
 });
 

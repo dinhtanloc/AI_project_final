@@ -16,8 +16,11 @@ import {
   Snackbar,
   Button,
 } from "@mui/material";
-
+import { useTheme } from "@mui/material";
+import { tokens } from "@theme";
 export default function DateStockPicker() {
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
   const [open, setOpen] = useState(false);
   const { getResourceData } = useRequestResource();
   const [startDate, setStartDate] = useState("");
@@ -41,7 +44,7 @@ export default function DateStockPicker() {
 
   const action = (
     <React.Fragment>
-      <Button sx={{ color: "#03FFF9" }} size="small" onClick={handleClose}>
+      <Button sx={{ color: colors.lightPred[600] }} size="small" onClick={handleClose}>
         Close
       </Button>
     </React.Fragment>
@@ -79,7 +82,7 @@ export default function DateStockPicker() {
         sx={{
           pb: 5,
           fontFamily: "Roboto Flex",
-          color: "rgba(255,255,255,0.8)",
+          color: colors.lightPred[500],
           fontSize: { lg: 45, md: 45, sm: 35, xs: 25 },
         }}
       >
@@ -108,12 +111,12 @@ export default function DateStockPicker() {
           <FormControl fullWidth>
             <InputLabel
               id="stock-label"
-              sx={{ color: "rgba(255,255,255,0.7)" }}
+              sx={{ color: colors.lightPred[400] }}
             >
               Stock
             </InputLabel>
             <Select
-              sx={{ color: "rgba(255,255,255,0.7)" }}
+              sx={{ color: colors.lightPred[400] }}
               id="demo-simple-select"
               value={stock}
               label="Stock"

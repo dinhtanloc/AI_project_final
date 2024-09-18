@@ -6,12 +6,12 @@ import blogData from "@assets/data/blogData";
 import Helmet from "@components/Helmet/Helmet";
 import { Link } from "react-router-dom";
 
-import commentImg from "/media/Loc_Dinh.jpg";
+import commentImg from "/media/member/Loc_Dinh.jpg";
 
 import "@styles/blog-details.css";
 
 const BlogDetails = () => {
-  console.log(blogData)
+  // console.log(blogData)
   // return(<><div>Hello</div></>)
   const { slug } = useParams();
   const blog = blogData.find((blog) => blog.title === slug);

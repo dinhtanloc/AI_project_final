@@ -87,7 +87,7 @@ const ProSidebar = (data) => {
                 ml="15px"
               >
                 <Typography variant="h3" color={colors.grey[100]}>
-                  ADMINIS
+                  MOKETO GR.
                 </Typography>
                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
                   <MenuOutlinedIcon />
@@ -141,7 +141,7 @@ const ProSidebar = (data) => {
             </Typography>
             <Item
               title="Market Analysys"
-              to="admin/team"
+              to="/dashboard"
               icon={<PeopleOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}

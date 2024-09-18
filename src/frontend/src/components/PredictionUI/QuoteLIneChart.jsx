@@ -12,7 +12,8 @@ import {
   eachYearOfInterval,
   getYear,
 } from "date-fns";
-
+import { useTheme } from "@mui/material";
+import { tokens } from "@theme";
 export default function QuoteLIneChart() {
   const [circules, setCircules] = useState([]);
   
@@ -105,6 +106,8 @@ export default function QuoteLIneChart() {
         .on("end", repeat);
     })();
   };
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
 
   return (
     <Box
@@ -122,7 +125,7 @@ export default function QuoteLIneChart() {
         <svg
           ref={ref}
           style={{
-            backgroundColor: "#1A172C",
+            backgroundColor: colors.lightPred[1000],
             padding: 5,
             width: "100%",
             height: "100%",
@@ -138,11 +141,11 @@ export default function QuoteLIneChart() {
                 x2={width - margin.right}
                 y1={yScale(max)}
                 y2={yScale(max)}
-                stroke="rgba(255,255,255,0.2)"
+                stroke={colors.lightPred[1600]}
                 strokeDasharray="1"
               />
               <text
-                fill="rgba(255,255,255,0.5)"
+                fill={colors.lightPred[1700]}
                 alignmentBaseline="middle"
                 y={yScale(max)}
               >
@@ -157,7 +160,7 @@ export default function QuoteLIneChart() {
                 <rect
                   width={xScale(endOfYear(date)) - xScale(date)}
                   height={height - margin.bottom}
-                  fill="rgba(0,0,0,0.2)"
+                  fill={colors.lightPred[1400]}
                 />
               )}
               <text
@@ -165,7 +168,7 @@ export default function QuoteLIneChart() {
                 x={(xScale(endOfYear(date)) - xScale(date)) / 2}
                 y={height - 5}
                 textAnchor="middle"
-                fill="rgba(255,255,255,0.5)"
+                fill={colors.lightPred[1200]}
               >
                 {format(date, "MMM y")}
               </text>
@@ -180,7 +183,7 @@ export default function QuoteLIneChart() {
             transition={{ duration: 8, type: "spring" }}
             d={pathData}
             fill="none"
-            stroke="#03FFF9"
+            stroke={colors.lightPred[700]}
           />
 
           {circules.map((d) => (
@@ -190,7 +193,7 @@ export default function QuoteLIneChart() {
               componentsProps={{
                 tooltip: {
                   sx: {
-                    bgcolor: "black",
+                    bgcolor: colors.lightPred[1300],
                     fontSize: 15,
                   },
                 },
@@ -199,8 +202,8 @@ export default function QuoteLIneChart() {
               <circle
                 className="circle"
                 key={d.date.toString()}
-                stroke="#E4FCFF"
-                fill="#E4FCFF"
+                stroke={colors.lightPred[1500]}
+                fill={colors.lightPred[1500]}
                 r="8"
                 cx={xScale(d.date)}
                 cy={yScale(d.value)}

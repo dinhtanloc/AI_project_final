@@ -22,7 +22,8 @@ import {
   eachYearOfInterval,
 } from "date-fns";
 import Prediction from "./Prediction";
-
+import { useTheme } from "@mui/material";
+import { tokens } from "@theme";
 export default function ModelPerformance() {
   const {
     timeTrain,
@@ -34,6 +35,8 @@ export default function ModelPerformance() {
     rmse,
     price,
   } = useData();
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
 
 
   let trainData = [];
@@ -120,7 +123,7 @@ export default function ModelPerformance() {
           pt: 5,
           pb: 4,
           fontFamily: "Roboto Flex",
-          color: "rgba(255,255,255,0.8)",
+          color: colors.lightPred[500],
           fontSize: { lg: 45, md: 45, sm: 35, xs: 25 },
         }}
       >
@@ -133,11 +136,12 @@ export default function ModelPerformance() {
         <Box
           sx={{
             position: "absolute",
-            bgcolor: "rgba(255,255,255,0.7)",
+            bgcolor: colors.lightPred[500],
             left: "1%",
             bottom: 0,
             p: 0.5,
             borderRadius: "10px",
+            color:'white'
           }}
         >
           RMSE: {rmseValue}
@@ -145,7 +149,7 @@ export default function ModelPerformance() {
         <Box
           sx={{
             position: "absolute",
-            bgcolor: "rgba(255,255,255,0.7)",
+            bgcolor: colors.lightPred[500],
             left: { lg: "68%", md: "45%", sm: "75%", xs: "75%" },
             top: -63,
             p: 0.2,
@@ -154,21 +158,21 @@ export default function ModelPerformance() {
         >
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <div
-              style={{ height: "3px", background: "#03FFF9", width: "20px" }}
+              style={{ height: "3px", background: colors.lightPred[700], width: "20px" }}
             />
-            <Typography sx={{ fontSize: 12 }}>Train</Typography>
+            <Typography sx={{ fontSize: 12, color:'white'}}>Train</Typography>
           </Box>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <div
-              style={{ height: "3px", background: "#009CFF", width: "20px" }}
+              style={{ height: "3px", background: colors.lightPred[800], width: "20px" }}
             />
-            <Typography sx={{ fontSize: 12 }}>Price</Typography>
+            <Typography sx={{ fontSize: 12, color:'white' }}>Price</Typography>
           </Box>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <div
-              style={{ height: "3px", background: "#FD00B2", width: "20px" }}
+              style={{ height: "3px", background: colors.lightPred[900], width: "20px" }}
             />
-            <Typography sx={{ fontSize: 12 }}>Prediction</Typography>
+            <Typography sx={{ fontSize: 12, color:'white' }}>Prediction</Typography>
           </Box>
         </Box>
         <Box
@@ -183,7 +187,7 @@ export default function ModelPerformance() {
             <svg
               ref={ref}
               style={{
-                backgroundColor: "#1A172C",
+                backgroundColor: colors.lightPred[1000],
                 padding: 5,
                 width: "100%",
                 height: "400px",
@@ -233,7 +237,7 @@ export default function ModelPerformance() {
                 transition={{ duration: 5, type: "spring" }}
                 d={d}
                 fill="none"
-                stroke="#03FFF9"
+                stroke={colors.lightPred[700]}
                 className="shadow"
               />
 
@@ -243,7 +247,7 @@ export default function ModelPerformance() {
                 transition={{ duration: 5, type: "spring" }}
                 d={v}
                 fill="none"
-                stroke="#009CFF"
+                stroke={colors.lightPred[800]}
               />
 
               <motion.path
@@ -252,7 +256,7 @@ export default function ModelPerformance() {
                 transition={{ duration: 5, type: "spring" }}
                 d={p}
                 fill="none"
-                stroke="#FD00B2"
+                stroke={colors.lightPred[900]}
               />
             </svg>
           ) : null}
@@ -261,19 +265,19 @@ export default function ModelPerformance() {
             sx={{ width: { lg: "30%" }, height: "405px", borderRadius: "10px" }}
           >
             <Table sx={{ maxWidth: 600 }}>
-              <TableHead sx={{ bgcolor: "rgba(203,156,255,0.1)" }}>
+              <TableHead sx={{ bgcolor: colors.lightPred[1100] }}>
                 <TableRow sx={{ width: 0 }}>
-                  <TableCell sx={{ width: 0, color: "rgba(255,255,255,0.7)" }}>
+                  <TableCell sx={{ width: 0, color: colors.lightPred[500] }}>
                     Date
                   </TableCell>
                   <TableCell
-                    sx={{ width: 0, color: "rgba(255,255,255,0.7)" }}
+                    sx={{ width: 0, color: colors.lightPred[500] }}
                     align="left"
                   >
                     Close Price
                   </TableCell>
                   <TableCell
-                    sx={{ width: "20px", color: "rgba(255,255,255,0.7)" }}
+                    sx={{ width: "20px", color: colors.lightPred[500] }}
                     align="left"
                   >
                     Prediction
@@ -289,20 +293,20 @@ export default function ModelPerformance() {
                     }}
                   >
                     <TableCell
-                      sx={{ width: 0, color: "rgba(255,255,255,0.7)" }}
+                      sx={{ width: 0, color: colors.lightPred[500] }}
                       component="th"
                       scope="row"
                     >
                       {`${row.date.getFullYear()}-${row.date.getMonth()}-${row.date.getDay()}`}
                     </TableCell>
                     <TableCell
-                      sx={{ width: 0, color: "rgba(255,255,255,0.7)" }}
+                      sx={{ width: 0, color: colors.lightPred[500] }}
                       align="left"
                     >
                       {row.price}
                     </TableCell>
                     <TableCell
-                      sx={{ width: 0, color: "rgba(255,255,255,0.7)" }}
+                      sx={{ width: 0, color: colors.lightPred[500] }}
                       align="left"
                     >
                       {row.predict}
