@@ -2,17 +2,13 @@ import React, { Fragment, useState, useContext, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import AuthContext from '@context/AuthContext.jsx';
 import useAxios from "@utils/useAxios.js";
-// import Header from "../Header/Header";
-// import Footer from "../Footer/Footer";
 import Login from "@pages/Login";
 import Routers from "@routers/Routers";
 import axios from 'axios';
 import backgroundImage from '/media/background_login.png'; 
 import "@styles/page.css"
-// import { useMode } from "@theme";
 import Topbar from "../global/Topbar"
 import ProSidebar from "../global/ProSidebar"
-import HomePage from "@pages/HomePage"
 import Header from "@components/Header/Header";
 import Footer from "@components/Footer/Footer"
 axios.defaults.xsrfCookieName = 'csrftoken';
@@ -52,7 +48,6 @@ const Layout = () => {
 
 
 
-  {console.log(isDashboard)}
   return (
     <>
       {isLoginPage ? (

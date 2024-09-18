@@ -1,16 +1,8 @@
 import React, { useState, useContext } from 'react';
 import "@styles/login.css";
-import axios from 'axios'
-import { jwtDecode }  from "jwt-decode";
 import AuthContext from '@context/AuthContext'
 import  AuthLoginContext  from '@context/AuthLoginContext';
-import useAxios from "@utils/useAxios"
-
 import { useEffect } from 'react';
-import Container from 'react-bootstrap/Container';
-import Navbar from 'react-bootstrap/Navbar';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faGoogle, faGithub } from '@fortawesome/free-brands-svg-icons';
 

@@ -4,8 +4,6 @@ import CommonSection from "@components/UI/CommonSection";
 import Helmet from "@components/Helmet/Helmet";
 import AboutSection from "@components/UI/AboutSection";
 import { Container, Row, Col } from "reactstrap";
-import BecomeOurCustomer from "@components/UI/BecomeOurCustomer";
-
 import driveImg from "@assets/all-images/upward.png";
 import OurMembers from "@components/UI/OurMembers";
 import "@styles/about.css";

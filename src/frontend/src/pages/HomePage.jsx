@@ -1,42 +1,19 @@
 import React, {useState, useEffect} from "react";
-import { useNavigate } from 'react-router-dom';
-import axios from "axios";
 import HeroSlider from "@components/UI/HeroSlider";
 import Helmet from "@components/Helmet/Helmet";
 
 import { Container, Row, Col, Form, FormGroup } from "reactstrap";
-import FindCarForm from "@components/UI/FindCarForm";
 import AboutSection from "@components/UI/AboutSection";
 import ServicesList from "@components/UI/ServicesList";
-import carData from "@assets/data/carData";
 import BecomeOurCustomer from "@components/UI/BecomeOurCustomer";
 import Testimonial from "@components/UI/Testimonial";
-// import { Form, FormGroup } from "reactstrap";
 import "@styles/find-car-form.css"
 import BlogList from "@components/UI/BlogList";
 
 const HomePage = () => {
-//   const [carData, setCarData] = useState([]);
   const [prompt, setPrompt] = useState('');
   const [color, setColor] = useState('');
-//   const navigate = useNavigate();
-//   const instance = axios.create({
-//     baseURL: import.meta.env.VITE_DOMAIN_BACKEND, 
-   
-//   });
 
-//   useEffect(() => {
-//     fetchData();
-//   }, []);
-
-//   const fetchData = async () => {
-//     try {
-//       const response = await instance.get('/orders/admin/orders/recent-car-orders/'); 
-//       setCarData(response.data)
-//     } catch (error) {
-//       console.error('Error fetching data:', error);
-//     }
-//   };
   const handleFindCar = async (e) => {
     // e.preventDefault()
     // try {
@@ -179,7 +156,7 @@ const HomePage = () => {
               <h2 className="section__title">Latest Blogs</h2>
             </Col>
 
-            {/* <BlogList /> */}
+            <BlogList />
           </Row>
         </Container>
       </section>

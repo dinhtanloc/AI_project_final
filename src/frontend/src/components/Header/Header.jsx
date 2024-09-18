@@ -95,7 +95,6 @@ const Header = ({ onSearch }) => {
       try {
         const res = await api.get("accounts/user/current-user/");
         setCurrentUser(true);
-        console.log(res)
         const name_login = res.data.response.username;
         setName(name_login)
       } catch (error) {
@@ -136,7 +135,6 @@ const Header = ({ onSearch }) => {
     fetchStaffChecking();
   }, []);
 
-// console.log(currentUser)
   const menuRef = useRef(null);
   // import img from './default.jpg'
 

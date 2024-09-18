@@ -12,10 +12,7 @@ const BollingerStock = ({n,k}) => {
 
   useEffect(() => {
     if (plotRef.current) {
-      // Clear previous plots
       plotRef.current.innerHTML = '';
-
-      // Render the plot
       const plot = Plot.plot({
         width: 850,
         height:300,

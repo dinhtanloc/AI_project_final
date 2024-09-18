@@ -3,7 +3,6 @@ import '@styles/chatbot.css';
 import { useTheme } from "@mui/material";
 import { assets } from '@assets/chatbot/assets';
 import { ChatbotContext } from '@context/ChatbotContext';
-import { tokens } from "@theme";
 
 const Chatbot = () => {
     const theme = useTheme();

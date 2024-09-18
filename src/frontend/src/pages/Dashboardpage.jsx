@@ -1,19 +1,15 @@
 import React, { useEffect, useContext,useState } from "react";
-import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
+import { Box, Button, useTheme } from "@mui/material";
 import { tokens } from "@theme";
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import InventoryIcon from '@mui/icons-material/Inventory';
 import Header from "./HeaderDashboard";
-import numeral from 'numeral';
 import useAxios from "@utils/useAxios"
 import StockAgChart from "@components/UI/StockAgChart";
 import StatBox from "@components/UI/StatBox";
-// import ProgressCircle from "@components/UI/ProgressCircle";
-// import RecentTransactions from "@components/UI/RecentTransactions";
 
 // import downloadExcel from "../utils/downloadExcel";
 

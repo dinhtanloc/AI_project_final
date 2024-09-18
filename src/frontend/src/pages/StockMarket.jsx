@@ -1,17 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
-// import StockChart from "@components/UI/StockChart";
 import Helmet from "@components/Helmet/Helmet";
 import { Container, Row } from "reactstrap";
-import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
-import StatBox from "@components/UI/StatBox";
-import { tokens } from "@theme";
-import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
-import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
-import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
-import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import InventoryIcon from '@mui/icons-material/Inventory';
-// import { Box } from "@mui/material";
+import { Box } from "@mui/material";
 import "@styles/about.css";
 import CandleStickChartWithBollingerBandOverlay from "@components/UI/CandleStickChartWithBollingerBandOverlay";
 import getData from "@assets/data/stockData"

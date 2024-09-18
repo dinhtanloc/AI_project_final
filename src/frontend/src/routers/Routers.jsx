@@ -11,8 +11,6 @@ import About from "@pages/About";
 import MainLayout from "@components/UI/MainLayout";
 import RadarChart from "@components/UI/RadarChart";
 import BollingerStock from "@components/UI/BollingerStock";
-import CandleStickChartWithBollingerBandOverlay from "@components/UI/CandleStickChartWithBollingerBandOverlay";
-import getData from "@assets/data/stockData"
 import Contact from "@pages/Contact";
 import TableComponent from "@components/UI/TableComponent"
 import PredictionDashboard from '@pages/PredictionDashboard'
