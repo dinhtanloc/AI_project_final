@@ -20,9 +20,10 @@ const Layout = () => {
   const [isSidebar, setIsSidebar] = useState(true);
   const location = useLocation();
   const { logined } = useContext(AuthContext);
+  const[name,setName]=useState('');
+  const[img,setImage]=useState('');
   const [currentUser, setCurrentUser] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const staffInfo={data:{profile:{full_name:'Mi mi', image:'abc.png'}}}
   const api = useAxios();
 
   useEffect(() => {
@@ -30,12 +31,44 @@ const Layout = () => {
       try {
         const res = await api.get("accounts/user/current-user/");
         setCurrentUser(true);
+        const name_login = res.data.response.username;
+        setName(name_login)
       } catch (error) {
         setCurrentUser(false);
         console.error('Có lỗi xảy ra khi truy cập dữ liệu:', error);
+
       }
     };
+
+    const fetchProfile = async () => {
+      try {
+        const res = await api.get("accounts/user/profile/");
+        setCurrentUser(true);
+        const profile = res.data;
+        var imgUrl = profile.image
+        setImage(imgUrl)
+        // setName(profile)
+      } catch (error) {
+        setCurrentUser(false);
+        console.error('Có lỗi xảy ra khi truy cập dữ liệu:', error);
+
+      }
+    };
+
+    // const fetchStaffChecking = async () => {
+    //   try {
+    //       const response = await api.get('accounts/user/staff/');
+    //       // setUserProfile(response.data);
+    //       checkStaff(response.data.is_staff);
+          
+    //   } catch (error) {
+    //       console.error('Error fetching user profile:', error);
+    //   }
+  // };
+
     fetchUser();
+    fetchProfile();
+    // fetchStaffChecking();
   }, []);
 
   const handleSearch = (term) => {
@@ -68,7 +101,7 @@ const Layout = () => {
         isDashboard ? (
           <Fragment>
             <div className="app" style={{display:'flex'}}>
-              <ProSidebar isSidebar={isSidebar}  data={staffInfo} />
+              <ProSidebar isSidebar={isSidebar}  data={{name:name, image:img}} />
               <main className="content" style={{flex:'1', overflowY:'auto', padding:'20px'}}>
                 <Topbar setIsSidebar={setIsSidebar} />
                 <Routers IsDashboard ={isDashboard}/>

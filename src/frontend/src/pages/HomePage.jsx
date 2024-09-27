@@ -45,14 +45,13 @@ const HomePage = () => {
               </Col>
 
               <Col lg="5" md="5" sm="12">
-                {/* <FindCarForm /> */}
                 <Form className="form"  onSubmit={handleFindCar}>
                   <div className=" d-flex align-items-center justify-content-between flex-wrap">
                     <FormGroup className="form__group" style={{width:"65%"}}>
                       <input 
                       type="text"
                       value={prompt} 
-                      placeholder="What does car look like?"
+                      placeholder="What ticket do you want?"
                       onChange={(e) => setPrompt(e.target.value)}
                       required />
                     </FormGroup>
@@ -65,29 +64,17 @@ const HomePage = () => {
                       onChange={(e) => setColor(e.target.value)}
                     />
                     </FormGroup>
-
-                    {/* <FormGroup className="form__group"> */}
-                      {/* <input type="date" placeholder="Journey date" required /> */}
-                    {/* </FormGroup> */}
-
                     <FormGroup className="form__group">
-                      {/* <input
-                        className="journey__time"
-                        type="time"
-                        placeholder="Journey time"
-                        required
-                      /> */}
                       <select>
-                        <option value="ac">AC Car</option>
-                        <option value="non-ac">Non AC Car</option>
+                        <option value="ac">AC Ticket</option>
+                        <option value="non-ac">Non AC Ticket</option>
                       </select>
                     </FormGroup>
                     <FormGroup className="select__group">
                       <button type="submit" className="btn find__car-btn" >Find Ticker</button>
                     </FormGroup>
 
-                    {/* <FormGroup className="form__group"  >
-                    </FormGroup> */}
+                   
                   </div>
                 </Form>
               </Col>

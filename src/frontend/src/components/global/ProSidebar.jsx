@@ -37,6 +37,8 @@ const ProSidebar = (data) => {
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
+  console.log(data)
+  console.log(data.data.image)
 
   return (
     <Box
@@ -89,7 +91,7 @@ const ProSidebar = (data) => {
               </Box>
             )}
           </MenuItem>
-          {console.log('meomeo',isCollapsed)}
+          {/* {console.log('meomeo',isCollapsed)} */}
           {!isCollapsed && (
             <Box mb="25px">
               <Box display="flex" justifyContent="center" alignItems="center">
@@ -97,7 +99,7 @@ const ProSidebar = (data) => {
                   alt="profile-user"
                   width="100px"
                   height="100px"
-                  // src={data.data.profile.image}
+                  src={data.data.image}
                   style={{ cursor: "pointer", borderRadius: "50%" }}
                 />
               </Box>
@@ -108,11 +110,11 @@ const ProSidebar = (data) => {
                   fontWeight="bold"
                   sx={{ m: "10px 0 0 0" }}
                 >
-                  {/* {data.data.profile.full_name} */}
+                  {data.data.name}
                 </Typography>
-                <Typography variant="h5" color={colors.greenAccent[500]}>
+                {/* <Typography variant="h5" color={colors.greenAccent[500]}>
                   Shop Assistant
-                </Typography>
+                </Typography> */}
               </Box>
             </Box>
           )}

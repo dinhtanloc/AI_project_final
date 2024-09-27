@@ -1,6 +1,6 @@
 .find__cars-left {
   background: linear-gradient(rgb(249, 168, 38, 0.9), rgb(249, 168, 38, 0.9)),
-    url("../assets/all-images/toyota-offer-2.png");
+    url("../assets/all-images/stock_about.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -13,7 +13,7 @@
 }
 .find__cars-right {
   background: linear-gradient(rgb(249, 168, 38, 0.9), rgb(249, 168, 38, 0.9)),
-    url("../assets/all-images/vinfast-offer-removebg-preview.png");
+    url("../assets/all-images/stock_form.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

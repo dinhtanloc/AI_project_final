@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { Chart } from "react-google-charts";
 import {data} from '@assets/data/organStructure.js'
 import { Container, Row, Col } from "reactstrap";
-import CommonSection from "@components/UI/CommonSection";
 import "@styles/about-section.css";
 import "@styles/organstructure.css"
 

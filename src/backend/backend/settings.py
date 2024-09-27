@@ -46,6 +46,7 @@ CORS_ALLOW_CREDENTIALS = True
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -382,15 +383,15 @@ JAZZMIN_SETTINGS = {
     "copyright": "www.desphixs.com",
     "topmenu_links": [
         {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
-        {"name": "React Admin", "url": "http://localhost:5173/admin", "new_window": False},
+        # {"name": "React Admin", "url": "http://localhost:5173/admin", "new_window": False},
     ],
     "usermenu_links": [
         {"name": "Profile", "url": "admin:auth_user_change", "permissions": ["auth.view_user"]},
-        {"name": "React Admin", "url": "http://localhost:5173/admin", "new_window": False},
+        # {"name": "React Admin", "url": "http://localhost:5173/admin", "new_window": False},
     ],
     "custom_links": {
         "app_name": [
-            {"name": "React Admin", "url": "http://localhost:5173/admin", "icon": "fas fa-external-link-alt", "permissions": ["auth.view_user"]},
+            # {"name": "React Admin", "url": "http://localhost:5173/admin", "icon": "fas fa-external-link-alt", "permissions": ["auth.view_user"]},
         ]
     },
     

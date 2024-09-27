@@ -119,20 +119,20 @@ const Header = ({ onSearch }) => {
       }
     };
 
-    const fetchStaffChecking = async () => {
-      try {
-          const response = await api.get('accounts/user/staff/');
-          // setUserProfile(response.data);
-          checkStaff(response.data.is_staff);
+    // const fetchStaffChecking = async () => {
+    //   try {
+    //       const response = await api.get('accounts/user/staff/');
+    //       // setUserProfile(response.data);
+    //       checkStaff(response.data.is_staff);
           
-      } catch (error) {
-          console.error('Error fetching user profile:', error);
-      }
-  };
+    //   } catch (error) {
+    //       console.error('Error fetching user profile:', error);
+    //   }
+  // };
 
     fetchUser();
     fetchProfile();
-    fetchStaffChecking();
+    // fetchStaffChecking();
   }, []);
 
   const menuRef = useRef(null);
