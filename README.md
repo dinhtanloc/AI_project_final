@@ -70,11 +70,11 @@ python manage.py makemigrations
 ```
 
 ## Reference
-1. [Title of the first reference]([https://example.com](https://github.com/dinhtanloc/hw_web_development/tree/main)
-2. [Title of the second reference]((https://www.langchain.com/)
-3. [Title of the second reference](https://github.com/langchain-ai/langchain)
-4. [Title of the second reference](https://github.com/encode/django-rest-framework)
-5. [Title of the second reference](https://github.com/dinhtanloc/Stock-forecast-app-streamlit))
+1. [Loc Dinh CarRetail Web](https://github.com/dinhtanloc/hw_web_development/tree/main)
+2. [Langchain document](https://www.langchain.com/)
+3. [Langchain repository](https://github.com/langchain-ai/langchain)
+4. [Rest API for Django](https://github.com/encode/django-rest-framework)
+5. [MVP AI project](https://github.com/dinhtanloc/Stock-forecast-app-streamlit)
 
 
 
