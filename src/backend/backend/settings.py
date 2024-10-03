@@ -376,9 +376,9 @@ CKEDITOR_UPLOAD_PATH = 'uploads/'
 
 
 JAZZMIN_SETTINGS = {
-    "site_title": "Django & React JWT Authentication ",
-    "welcome_sign": "Management Auto Retailer Backend",
-    "site_header": "Django & React JWT Authentication ",
+    "site_title": "Web Platform Authentication",
+    "welcome_sign": "Management Robo Autovisor Backend",
+    "site_header": "Admin Moketo Gr. Platform ",
     "site_brand": "Admin System",
     "copyright": "www.desphixs.com",
     "topmenu_links": [

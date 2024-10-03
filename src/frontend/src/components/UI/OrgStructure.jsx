@@ -78,7 +78,7 @@ console.warn = function (...args) {
                       // alignItems: 'center', /* Canh giữa theo chiều dọc (nếu cần) */
                       // height: '400px', /* Hoặc chiều cao của container */
                     }}>
-                  <div id="chart_div" style={{marginLeft:'10%', color:'black'}}>
+                  <div id="chart_div" style={{ color:'black'}}>
                     <Chart
                       chartType="OrgChart"
                       data={data}
