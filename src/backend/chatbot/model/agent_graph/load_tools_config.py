@@ -16,6 +16,8 @@ class LoadToolsConfig:
         # Set environment variables
         os.environ['OPENAI_API_KEY'] = os.getenv("OPEN_AI_API_KEY")
         os.environ['TAVILY_API_KEY'] = os.getenv("TAVILY_API_KEY")
+        self.stock_db = os.getenv("POSTGRESQL_DBMS_KEY")
+
 
         # Primary agent
         self.primary_agent_llm = app_config["primary_agent"]["llm"]
