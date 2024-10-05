@@ -40,3 +40,4 @@ from langgraph.prebuilt import ToolNode
 from typing import Literal, List
 from datetime import datetime, timedelta
 from scipy.optimize import minimize
+import random as rd
