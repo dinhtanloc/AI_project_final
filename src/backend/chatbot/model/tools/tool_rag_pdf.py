@@ -2,7 +2,7 @@ from langchain_chroma import Chroma
 from langchain_openai import OpenAIEmbeddings
 from langchain_core.tools import tool
 from agent_graph.load_tools_config import LoadToolsConfig
-
+from chatbot.utils.prepare_vectodb import PrepareVectorDB
 # Load cấu hình từ file config
 TOOLS_CFG = LoadToolsConfig()
 
@@ -34,12 +34,39 @@ class UserDocumentRAGTool:
         self.embedding_model = embedding_model
         self.vectordb_dir = vectordb_dir
         self.k = k
-        self.vectordb = Chroma(
-            collection_name=collection_name,
-            persist_directory=self.vectordb_dir,
-            embedding_function=OpenAIEmbeddings(model=self.embedding_model)
+        self.vectordb = PrepareVectorDB(
+            doc_dir=TOOLS_CFG.user_doc_rag_unstructured_docs,
+            chunk_size=TOOLS_CFG.user_doc_rag_chunk_size,
+            chunk_overlap=TOOLS_CFG.user_doc_rag_chunk_overlap,
+            embedding_model=self.embedding_model,
+            mongodb_uri=self.mongodb_uri,
+            db_name=self.db_name,
+            collection_name=self.collection_name
         )
         print("Number of vectors in vectordb: ", self.vectordb._collection.count(), "\n\n")
+
+    def similarity_search(self, query: str, k: int = None):
+        """
+        Thực hiện tìm kiếm tài liệu tương tự bằng cách sử dụng truy vấn từ người dùng.
+
+        Tham số:
+        query (str): Truy vấn để tìm kiếm tài liệu.
+        k (int, tùy chọn): Số lượng tài liệu lân cận gần nhất sẽ được trả về. Nếu không cung cấp, sẽ sử dụng giá trị mặc định của đối tượng.
+
+        Trả về:
+        list: Danh sách các tài liệu phù hợp.
+        """
+        embedding_model = OpenAIEmbeddings(model=self.embedding_model)
+        query_vector = embedding_model.embed_documents([query])[0]
+
+        if k is None:
+            k = self.k
+
+        results = self.prepare_db_instance.collection.find({
+            "vector": {"$near": {"$geometry": {"type": "Point", "coordinates": query_vector}}}
+        }).limit(k)
+
+        return [result for result in results]
 
 
 @tool
@@ -51,7 +78,5 @@ def lookup_user_document(query: str) -> str:
         k=TOOLS_CFG.user_doc_rag_k,
         collection_name=TOOLS_CFG.user_doc_rag_collection_name
     )
-    # Thực hiện tìm kiếm tài liệu tương tự bằng cách sử dụng query
-    docs = rag_tool.vectordb.similarity_search(query, k=rag_tool.k)
-    # Trả về nội dung của các tài liệu phù hợp
+    docs = rag_tool.similarity_search(query, k=rag_tool.k)
     return "\n\n".join([doc.page_content for doc in docs])
