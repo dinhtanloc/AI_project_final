@@ -68,7 +68,7 @@ class FinanceAgent:
 
 
 @tool
-def query_stock_sqldb(ques: str) -> str:
+def query_stock_logic(ques: str) -> str:
     """Truy vấn dữ liệu thị trường chứng khoán Việt Nam từ cơ sở dữ liệu SQL Vnstock với hỗ trợ few-shot prompting."""
     messages = [HumanMessage(ques)]
     agent = FinanceAgent(
