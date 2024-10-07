@@ -4,6 +4,8 @@ from agent_graph.load_tools_config import LoadToolsConfig
 from agent_graph.build_full_graph import build_graph
 from utils.app_utils import create_directory
 from utils.memory import Memory
+from utils.langsmith_utils import log_event
+
 
 URL = "https://github.com/Farzad-R/LLM-Zero-to-Hundred/tree/master/RAG-GPT"
 hyperlink = f"[RAG-GPT user guideline]({URL})"
@@ -19,31 +21,34 @@ create_directory("memory")
 
 class ChatBot:
     """
-    A class to handle chatbot interactions by utilizing a pre-defined agent graph. The chatbot processes
-    user messages, generates appropriate responses, and saves the chat history to a specified memory directory.
+    Lớp này chịu trách nhiệm xử lý các tương tác với chatbot bằng cách sử dụng một đồ thị tác nhân đã được định nghĩa trước.
+    Chatbot tiếp nhận tin nhắn từ người dùng, sinh ra phản hồi thích hợp và lưu trữ lịch sử hội thoại vào thư mục bộ nhớ đã chỉ định.
 
-    Attributes:
-        config (dict): A configuration dictionary that stores specific settings such as the `thread_id`.
+    Thuộc tính:
+        config (dict): Một từ điển cấu hình lưu trữ các thiết lập cụ thể như `thread_id`.
 
-    Methods:
-        respond(chatbot: List, message: str) -> Tuple:
-            Processes the user message through the agent graph, generates a response, appends it to the chat history,
-            and writes the chat history to a file.
+    Phương thức:
+        respond(chatbot: List, message: str, userid: int) -> Tuple:
+            Xử lý tin nhắn người dùng thông qua đồ thị tác nhân, sinh ra phản hồi,
+            thêm phản hồi vào lịch sử hội thoại và lưu lịch sử hội thoại vào một tệp bộ nhớ.
     """
     @staticmethod
-    def respond(chatbot: List, message: str) -> Tuple:
+    def respond(chatbot: List, message: str, userid:int) -> Tuple:
         """
-        Processes a user message using the agent graph, generates a response, and appends it to the chat history.
-        The chat history is also saved to a memory file for future reference.
+        Xử lý một tin nhắn từ người dùng bằng cách sử dụng đồ thị tác nhân, sinh ra phản hồi và thêm phản hồi vào lịch sử hội thoại.
+        Lịch sử hội thoại cũng được lưu vào một tệp bộ nhớ để tham khảo trong tương lai.
 
-        Args:
-            chatbot (List): A list representing the chatbot conversation history. Each entry is a tuple of the user message and the bot response.
-            message (str): The user message to process.
+        Tham số:
+            chatbot (List): Danh sách đại diện cho lịch sử hội thoại của chatbot.
+                            Mỗi mục là một tuple gồm tin nhắn của người dùng và phản hồi của bot.
+            message (str): Tin nhắn của người dùng để xử lý.
 
-        Returns:
-            Tuple: Returns an empty string (representing the new user input placeholder) and the updated conversation history.
+            user_id (int): Mã định danh của người dùng tham gia tương tác.
+
+        Trả về:
+            Tuple: Trả về một chuỗi rỗng (đại diện cho placeholder cho đầu vào mới của người dùng)
+                   và lịch sử hội thoại đã được cập nhật.
         """
-        # The config is the **second positional argument** to stream() or invoke()!
         events = graph.stream(
             {"messages": [("user", message)]}, config, stream_mode="values"
         )
@@ -52,7 +57,16 @@ class ChatBot:
 
         chatbot.append(
             (message, event["messages"][-1].content))
-
-        Memory.write_chat_history_to_file(
-            gradio_chatbot=chatbot, folder_path=PROJECT_CFG.memory_dir, thread_id=TOOLS_CFG.thread_id)
+        response_content = event["messages"][-1].content
+        # user_id = userid
+        log_event({
+                "user_id": user_id,
+                "user_query": message,
+                "bot_response": response_content,
+                "timestamp": datetime.now()
+            })
+        # Memory.write_chat_history_to_cache(
+        #     gradio_chatbot=chatbot, thread_id=TOOLS_CFG.thread_id, user=userid
+        # )
+        Memory.save_chat_interaction(user, thread_id, message, response_content)
         return "", chatbot

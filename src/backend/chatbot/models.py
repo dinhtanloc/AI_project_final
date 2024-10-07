@@ -1,28 +1,43 @@
-from django.db import models
-from django.conf import settings 
+from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from .models import ChatHistory
+from .serializers import ChatHistorySerializer
+from .model.chatbot_backend import ChatBot
 
+class ChatbotViewSet(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated]
 
-# class ChatbotFile(models.Model):
-#     """Mô hình để lưu trữ các tệp đã tải lên của người dùng."""
-#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-#     title = models.CharField(max_length=255)
-#     uploaded_at = models.DateTimeField(auto_now_add=True)
-#     uploaded_file = models.FileField(upload_to='uploads/')
+    @action(detail=False, methods=['post'])
+    def interact(self, request):
+        """
+        Handle the chatbot interaction via POST request, process user input, and return a response.
+        """
+        user_message = request.data.get('message', '')
 
-#     class Meta:
-#         abstract = True 
+        if not user_message:
+            return Response({'error': 'No message provided'}, status=400)
 
-#     def __str__(self):
-#         return self.title
+        chatbot = []
 
+        _, updated_chat = ChatBot.respond(chatbot, user_message)
+        bot_response = updated_chat[-1][1] if updated_chat else 'No response'
 
+        chat_history = ChatHistory.objects.create(
+            user=request.user,
+            thread_id="unique_thread_id",
+            user_query=user_message,
+            response=bot_response
+        )
 
-class ChatHistory(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  
-    thread_id = models.CharField(max_length=255)
-    timestamp = models.DateTimeField(auto_now_add=True)
-    user_query = models.TextField()
-    response = models.TextField()
+        return Response({'response': bot_response})
 
-    def __str__(self):
-        return f"Thread {self.thread_id} by User {self.user.email} at {self.timestamp}"
+    @action(detail=False, methods=['get'])
+    def history(self, request):
+        """
+        Retrieve the chat history for the authenticated user.
+        """
+        chat_history = ChatHistory.objects.filter(user=request.user).order_by('-timestamp')
+        serializer = ChatHistorySerializer(chat_history, many=True)
+        return Response(serializer.data)

@@ -7,7 +7,7 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
 from operator import itemgetter
 from langchain_openai import ChatOpenAI
-from agent_graph.load_tools_config import LoadToolsConfig
+from model.tools.load_tools_config import LoadToolsConfig
 
 TOOLS_CFG = LoadToolsConfig()
 
@@ -72,9 +72,9 @@ class SQLAgent:
 def query_stock_sqldb(query: str) -> str:
     """Truy vấn dữ liệu thị trường chứng khoán Việt Nam từ cơ sở dữ liệu SQL Vnstock và truy cập toàn bộ thông tin công ty, sự kiện. Đầu vào nên là một truy vấn tìm kiếm."""
     agent = SQLAgent(
-        llm=TOOLS_CFG.travel_sqlagent_llm,
-        sqldb_directory=TOOLS_CFG.travel_sqldb_directory,
-        llm_temerature=TOOLS_CFG.travel_sqlagent_llm_temperature
+        llm=TOOLS_CFG.sqlagent_llm,
+        sqldb_directory=TOOLS_CFG.sqldb_directory,
+        llm_temerature=TOOLS_CFG.sqlagent_llm_temperature
     )
     response = agent.chain.invoke({"question": query})
     return response

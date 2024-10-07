@@ -1,7 +1,8 @@
 from langchain_chroma import Chroma
 from langchain_openai import OpenAIEmbeddings
+from sentence_transformers import SentenceTransformer
 from langchain_core.tools import tool
-from agent_graph.load_tools_config import LoadToolsConfig
+from model.tools.load_tools_config import LoadToolsConfig
 from chatbot.utils.prepare_vectodb import PrepareVectorDB
 # Load cấu hình từ file config
 TOOLS_CFG = LoadToolsConfig()
@@ -21,7 +22,7 @@ class UserDocumentRAGTool:
     __init__: Khởi tạo công cụ bằng cách thiết lập mô hình embedding, cơ sở dữ liệu vector, và các tham số truy xuất.
     """
 
-    def __init__(self, embedding_model: str, vectordb_dir: str, k: int, collection_name: str) -> None:
+    def __init__(self, vectordb_dir: str, k: int, collection_name: str) -> None:
         """
         Khởi tạo công cụ UserDocumentRAGTool với cấu hình cần thiết.
 
@@ -31,7 +32,7 @@ class UserDocumentRAGTool:
         k (int): Số lượng tài liệu lân cận gần nhất sẽ được truy xuất dựa trên sự tương đồng của truy vấn.
         collection_name (str): Tên của bộ sưu tập trong cơ sở dữ liệu vector chứa các tài liệu do người dùng tải lên.
         """
-        self.embedding_model = embedding_model
+        self.embedding_model = SentenceTransformer("keepitreal/vietnamese-sbert")
         self.vectordb_dir = vectordb_dir
         self.k = k
         self.vectordb = PrepareVectorDB(
@@ -56,24 +57,56 @@ class UserDocumentRAGTool:
         Trả về:
         list: Danh sách các tài liệu phù hợp.
         """
-        embedding_model = OpenAIEmbeddings(model=self.embedding_model)
-        query_vector = embedding_model.embed_documents([query])[0]
+        # embedding_model = OpenAIEmbeddings(model=self.embedding_model)
+        query_vector = self.embedding_model.encode(query).tolist()
+
+        if query_vector is None:
+            return "Invalid query or embedding generation failed."
 
         if k is None:
             k = self.k
 
-        results = self.prepare_db_instance.collection.find({
-            "vector": {"$near": {"$geometry": {"type": "Point", "coordinates": query_vector}}}
-        }).limit(k)
+        vector_search_stage = {
+            "$vectorSearch": {
+                "index": "vector_index",
+                "queryVector": query_vector,
+                "path": "embedding",
+                "numCandidates": 400,
+                "limit": k,
+                }
+            }
 
-        return [result for result in results]
+        unset_stage = {
+            "$unset": "vector"
+        }
+
+        project_stage = {
+            "$project": {
+                "_id": 0,
+                "content": 1,
+                "score": {
+                    "$meta": "vectorSearchScore"
+                }
+            }
+        }
+
+        pipeline = [vector_search_stage, unset_stage, project_stage]
+
+        # Execute the search
+        results = self.vectordb.collection.aggregate(pipeline)
+        return list(results)
+
+        # results = self.prepare_db_instance.collection.find({
+        #     "vector": {"$near": {"$geometry": {"type": "Point", "coordinates": query_vector}}}
+        # }).limit(k)
+
+        # return [result for result in results]
 
 
 @tool
 def lookup_user_document(query: str) -> str:
     """Tìm kiếm các tài liệu đã tải lên của người dùng để tìm thông tin liên quan dựa trên truy vấn."""
     rag_tool = UserDocumentRAGTool(
-        embedding_model=TOOLS_CFG.user_doc_rag_embedding_model,
         vectordb_dir=TOOLS_CFG.user_doc_rag_vectordb_directory,
         k=TOOLS_CFG.user_doc_rag_k,
         collection_name=TOOLS_CFG.user_doc_rag_collection_name

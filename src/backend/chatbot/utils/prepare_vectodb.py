@@ -3,6 +3,7 @@ import yaml
 from pyprojroot import here
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_openai import OpenAIEmbeddings
+from sentence_transformers import SentenceTransformer
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from dotenv import load_dotenv
 from pymongo import MongoClient
@@ -25,36 +26,35 @@ DOC_DIR = app_config["stories_rag"]["unstructured_docs"]
 
 class PrepareVectorDB:
     """
-    A class to prepare and manage a Vector Database (VectorDB) using documents from a specified directory.
-    The class performs the following tasks:
-    - Loads and splits documents (PDFs).
-    - Splits the text into chunks based on the specified chunk size and overlap.
-    - Embeds the document chunks using a specified embedding model.
-    - Stores the embedded vectors in a MongoDB collection.
+    Lớp này được sử dụng để chuẩn bị và quản lý một cơ sở dữ liệu vector (VectorDB) bằng cách sử dụng tài liệu từ một thư mục được chỉ định.
+    Lớp này thực hiện các tác vụ sau:
+    - Tải và chia nhỏ tài liệu (PDF).
+    - Chia nhỏ văn bản thành các phần dựa trên kích thước và độ chồng chéo được chỉ định.
+    - Nhúng các đoạn văn bản tài liệu bằng cách sử dụng một mô hình nhúng đã chỉ định.
+    - Lưu trữ các vector đã nhúng vào một collection trong MongoDB.
 
-    Attributes:
-        doc_dir (str): Path to the directory containing documents (PDFs) to be processed.
-        chunk_size (int): The maximum size of each chunk (in characters) into which the document text will be split.
-        chunk_overlap (int): The number of overlapping characters between consecutive chunks.
-        embedding_model (str): The name of the embedding model to be used for generating vector representations of text.
-        mongodb_uri (str): MongoDB URI for connecting to the database.
-        db_name (str): The name of the MongoDB database.
-        collection_name (str): The name of the collection to be used within the MongoDB database.
+    Thuộc tính:
+        doc_dir (str): Đường dẫn đến thư mục chứa tài liệu (PDF) sẽ được xử lý.
+        chunk_size (int): Kích thước tối đa của mỗi đoạn (tính bằng ký tự) mà văn bản tài liệu sẽ được chia nhỏ.
+        chunk_overlap (int): Số ký tự chồng lấp giữa các đoạn liên tiếp.
+        embedding_model (str): Tên của mô hình nhúng được sử dụng để tạo ra các biểu diễn vector của văn bản.
+        mongodb_uri (str): URI MongoDB để kết nối đến cơ sở dữ liệu.
+        db_name (str): Tên của cơ sở dữ liệu MongoDB.
+        collection_name (str): Tên của collection sẽ được sử dụng trong cơ sở dữ liệu MongoDB.
 
-    Methods:
+    Phương thức:
         path_maker(file_name: str, doc_dir: str) -> str:
-            Creates a full file path by joining the given directory and file name.
+            Tạo một đường dẫn đầy đủ bằng cách nối thư mục đã cho với tên tệp.
 
         run() -> None:
-            Executes the process of reading documents, splitting text, embedding them into vectors, and 
-            saving the resulting vector database in MongoDB.
+            Thực hiện quá trình đọc tài liệu, chia nhỏ văn bản, nhúng chúng thành vector và
+            lưu cơ sở dữ liệu vector kết quả vào MongoDB.
     """
 
     def __init__(self,
                  doc_dir: str,
                  chunk_size: int,
                  chunk_overlap: int,
-                 embedding_model: str,
                  mongodb_uri: str,
                  db_name: str,
                  collection_name: str
@@ -63,7 +63,7 @@ class PrepareVectorDB:
         self.doc_dir = doc_dir
         self.chunk_size = chunk_size
         self.chunk_overlap = chunk_overlap
-        self.embedding_model = embedding_model
+        self.embedding_model = SentenceTransformer("keepitreal/vietnamese-sbert")
         self.mongodb_uri = mongodb_uri
         self.db_name = db_name
         self.collection_name = collection_name
@@ -75,38 +75,38 @@ class PrepareVectorDB:
 
     def path_maker(self, file_name: str, doc_dir):
         """
-        Creates a full file path by joining the provided directory and file name.
+        Tạo một đường dẫn đầy đủ bằng cách nối thư mục và tên tệp.
 
-        Args:
-            file_name (str): Name of the file.
-            doc_dir (str): Path of the directory.
+        Tham số:
+            file_name (str): Tên của tệp.
+            doc_dir (str): Đường dẫn đến thư mục.
 
-        Returns:
-            str: Full path of the file.
+        Trả về:
+            str: Đường dẫn đầy đủ của tệp.
         """
         return os.path.join(here(doc_dir), file_name)
 
     def run(self):
         """
-        Executes the main logic to create and store document embeddings in MongoDB.
+        Thực hiện logic chính để tạo và lưu các nhúng tài liệu vào MongoDB.
 
-        If the collection doesn't exist:
-        - It loads PDF documents from the `doc_dir`, splits them into chunks,
-        - Embeds the document chunks using the specified embedding model,
-        - Stores the embeddings in a MongoDB collection.
+        Nếu collection chưa tồn tại:
+        - Tải các tài liệu PDF từ `doc_dir`, chia nhỏ chúng thành các đoạn,
+        - Nhúng các đoạn tài liệu bằng mô hình nhúng đã chỉ định,
+        - Lưu các nhúng vào một collection trong MongoDB.
 
-        If the collection already contains data, it skips the embedding creation process.
+        Nếu collection đã có dữ liệu, quá trình tạo nhúng sẽ bị bỏ qua.
 
-        Prints the creation status and the number of vectors in the MongoDB collection.
+        In trạng thái tạo và số lượng vector trong collection MongoDB.
 
-        Returns:
+        Trả về:
             None
         """
         if self.collection.count_documents({}) == 0:
             # Nếu collection chưa có dữ liệu, thực hiện quá trình tạo vector
             print(f"Creating collection '{self.collection_name}' in MongoDB.")
 
-            file_list = os.listdir(here(self.doc_dir))
+            file_list = [fn for fn in os.listdir(here(self.doc_dir)) if fn.endswith('.pdf')]
             docs = [PyPDFLoader(self.path_maker(fn, self.doc_dir)).load_and_split() for fn in file_list]
             docs_list = [item for sublist in docs for item in sublist]
 
@@ -115,10 +115,10 @@ class PrepareVectorDB:
             )
             doc_splits = text_splitter.split_documents(docs_list)
 
-            embedding_model = OpenAIEmbeddings(model=self.embedding_model)
+            # embedding_model = OpenAIEmbeddings(model=self.embedding_model)
             for doc_split in doc_splits:
-                vector = embedding_model.embed_documents([doc_split.page_content])[0]
-                
+                vector = self.embedding_model.encode(doc_split.page_content).tolist()
+
                 # Lưu vào MongoDB
                 document = {
                     "content": doc_split.page_content,
@@ -136,7 +136,6 @@ prepare_db_instance = PrepareVectorDB(
     doc_dir=DOC_DIR,
     chunk_size=CHUNK_SIZE,
     chunk_overlap=CHUNK_OVERLAP,
-    embedding_model=EMBEDDING_MODEL,
     mongodb_uri=MONGODB_URI,
     db_name=DB_NAME,
     collection_name=COLLECTION_NAME
@@ -144,5 +143,4 @@ prepare_db_instance = PrepareVectorDB(
 
 prepare_db_instance.run()
 
-# Để kiểm tra số lượng vector trong MongoDB, bạn có thể sử dụng đoạn mã dưới đây
 print("Number of vectors in MongoDB collection:", prepare_db_instance.collection.count_documents({}), "\n\n")

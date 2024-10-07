@@ -1,7 +1,9 @@
-# from rest_framework import serializers
-# from .models import ChatbotFile
+#serializers.py
+from rest_framework import serializers
+from .models import ChatHistory
 
-# class ChatbotFileSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = ChatbotFile
-#         fields = ['id', 'user', 'title', 'content', 'uploaded_at']
+class ChatHistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ChatHistory
+        fields = ['id', 'user', 'thread_id', 'timestamp', 'user_query', 'response']
+        read_only_fields = ['user', 'timestamp', 'thread_id']

@@ -2,35 +2,41 @@ import os
 import pandas as pd
 from typing import List
 from datetime import datetime, date
-from chatbot.models import ChatHistory  
+from chatbot.models import ChatHistory
 
 class Memory:
     """
-    Một lớp để xử lý việc lưu trữ lịch sử hội thoại của chatbot bằng cách lưu tạm thời các tin nhắn vào bộ nhớ đệm (cache) 
-    và sau đó ghi chúng vào cơ sở dữ liệu.
+        Lớp này chịu trách nhiệm xử lý việc lưu trữ lịch sử hội thoại của chatbot.
+        Nó thực hiện việc lưu trữ tạm thời các tin nhắn vào bộ nhớ đệm (cache)
+        và sau đó ghi chúng vào cơ sở dữ liệu để theo dõi và phân tích.
 
-    Thuộc tính:
-        cache (List[Dict]): Bộ nhớ tạm thời lưu các tin nhắn chưa được ghi vào cơ sở dữ liệu.
+        Thuộc tính:
+            cache (List[Dict]): Bộ nhớ tạm thời lưu trữ các tin nhắn chưa được ghi vào cơ sở dữ liệu,
+                                mỗi tin nhắn bao gồm thông tin về người dùng, mã luồng, truy vấn và phản hồi.
 
-    Phương thức:
-        write_chat_history_to_cache(gradio_chatbot: List, thread_id: str, user) -> None:
-            Lưu tương tác mới nhất của chatbot (truy vấn của người dùng và phản hồi của bot) vào bộ nhớ tạm thời (cache).
-            Mỗi tương tác bao gồm thông tin về mã luồng, truy vấn của người dùng, phản hồi từ chatbot, và dấu thời gian.
+        Phương thức:
+            save_chat_interaction(user, thread_id: str, user_query: str, response: str) -> None:
+                Lưu lại một tương tác mới nhất của chatbot (truy vấn của người dùng và phản hồi của bot) vào cơ sở dữ liệu.
+                Mỗi bản ghi lưu trữ thông tin về người dùng, mã luồng, truy vấn, phản hồi và thời gian tương tác.
 
-        save_cache_to_database() -> None:
-            Ghi toàn bộ các tin nhắn từ bộ nhớ đệm (cache) vào cơ sở dữ liệu và xóa bộ nhớ đệm sau khi hoàn thành.
-    """
+            write_chat_history_to_cache(gradio_chatbot: List, thread_id: str, user) -> None:
+                Lưu lại tương tác mới nhất của chatbot (truy vấn của người dùng và phản hồi của bot) vào bộ nhớ tạm thời (cache).
+                Mỗi bản ghi bao gồm thông tin về người dùng, mã luồng, truy vấn, phản hồi và thời gian tương tác.
 
-    cache = []  
+            save_cache_to_database() -> None:
+                Ghi tất cả các tin nhắn từ bộ nhớ tạm thời (cache) vào cơ sở dữ liệu.
+                Sau khi ghi xong, bộ nhớ tạm thời sẽ được xóa để giải phóng bộ nhớ.
+      """
+    cache = []
 
     @staticmethod
     def write_chat_history_to_cache(gradio_chatbot: List, thread_id: str, user) -> None:
         """
-        Lưu lại tương tác mới nhất của chatbot (truy vấn của người dùng và phản hồi) vào bộ nhớ tạm thời (cache). 
+        Lưu lại tương tác mới nhất của chatbot (truy vấn của người dùng và phản hồi) vào bộ nhớ tạm thời (cache).
         Mỗi bản ghi bao gồm mã luồng, người dùng, truy vấn, phản hồi, và dấu thời gian.
 
         Tham số:
-            gradio_chatbot (List): Danh sách chứa các cặp (truy vấn của người dùng, phản hồi của chatbot). 
+            gradio_chatbot (List): Danh sách chứa các cặp (truy vấn của người dùng, phản hồi của chatbot).
                                    Tương tác mới nhất được lấy từ cuối danh sách.
             thread_id (str): Mã định danh duy nhất cho phiên trò chuyện.
             user: Người dùng đang tham gia phiên trò chuyện.
@@ -51,7 +57,7 @@ class Memory:
     def save_cache_to_database():
         """
         Ghi tất cả các tin nhắn từ bộ nhớ tạm thời (cache) vào cơ sở dữ liệu. Sau khi ghi, bộ nhớ tạm thời được xóa.
-        
+
         Trả về:
             None
         """
@@ -67,3 +73,28 @@ class Memory:
                 for item in Memory.cache
             ])
             Memory.cache.clear()
+
+
+    @staticmethod
+    def save_chat_interaction(user, thread_id: str, user_query: str, response: str) -> None:
+        """
+        Lưu lại tương tác mới nhất của chatbot vào cơ sở dữ liệu.
+        Mỗi bản ghi bao gồm mã luồng, người dùng, truy vấn, phản hồi, và dấu thời gian.
+
+        Tham số:
+            user: Người dùng đang tham gia phiên trò chuyện.
+            thread_id (str): Mã định danh duy nhất cho phiên trò chuyện.
+            user_query (str): Truy vấn của người dùng.
+            response (str): Phản hồi từ chatbot.
+
+        Trả về:
+            None
+        """
+        chat_history = ChatHistory(
+            user=user,
+            thread_id=thread_id,
+            user_query=user_query,
+            response=response,
+            timestamp=datetime.now()
+        )
+        chat_history.save()
