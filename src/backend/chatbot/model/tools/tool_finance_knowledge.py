@@ -58,7 +58,6 @@ class FinanceAgent:
                 *self.examples,
                 ("human", "{query}"),
             ]
-
         )
 
 

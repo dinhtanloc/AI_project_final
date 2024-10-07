@@ -1,11 +1,11 @@
 from typing import List, Tuple
 from utils.load_config import LoadProjectConfig
-from agent_graph.load_tools_config import LoadToolsConfig
+from model.tools.load_tools_config import LoadToolsConfig
 from agent_graph.build_full_graph import build_graph
 from utils.app_utils import create_directory
 from utils.memory import Memory
-from utils.langsmith_utils import log_event
-
+from utils.langsmith_metrics import log_event
+import datetime
 
 URL = "https://github.com/Farzad-R/LLM-Zero-to-Hundred/tree/master/RAG-GPT"
 hyperlink = f"[RAG-GPT user guideline]({URL})"
@@ -33,7 +33,7 @@ class ChatBot:
             thêm phản hồi vào lịch sử hội thoại và lưu lịch sử hội thoại vào một tệp bộ nhớ.
     """
     @staticmethod
-    def respond(chatbot: List, message: str, userid:int) -> Tuple:
+    def respond(chatbot: List, message: str, user_id:int) -> Tuple:
         """
         Xử lý một tin nhắn từ người dùng bằng cách sử dụng đồ thị tác nhân, sinh ra phản hồi và thêm phản hồi vào lịch sử hội thoại.
         Lịch sử hội thoại cũng được lưu vào một tệp bộ nhớ để tham khảo trong tương lai.
@@ -68,5 +68,5 @@ class ChatBot:
         # Memory.write_chat_history_to_cache(
         #     gradio_chatbot=chatbot, thread_id=TOOLS_CFG.thread_id, user=userid
         # )
-        Memory.save_chat_interaction(user, thread_id, message, response_content)
+        Memory.save_chat_interaction(user_id, thread_id, message, response_content)
         return "", chatbot
