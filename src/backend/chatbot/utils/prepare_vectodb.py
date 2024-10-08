@@ -5,24 +5,21 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain_openai import OpenAIEmbeddings
 from sentence_transformers import SentenceTransformer
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from dotenv import load_dotenv
-from pymongo import MongoClient
+from dotenv import load_dotenv, find_dotenv
+import pymongo
+load_dotenv(find_dotenv())
+os.environ['OPENAI_API_KEY'] = os.getenv("OPEN_API_KEY")
 
-load_dotenv()
-
-os.environ['OPENAI_API_KEY'] = os.getenv("OPEN_AI_API_KEY")
-
-with open(here("configs/tools_config.yml")) as cfg:
+with open(here("config/tools_config.yml")) as cfg:
     app_config = yaml.load(cfg, Loader=yaml.FullLoader)
 
-# Uncomment the following configs to run for stories document
-CHUNK_SIZE = app_config["stories_rag"]["chunk_size"]
-CHUNK_OVERLAP = app_config["stories_rag"]["chunk_overlap"]
-EMBEDDING_MODEL = app_config["stories_rag"]["embedding_model"]
-MONGODB_URI = app_config["stories_rag"]["mongodb_uri"]  # URL kết nối MongoDB
-DB_NAME = app_config["stories_rag"]["db_name"]  # Tên cơ sở dữ liệu MongoDB
-COLLECTION_NAME = app_config["stories_rag"]["collection_name"]
-DOC_DIR = app_config["stories_rag"]["unstructured_docs"]
+CHUNK_SIZE = app_config["document_rag_pdf"]["chunk_size"]
+CHUNK_OVERLAP = app_config["document_rag_pdf"]["chunk_overlap"]
+EMBEDDING_MODEL = app_config["document_rag_pdf"]["embedding_model"]
+MONGODB_URI = os.getenv('MONGODB_URL') 
+COLLECTION_NAME = app_config["document_rag_pdf"]["collection_name"]
+DB_NAME = app_config["document_rag_pdf"]["db_name"]  
+DOC_DIR = app_config["document_rag_pdf"]["unstructured_docs"]
 
 class PrepareVectorDB:
     """
@@ -37,7 +34,6 @@ class PrepareVectorDB:
         doc_dir (str): Đường dẫn đến thư mục chứa tài liệu (PDF) sẽ được xử lý.
         chunk_size (int): Kích thước tối đa của mỗi đoạn (tính bằng ký tự) mà văn bản tài liệu sẽ được chia nhỏ.
         chunk_overlap (int): Số ký tự chồng lấp giữa các đoạn liên tiếp.
-        embedding_model (str): Tên của mô hình nhúng được sử dụng để tạo ra các biểu diễn vector của văn bản.
         mongodb_uri (str): URI MongoDB để kết nối đến cơ sở dữ liệu.
         db_name (str): Tên của cơ sở dữ liệu MongoDB.
         collection_name (str): Tên của collection sẽ được sử dụng trong cơ sở dữ liệu MongoDB.
@@ -69,7 +65,11 @@ class PrepareVectorDB:
         self.collection_name = collection_name
 
         # Kết nối đến MongoDB
-        self.client = MongoClient(self.mongodb_uri)
+        try:
+            self.client = pymongo.MongoClient(self.mongodb_uri)
+            print("Connection to MongoDB successful")
+        except pymongo.errors.ConnectionFailure as e:
+            print(f"Connection failed: {e}")
         self.db = self.client[self.db_name]
         self.collection = self.db[self.collection_name]
 
@@ -102,45 +102,67 @@ class PrepareVectorDB:
         Trả về:
             None
         """
-        if self.collection.count_documents({}) == 0:
-            # Nếu collection chưa có dữ liệu, thực hiện quá trình tạo vector
-            print(f"Creating collection '{self.collection_name}' in MongoDB.")
+        file_list = [fn for fn in os.listdir(here(self.doc_dir)) if fn.endswith('.pdf')]
 
-            file_list = [fn for fn in os.listdir(here(self.doc_dir)) if fn.endswith('.pdf')]
-            docs = [PyPDFLoader(self.path_maker(fn, self.doc_dir)).load_and_split() for fn in file_list]
-            docs_list = [item for sublist in docs for item in sublist]
+        for file_name in file_list:
+            loader = PyPDFLoader(self.path_maker(file_name, self.doc_dir))
+            try:
+                docs = loader.load_and_split()
+            except Exception as e:
+                print(f"Lỗi khi tải hoặc chia nhỏ tệp {file_name}: {e}")
+                continue
 
             text_splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
                 chunk_size=self.chunk_size, chunk_overlap=self.chunk_overlap
             )
-            doc_splits = text_splitter.split_documents(docs_list)
+            doc_splits = text_splitter.split_documents(docs)
 
-            # embedding_model = OpenAIEmbeddings(model=self.embedding_model)
             for doc_split in doc_splits:
-                vector = self.embedding_model.encode(doc_split.page_content).tolist()
+                try:
+                    vector = self.embedding_model.encode(doc_split.page_content).tolist()
+                except Exception as e:
+                    print(f"Lỗi khi nhúng đoạn văn bản trong tệp {file_name}: {e}")
+                    continue
 
-                # Lưu vào MongoDB
                 document = {
+                    "file_name": file_name,  
                     "content": doc_split.page_content,
                     "vector": vector,
-                    # Bạn có thể thêm thông tin bổ sung nếu cần
                 }
-                self.collection.insert_one(document)
+                try:
+                    self.collection.insert_one(document)
+                except Exception as e:
+                    print(f"Lỗi khi lưu document vào MongoDB: {e}")
+                    continue
 
-            print("VectorDB is created and saved in MongoDB.")
-            print("Number of vectors in MongoDB collection:", self.collection.count_documents({}), "\n\n")
+            print(f"Hoàn thành nhúng và lưu tệp {file_name} vào MongoDB.")
         else:
-            print(f"Collection '{self.collection_name}' already exists in MongoDB.")
+            print(f"Tệp {file_name} đã tồn tại trong MongoDB. Bỏ qua xử lý.")
+        try:
+            os.remove(self.path_maker(file_name, self.doc_dir))
+            print(f"Đã xóa tệp {file_name} khỏi thư mục.")
+        except Exception as e:
+            print(f"Lỗi khi xóa tệp {file_name}: {e}")
 
-prepare_db_instance = PrepareVectorDB(
-    doc_dir=DOC_DIR,
-    chunk_size=CHUNK_SIZE,
-    chunk_overlap=CHUNK_OVERLAP,
-    mongodb_uri=MONGODB_URI,
-    db_name=DB_NAME,
-    collection_name=COLLECTION_NAME
-)
+        print("Quá trình xử lý hoàn tất.")
+        print("Số lượng vectors trong MongoDB collection:", self.collection.count_documents({}), "\n\n")
 
-prepare_db_instance.run()
+# prepare_db_instance = PrepareVectorDB(
+#     doc_dir=DOC_DIR,
+#     chunk_size=CHUNK_SIZE,
+#     chunk_overlap=CHUNK_OVERLAP,
+#     mongodb_uri=MONGODB_URI,
+#     db_name=DB_NAME,
+#     collection_name=COLLECTION_NAME
+# )
 
-print("Number of vectors in MongoDB collection:", prepare_db_instance.collection.count_documents({}), "\n\n")
+# prepare_db_instance.run()
+from pathlib import Path
+client = pymongo.MongoClient(MONGODB_URI)
+db = client['dinhtanloc']
+collection = db['rag_test']
+print(client['dinhtanloc']['rag_test'].count_documents({}))
+project_root = Path(__file__).resolve().parent.parent
+print(project_root)
+print(here(DOC_DIR))
+# print("Number of vectors in MongoDB collection:", prepare_db_instance.collection.count_documents({}), "\n\n")
