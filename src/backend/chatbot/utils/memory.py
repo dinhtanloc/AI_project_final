@@ -98,3 +98,31 @@ class Memory:
             timestamp=datetime.now()
         )
         chat_history.save()
+
+    @staticmethod
+    def get_chat_history(user, thread_id: str) -> List:
+        """
+        Truy xuất lịch sử hội thoại của người dùng từ cơ sở dữ liệu.
+
+        Tham số:
+            user: Người dùng yêu cầu lịch sử hội thoại.
+            thread_id (str): Mã định danh của phiên trò chuyện.
+
+        Trả về:
+            List: Danh sách các tin nhắn trong lịch sử hội thoại.
+        """
+        history = ChatHistory.objects.filter(user=user, thread_id=thread_id).order_by('timestamp')
+        return [(entry.user_query, entry.response) for entry in history]
+
+    @staticmethod
+    def save_chat_history_periodically(interval: int) -> None:
+        """
+        Tự động lưu cache vào cơ sở dữ liệu sau mỗi khoảng thời gian nhất định.
+
+        Tham số:
+            interval (int): Khoảng thời gian giữa các lần lưu (tính bằng giây).
+        """
+        import time
+        while True:
+            Memory.save_cache_to_database()
+            time.sleep(interval)
