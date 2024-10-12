@@ -1,15 +1,14 @@
 from langchain_openai import OpenAIEmbeddings
 from langchain_core.tools import tool
-from langchain_document_loaders import DocumentLoader
-from flask import Flask, request
+from model.tools.load_tools_config import LoadToolsConfig
+# from flask import Flask, request
 import pytesseract
 from PIL import Image
 import io
-from model.tools.load_tools_config import LoadToolsConfig
 
 TOOLS_CFG = LoadToolsConfig()
 
-app = Flask(__name__)
+# app = Flask(__name__)
 
 class OCRTool:
     """
