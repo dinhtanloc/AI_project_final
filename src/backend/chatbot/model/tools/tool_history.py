@@ -5,7 +5,7 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_openai import ChatOpenAI
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.runnables.history import RunnableWithMessageHistory
-from model.tools.load_tools_config import LoadToolsConfig
+from chatbot.model.tools.load_tools_config import LoadToolsConfig
 
 TOOLS_CFG = LoadToolsConfig()
 

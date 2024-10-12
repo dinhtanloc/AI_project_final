@@ -136,13 +136,13 @@ class PrepareVectorDB:
                     continue
 
             print(f"Hoàn thành nhúng và lưu tệp {file_name} vào MongoDB.")
-        else:
-            print(f"Tệp {file_name} đã tồn tại trong MongoDB. Bỏ qua xử lý.")
-        try:
-            os.remove(self.path_maker(file_name, self.doc_dir))
-            print(f"Đã xóa tệp {file_name} khỏi thư mục.")
-        except Exception as e:
-            print(f"Lỗi khi xóa tệp {file_name}: {e}")
+        # else:
+        #     print(f"Tệp {file_name} đã tồn tại trong MongoDB. Bỏ qua xử lý.")
+            try:
+                os.remove(self.path_maker(file_name, self.doc_dir))
+                print(f"Đã xóa tệp {file_name} khỏi thư mục.")
+            except Exception as e:
+                print(f"Lỗi khi xóa tệp {file_name}: {e}")
 
         print("Quá trình xử lý hoàn tất.")
         print("Số lượng vectors trong MongoDB collection:", self.collection.count_documents({}), "\n\n")

@@ -10,8 +10,8 @@ from langchain_openai import ChatOpenAI
 from langchain_core.messages import AIMessage, ToolMessage, HumanMessage
 import datetime
 from langchain_core.prompts import ChatPromptTemplate
-from .finance_toollists import tool_mapping, tools
-from .load_tools_config import LoadToolsConfig
+from chatbot.model.tools.finance_toollists import tool_mapping, tools
+from chatbot.model.tools.load_tools_config import LoadToolsConfig
 
 TOOLS_CFG = LoadToolsConfig()
 

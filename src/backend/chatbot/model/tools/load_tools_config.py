@@ -13,7 +13,7 @@ class LoadToolsConfig:
             app_config = yaml.load(cfg, Loader=yaml.FullLoader)
 
         # Set environment variables
-        os.environ['OPENAI_API_KEY'] = os.getenv("OPEN_AI_API_KEY")
+        os.environ['OPENAI_API_KEY'] = os.getenv("OPEN_API_KEY")
         os.environ['TAVILY_API_KEY'] = os.getenv("TAVILY_API_KEY")
         self.stock_db = os.getenv("POSTGRESQL_DBMS_KEY")
 
@@ -30,8 +30,8 @@ class LoadToolsConfig:
         self.policy_rag_llm_temperature = float(
             app_config["document_rag_pdf"]["llm_temperature"])
         self.policy_rag_embedding_model = app_config["document_rag_pdf"]["embedding_model"]
-        self.policy_rag_vectordb_directory = str(here(
-            app_config["document_rag_pdf"]["vectordb"]))  # needs to be strin for summation in chromadb backend: self._settings.require("persist_directory") + "/chroma.sqlite3"
+        # self.policy_rag_vectordb_directory = str(here(
+        #     app_config["document_rag_pdf"]["vectordb"]))  # needs to be strin for summation in chromadb backend: self._settings.require("persist_directory") + "/chroma.sqlite3"
         self.policy_rag_k = app_config["document_rag_pdf"]["k"]
         self.policy_rag_collection_name = app_config["document_rag_pdf"]["collection_name"]
 

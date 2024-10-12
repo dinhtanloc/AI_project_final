@@ -1,16 +1,17 @@
 from langchain_community.tools.tavily_search import TavilySearchResults
 
-
 def load_tavily_search_tool(tavily_search_max_results: int):
     """
-    This function initializes a Tavily search tool, which performs searches and returns results
-    based on user queries. The `max_results` parameter controls how many search results are
-    retrieved for each query.
+    Hàm này khởi tạo công cụ tìm kiếm Tavily, công cụ thực hiện các tìm kiếm và trả về kết quả
+    dựa trên các truy vấn của người dùng. Tham số `max_results` điều khiển số lượng kết quả tìm kiếm 
+    được trả về cho mỗi truy vấn.
 
-    Args:
-        tavily_search_max_results (int): The maximum number of search results to return for each query.
+    Tham số:
+    tavily_search_max_results (int): Số lượng kết quả tìm kiếm tối đa được trả về cho mỗi truy vấn.
 
-    Returns:
-        TavilySearchResults: A configured instance of the Tavily search tool with the specified `max_results`.
+    Trả về:
+    TavilySearchResults: Một thể hiện đã được cấu hình của công cụ tìm kiếm Tavily với `max_results` được chỉ định.
     """
     return TavilySearchResults(max_results=tavily_search_max_results)
+
+#python -m doctest -v tenfile

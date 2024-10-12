@@ -2,7 +2,7 @@ from langchain_chroma import Chroma
 from langchain_openai import OpenAIEmbeddings
 from sentence_transformers import SentenceTransformer
 from langchain_core.tools import tool
-from model.tools.load_tools_config import LoadToolsConfig
+from chatbot.model.tools.load_tools_config import LoadToolsConfig
 from chatbot.utils.prepare_vectodb import PrepareVectorDB
 # Load cấu hình từ file config
 TOOLS_CFG = LoadToolsConfig()

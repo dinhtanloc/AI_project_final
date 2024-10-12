@@ -4,7 +4,8 @@ from chatbot.model.tools.load_tools_config import LoadToolsConfig
 from chatbot.model.agent_graph.build_full_graph import build_graph
 from chatbot.utils.app_utils import create_directory
 from chatbot.utils.memory import Memory
-from chatbot.utils.langsmith_metrics import log_event
+# from chatbot.utils.langsmith_metrics import log_event
+from chatbot.utils.langsmith_metrics import *
 from datetime import datetime
 URL = "https://github.com/Farzad-R/LLM-Zero-to-Hundred/tree/master/RAG-GPT"
 hyperlink = f"[RAG-GPT user guideline]({URL})"
@@ -58,12 +59,12 @@ class ChatBot:
             (message, event["messages"][-1].content))
         response_content = event["messages"][-1].content
         # user_id = userid
-        log_event({
-                "user_id": user_id,
-                "user_query": message,
-                "bot_response": response_content,
-                "timestamp": datetime.now()
-            })
+        # log_event({
+        #         "user_id": user_id,
+        #         "user_query": message,
+        #         "bot_response": response_content,
+        #         "timestamp": datetime.now()
+        #     })
         # Memory.write_chat_history_to_cache(
         #     gradio_chatbot=chatbot, thread_id=TOOLS_CFG.thread_id, user=userid
         # )

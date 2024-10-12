@@ -1,6 +1,6 @@
 from langchain_openai import OpenAIEmbeddings
 from langchain_core.tools import tool
-from model.tools.load_tools_config import LoadToolsConfig
+from chatbot.model.tools.load_tools_config import LoadToolsConfig
 import pytesseract
 from PIL import Image
 import io
