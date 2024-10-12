@@ -1,16 +1,25 @@
 import unittest
-from datetime import datetime
-from model.chatbot_backend import ChatBot 
-from utils.memory import Memory
-from typing import List, Tuple
-from utils.load_config import LoadProjectConfig
-from model.tools.load_tools_config import LoadToolsConfig
+import sys
+import os
+import django
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+os.environ['DJANGO_SETTINGS_MODULE'] = 'backend.settings'  # Thay your_project.settings bằng đường dẫn tới settings.py của bạn
 
+# # Khởi tạo Django
+django.setup()
+from datetime import datetime
+from chatbot.utils.memory import Memory
+from typing import List, Tuple
+from chatbot.model.chatbot_backend import ChatBot 
+from chatbot.utils.load_config import LoadProjectConfig
+from chatbot.model.tools.load_tools_config import LoadToolsConfig
+# from model.tools.load_tools_config import LoadToolsConfig
+from django.test import TestCase
 
 PROJECT_CFG = LoadProjectConfig()
 TOOLS_CFG = LoadToolsConfig()
 
-class TestChatBot(unittest.TestCase):
+class TestChatBot(TestCase):
     def setUp(self):
         self.chatbot = []
         self.message = "Xin chào chatbot!"
@@ -32,6 +41,10 @@ class TestChatBot(unittest.TestCase):
         self.assertIn(updated_chatbot[-1][1], [item['response'] for item in chat_history])
 
 if __name__ == "__main__":
+    
+
+    # print(os.path.dirname(os.path.abspath(__file__)) + '/../')
+
     unittest.main()
 
 

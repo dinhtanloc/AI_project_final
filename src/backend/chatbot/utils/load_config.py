@@ -6,7 +6,7 @@ from pyprojroot import here
 
 load_dotenv(find_dotenv())
 
-with open(here("configs/project_config.yml")) as cfg:
+with open(here("config/project_config.yml")) as cfg:
     app_config = yaml.load(cfg, Loader=yaml.FullLoader)
 
 
