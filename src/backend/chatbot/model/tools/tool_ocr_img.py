@@ -8,7 +8,7 @@ import io
 
 TOOLS_CFG = LoadToolsConfig()
 
-# app = Flask(__name__)
+app = Flask(__name__)
 
 class OCRTool:
     """

@@ -1,61 +1,43 @@
-from django.shortcuts import render
-from django.conf import settings
-from rest_framework import viewsets, status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import viewsets
+from rest_framework.decorators import action
 from rest_framework.response import Response
-from .models import ChatbotFile
-from .serializers import UserFileSerializer
-from .model.tools import lookup_user_document
-from .utils.prepare_vectodb import PrepareVectorDB
-from .serializers import ChatbotFileSerializer
-import os
+from rest_framework.permissions import IsAuthenticated
+from .models import ChatHistory
+from .serializers import ChatHistorySerializer
+# from model.chatbot_backend import ChatBot
+class ChatbotViewSet(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated]
 
-# Create your views here.
-# class UserFileViewSet(viewsets.ModelViewSet):
-#     """ViewSet cho việc quản lý các tệp tải lên của người dùng."""
-#     queryset = ChatbotFile.objects.all()
-#     serializer_class = ChatbotFileSerializer
-#     permission_classes = [IsAuthenticated]
+    @action(detail=False, methods=['post'])
+    def interact(self, request):
+        """
+        Handle the chatbot interaction via POST request, process user input, and return a response.
+        """
+        user_message = request.data.get('message', '')
 
-#     def perform_create(self, serializer):
-#         user_file = serializer.save(user=self.request.user)
+        if not user_message:
+            return Response({'error': 'No message provided'}, status=400)
 
-#         file_path = user_file.uploaded_file.path
-#         prepare_db_instance = PrepareVectorDB(
-#             doc_dir=os.path.dirname(file_path), 
-#             chunk_size=500, 
-#             chunk_overlap=50, 
-#             embedding_model='text-embedding-ada-002',  
-#             vectordb_dir=settings.VECTOR_DB_DIR, 
-#             collection_name='user_documents'  
-#         )
-#         prepare_db_instance.run() 
+        chatbot = []
 
-#     def process_and_store_file(self, file_path):
-#         with open(file_path, 'r', encoding='utf-8') as file:
-#             content = file.read()
-#             ChatbotFile.objects.create(
-#                 user=self.request.user,
-#                 title=os.path.basename(file_path),
-#                 content=content  # Lưu nội dung tệp
-#             )
-#         # os.remove(file_path)
+        # _, updated_chat = ChatBot.respond(chatbot, user_message)
+        _, updated_chat = ''
+        bot_response = updated_chat[-1][1] if updated_chat else 'No response'
 
-# class UserDocumentSearchViewSet(viewsets.ViewSet):
-#     """ViewSet cho việc tìm kiếm tài liệu của người dùng."""
-    
-#     permission_classes = [IsAuthenticated]
+        chat_history = ChatHistory.objects.create(
+            user=request.user,
+            thread_id="unique_thread_id",
+            user_query=user_message,
+            response=bot_response
+        )
 
-#     def list(self, request):
-#         """Tìm kiếm tài liệu của người dùng dựa trên truy vấn."""
-#         query = request.GET.get('query', '')
-#         if query:
-#             results = lookup_user_document(query)
-#             return Response({"results": results}, status=status.HTTP_200_OK)
-#         return Response({"error": "No query provided"}, status=status.HTTP_400_BAD_REQUEST)
-    
-#     @staticmethod  
-#     def lookup_user_document(query):
-#         """Tìm kiếm tài liệu của người dùng trong MongoDB dựa trên truy vấn."""
-#         results = ChatbotFile.objects.filter(content__icontains=query)
-#         return ChatbotFileSerializer(results, many=True).data
+        return Response({'response': bot_response})
+
+    @action(detail=False, methods=['get'])
+    def history(self, request):
+        """
+        Retrieve the chat history for the authenticated user.
+        """
+        chat_history = ChatHistory.objects.filter(user=request.user).order_by('-timestamp')
+        serializer = ChatHistorySerializer(chat_history, many=True)
+        return Response(serializer.data)

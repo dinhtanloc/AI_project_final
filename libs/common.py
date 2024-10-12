@@ -8,7 +8,10 @@ import functools
 import json
 import numpy as np
 import pandas as pd
-
+from PIL import Image
+import requests
+from io import BytesIO
+import matplotlib.pyplot as plt
 
 #------LANGCHAIN---------------
 from langchain.llms.openai import OpenAI
