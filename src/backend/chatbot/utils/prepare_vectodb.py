@@ -73,6 +73,8 @@ class PrepareVectorDB:
         self.db = self.client[self.db_name]
         self.collection = self.db[self.collection_name]
 
+   
+
     def path_maker(self, file_name: str, doc_dir):
         """
         Tạo một đường dẫn đầy đủ bằng cách nối thư mục và tên tệp.
@@ -143,26 +145,8 @@ class PrepareVectorDB:
                 print(f"Đã xóa tệp {file_name} khỏi thư mục.")
             except Exception as e:
                 print(f"Lỗi khi xóa tệp {file_name}: {e}")
-
+            finally:
+                self.client.close()
         print("Quá trình xử lý hoàn tất.")
         print("Số lượng vectors trong MongoDB collection:", self.collection.count_documents({}), "\n\n")
 
-prepare_db_instance = PrepareVectorDB(
-    doc_dir=DOC_DIR,
-    chunk_size=CHUNK_SIZE,
-    chunk_overlap=CHUNK_OVERLAP,
-    mongodb_uri=MONGODB_URI,
-    db_name=DB_NAME,
-    collection_name=COLLECTION_NAME
-)
-
-prepare_db_instance.run()
-# from pathlib import Path
-# client = pymongo.MongoClient(MONGODB_URI)
-# db = client['dinhtanloc']
-# collection = db['rag_test']
-# print(client['dinhtanloc']['rag_test'].count_documents({}))
-# project_root = Path(__file__).resolve().parent.parent
-# print(project_root)
-# print(here(DOC_DIR))
-print("Number of vectors in MongoDB collection:", prepare_db_instance.collection.count_documents({}), "\n\n")

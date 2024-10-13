@@ -3,9 +3,8 @@ import sys
 import os
 import django
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
-os.environ['DJANGO_SETTINGS_MODULE'] = 'backend.settings'  # Thay your_project.settings bằng đường dẫn tới settings.py của bạn
+os.environ['DJANGO_SETTINGS_MODULE'] = 'backend.settings'  
 
-# # Khởi tạo Django
 django.setup()
 from datetime import datetime
 from chatbot.utils.memory import Memory
@@ -15,7 +14,7 @@ from chatbot.utils.load_config import LoadProjectConfig
 from chatbot.model.tools.load_tools_config import LoadToolsConfig
 # from model.tools.load_tools_config import LoadToolsConfig
 from django.test import TestCase
-
+os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 PROJECT_CFG = LoadProjectConfig()
 TOOLS_CFG = LoadToolsConfig()
 
@@ -38,8 +37,10 @@ class TestChatBot(TestCase):
         chat_history = Memory.get_chat_history(self.user_id, TOOLS_CFG.thread_id)
         print("chat đây",chat_history)
         
-        self.assertIn(self.message, [item['user_query'] for item in chat_history])
-        self.assertIn(updated_chatbot[-1][1], [item['response'] for item in chat_history])
+        # self.assertIn(self.message, [item['user_query'] for item in chat_history])
+        # self.assertIn(updated_chatbot[-1][1], [item['response'] for item in chat_history])
+        self.assertIn(self.message, [item[0] for item in chat_history]) 
+        self.assertIn(updated_chatbot[-1][1], [item[1] for item in chat_history]) 
 
 if __name__ == "__main__":
     

@@ -1,7 +1,8 @@
 from unittest import TestCase
 from unittest.mock import patch
 from utils.prepare_vectodb import PrepareVectorDB
-
+import warnings
+warnings.filterwarnings("ignore")
 class TestPrepareVectorDB(TestCase):
 
     @patch('utils.prepare_vectodb.pymongo.MongoClient')

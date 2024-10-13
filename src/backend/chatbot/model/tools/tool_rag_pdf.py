@@ -1,4 +1,4 @@
-from langchain_chroma import Chroma
+# from langchain_Mongodb import Mongodb
 from langchain_openai import OpenAIEmbeddings
 from sentence_transformers import SentenceTransformer
 from langchain_core.tools import tool
@@ -11,13 +11,13 @@ class UserDocumentRAGTool:
     """
     Một công cụ để truy xuất các tài liệu liên quan được tải lên bởi người dùng, sử dụng phương pháp Tạo Dữ Liệu Tăng Cường Truy Xuất (RAG) với các vector embeddings.
 
-    Công cụ này sử dụng một mô hình embedding của OpenAI đã được huấn luyện trước để chuyển đổi các truy vấn thành các biểu diễn dạng vector. Các vector này sau đó được sử dụng để truy vấn cơ sở dữ liệu vector Chroma (được lưu trữ trên đĩa) nhằm truy xuất top-k tài liệu hoặc mục nhập có liên quan nhất từ một bộ sưu tập cụ thể.
+    Công cụ này sử dụng một mô hình embedding của OpenAI đã được huấn luyện trước để chuyển đổi các truy vấn thành các biểu diễn dạng vector. Các vector này sau đó được sử dụng để truy vấn cơ sở dữ liệu vector MongoDB nhằm truy xuất top-k tài liệu hoặc mục nhập có liên quan nhất từ một bộ sưu tập cụ thể.
 
     Các thuộc tính:
     embedding_model (str): Tên của mô hình embedding OpenAI được sử dụng để tạo ra các biểu diễn vector của các truy vấn.
-    vectordb_dir (str): Thư mục nơi cơ sở dữ liệu vector Chroma được lưu trữ trên đĩa.
+    vectordb_dir (str): Thư mục nơi cơ sở dữ liệu vector Mongodb được lưu trữ trên đĩa.
     k (int): Số lượng tài liệu lân cận gần nhất (tài liệu có liên quan nhất) sẽ được truy xuất từ cơ sở dữ liệu vector.
-    vectordb (Chroma): Thể hiện cơ sở dữ liệu vector Chroma được kết nối với bộ sưu tập và mô hình embedding đã chỉ định.
+    vectordb (Mongodb): Thể hiện cơ sở dữ liệu vector Mongodb được kết nối với bộ sưu tập và mô hình embedding đã chỉ định.
     Các phương thức:
     __init__: Khởi tạo công cụ bằng cách thiết lập mô hình embedding, cơ sở dữ liệu vector, và các tham số truy xuất.
     """
@@ -28,7 +28,7 @@ class UserDocumentRAGTool:
 
         Tham số:
         embedding_model (str): Tên của mô hình embedding (ví dụ: "text-embedding-ada-002") được sử dụng để chuyển đổi các truy vấn thành biểu diễn vector.
-        vectordb_dir (str): Đường dẫn thư mục nơi cơ sở dữ liệu vector Chroma được lưu trữ và bảo quản trên đĩa.
+        vectordb_dir (str): Đường dẫn thư mục nơi cơ sở dữ liệu vector Mongodb được lưu trữ và bảo quản trên đĩa.
         k (int): Số lượng tài liệu lân cận gần nhất sẽ được truy xuất dựa trên sự tương đồng của truy vấn.
         collection_name (str): Tên của bộ sưu tập trong cơ sở dữ liệu vector chứa các tài liệu do người dùng tải lên.
         """
@@ -45,7 +45,7 @@ class UserDocumentRAGTool:
             db_name=self.db_name,
             collection_name=self.collection_name
         )
-        print("Number of vectors in vectordb: ", self.vectordb._collection.count(), "\n\n")
+        print("Number of vectors in vectordb: ", self.vectordb.collection.count(), "\n\n")
 
     def similarity_search(self, query: str, k: int = None):
         """
@@ -94,8 +94,16 @@ class UserDocumentRAGTool:
         pipeline = [vector_search_stage, unset_stage, project_stage]
 
         # Execute the search
-        results = self.vectordb.collection.aggregate(pipeline)
+        try:
+            results = self.vectordb.collection.aggregate(pipeline)
+            self.vectordb.client.close()
+        except Exception as e:
+            print(e)
         return list(results)
+       
+            # print("Number of vectors in MongoDB collection: ", vectordb.collection.count_documents({}), "\n\n")
+            # results = []  # Bạn có thể thêm logic tìm kiếm tương tự ở đây.
+            # return results
 
         # results = self.prepare_db_instance.collection.find({
         #     "vector": {"$near": {"$geometry": {"type": "Point", "coordinates": query_vector}}}
