@@ -32,6 +32,7 @@ class UserDocumentRAGTool:
         k (int): Số lượng tài liệu lân cận gần nhất sẽ được truy xuất dựa trên sự tương đồng của truy vấn.
         collection_name (str): Tên của bộ sưu tập trong cơ sở dữ liệu vector chứa các tài liệu do người dùng tải lên.
         """
+        self.name = "lookup_user_document"
         self.embedding_model = SentenceTransformer("keepitreal/vietnamese-sbert")
         self.vectordb_dir = vectordb_dir
         self.k = k

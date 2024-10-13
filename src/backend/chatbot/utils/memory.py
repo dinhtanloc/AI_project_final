@@ -3,7 +3,7 @@ import pandas as pd
 from typing import List
 from datetime import datetime, date
 from chatbot.models import ChatHistory
-
+from accounts.models import User
 class Memory:
     """
         Lớp này chịu trách nhiệm xử lý việc lưu trữ lịch sử hội thoại của chatbot.
@@ -90,8 +90,9 @@ class Memory:
         Trả về:
             None
         """
+        user_instance = User.objects.get(id=user)
         chat_history = ChatHistory(
-            user=user,
+            user=user_instance,
             thread_id=thread_id,
             user_query=user_query,
             response=response,

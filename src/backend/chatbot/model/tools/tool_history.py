@@ -1,5 +1,9 @@
 from langchain_core.tools import tool
-from langchain_core.memory import ChatMessageHistory
+from langchain.memory import ChatMessageHistory
+from langchain_core.chat_history import (
+    BaseChatMessageHistory,
+    InMemoryChatMessageHistory,
+)
 from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_openai import ChatOpenAI
@@ -11,20 +15,16 @@ TOOLS_CFG = LoadToolsConfig()
 
 class HistoryAgent:
     """
-    Một công cụ để quản lý lịch sử hội thoại cho chatbot, cho phép ghi nhớ và xử lý các tin nhắn từ người dùng,
-    giúp duy trì ngữ cảnh trong cuộc hội thoại.
+    Quản lý lịch sử hội thoại cho chatbot, ghi nhớ và xử lý tin nhắn từ người dùng để duy trì ngữ cảnh.
 
-    Công cụ này sử dụng mô hình ngôn ngữ để trả lời các câu hỏi từ người dùng dựa trên lịch sử hội thoại
-    và các tin nhắn trước đó.
+    Thuộc tính:
+        history_agent_llm (ChatOpenAI): Mô hình ngôn ngữ dùng để tạo phản hồi.
+        chat_history (ChatMessageHistory): Lưu trữ tin nhắn từ người dùng và phản hồi từ chatbot.
+        system_role (str): Mẫu nhắc hướng dẫn mô hình trong việc trả lời câu hỏi.
+        chain (RunnableWithMessageHistory): Chuỗi thao tác để quản lý lịch sử và tạo phản hồi.
 
-    Các thuộc tính:
-        history_agent_llm (ChatOpenAI): Một phiên bản của mô hình ngôn ngữ ChatOpenAI được sử dụng để tạo phản hồi.
-        chat_history (ChatMessageHistory): Lịch sử cuộc hội thoại, nơi lưu trữ các tin nhắn từ người dùng và phản hồi từ chatbot.
-        system_role (str): Một mẫu nhắc hệ thống hướng dẫn mô hình ngôn ngữ trong việc trả lời các câu hỏi của người dùng.
-        chain (RunnableWithMessageHistory): Một chuỗi các thao tác để quản lý lịch sử và tạo ra phản hồi cho người dùng.
-
-    Các phương thức:
-        __init__: Khởi tạo HistoryAgent với các cấu hình cần thiết.
+    Phương thức:
+        __init__: Khởi tạo với cấu hình cần thiết.
     """
 
     def __init__(self, llm: str, llm_temperature: float, session_id: str) -> None:
@@ -36,6 +36,7 @@ class HistoryAgent:
             llm_temperature (float): Cài đặt nhiệt độ cho mô hình ngôn ngữ, kiểm soát độ ngẫu nhiên của phản hồi.
             session_id (str): ID phiên để quản lý lịch sử cuộc hội thoại.
         """
+        self.name='chat_with_history'
         self.history_agent_llm = ChatOpenAI(
             model=llm, temperature=llm_temperature)
         self.chat_history = ChatMessageHistory()

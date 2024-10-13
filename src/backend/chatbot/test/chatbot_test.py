@@ -36,6 +36,7 @@ class TestChatBot(TestCase):
     def test_chat_history_saved(self):
         _, updated_chatbot = self.bot.respond(self.chatbot, self.message, self.user_id)
         chat_history = Memory.get_chat_history(self.user_id, TOOLS_CFG.thread_id)
+        print("chat đây",chat_history)
         
         self.assertIn(self.message, [item['user_query'] for item in chat_history])
         self.assertIn(updated_chatbot[-1][1], [item['response'] for item in chat_history])

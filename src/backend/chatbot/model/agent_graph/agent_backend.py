@@ -32,7 +32,8 @@ class BasicToolNode:
         Tham số:
             tools (list): Danh sách các đối tượng công cụ, mỗi công cụ có thuộc tính `name`.
         """
-        self.tools_by_name = {tool.name: tool for tool in tools}
+        # self.tools_by_name = {tool.name: tool for tool in tools}
+        self.tools_by_name = {'query_stock_sqldb', 'ocr_and_lookup', 'query_stock_logic', 'load_tavily_search_tool'}
 
     def __call__(self, inputs: dict):
         """Thực thi các công cụ dựa trên các cuộc gọi công cụ trong tin nhắn cuối cùng.
@@ -52,6 +53,7 @@ class BasicToolNode:
             raise ValueError("No message found in input")
         outputs = []
         for tool_call in message.tool_calls:
+            print(self.tools_by_name[tool_call["name"]])
             tool_result = self.tools_by_name[tool_call["name"]].invoke(
                 tool_call["args"]
             )

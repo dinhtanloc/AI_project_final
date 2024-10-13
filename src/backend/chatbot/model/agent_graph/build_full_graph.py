@@ -8,6 +8,7 @@ from chatbot.model.tools.tool_tavily_search import load_tavily_search_tool
 from chatbot.model.tools.tool_sqlagent import query_stock_sqldb
 from chatbot.model.tools.load_tools_config import LoadToolsConfig
 from chatbot.model.tools.tool_ocr_img import ocr_and_lookup
+from chatbot.model.tools.tool_history import chat_with_history
 from chatbot.model.agent_graph.agent_backend import State, BasicToolNode, route_tools, plot_agent_schema
 
 TOOLS_CFG = LoadToolsConfig()
@@ -50,11 +51,12 @@ def build_graph():
                              temperature=TOOLS_CFG.primary_agent_llm_temperature)
     graph_builder = StateGraph(State)
     # Load tools with their proper configs
-    search_tool = load_tavily_search_tool(TOOLS_CFG.tavily_search_max_results)
+    search_tool = load_tavily_search_tool(tavily_search_max_results=TOOLS_CFG.tavily_search_max_results)
     tools = [search_tool,
             lookup_user_document,
             query_stock_logic,
-            load_tavily_search_tool,
+            chat_with_history,
+            # load_tavily_search_tool,
             ocr_and_lookup
              ]
     # Tell the LLM which tools it can call
@@ -70,7 +72,8 @@ def build_graph():
             search_tool,
             lookup_user_document,
             query_stock_logic,
-            load_tavily_search_tool,
+            chat_with_history,
+            # load_tavily_search_tool,
             ocr_and_lookup
         ])
     graph_builder.add_node("tools", tool_node)

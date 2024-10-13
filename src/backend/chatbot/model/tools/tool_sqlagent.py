@@ -1,4 +1,7 @@
 from langchain_core.tools import tool
+import sys,os
+# sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+# os.environ['DJANGO_SETTINGS_MODULE'] = 'backend.settings'
 from langchain_community.utilities import SQLDatabase
 from langchain.chains import create_sql_query_chain
 from langchain_community.tools.sql_database.tool import QuerySQLDataBaseTool
@@ -40,7 +43,7 @@ class SQLAgent:
             sqldb_directory (str): Đường dẫn đến thư mục nơi cơ sở dữ liệu SQLite được lưu trữ.
             llm_temperature (float): Cài đặt nhiệt độ cho mô hình ngôn ngữ, kiểm soát độ ngẫu nhiên của phản hồi.
         """
-
+        self.name='query_stock_sqldb'
         self.sql_agent_llm = ChatOpenAI(
             model=llm, temperature=llm_temerature)
         self.system_role = """Given the following user question, corresponding SQL query, and SQL result, answer the user question.\n
@@ -78,3 +81,4 @@ def query_stock_sqldb(query: str) -> str:
     )
     response = agent.chain.invoke({"question": query})
     return response
+

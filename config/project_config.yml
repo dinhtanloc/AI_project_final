@@ -1,6 +1,6 @@
 langsmith:
   tracing: "true"
-  project_name: "RAG & SQL Agents"
+  project_name: "chatbot_project"
 
 memory:
   directory: memory
