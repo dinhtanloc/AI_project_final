@@ -71,7 +71,7 @@ class SQLAgent:
         )
 
 
-@tool
+@tool('query_stock_sqldb')
 def query_stock_sqldb(query: str) -> str:
     """Truy vấn dữ liệu thị trường chứng khoán Việt Nam từ cơ sở dữ liệu SQL Vnstock và truy cập toàn bộ thông tin công ty, sự kiện. Đầu vào nên là một truy vấn tìm kiếm."""
     agent = SQLAgent(

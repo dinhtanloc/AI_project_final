@@ -63,7 +63,7 @@ class FinanceAgent:
 
 
 
-@tool
+@tool('query_stock_logic')
 def query_stock_logic(ques: str) -> str:
     """Truy vấn dữ liệu thị trường chứng khoán từ cơ sở dữ liệu SQL."""
     messages = [HumanMessage(ques)]

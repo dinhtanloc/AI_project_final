@@ -67,7 +67,7 @@ class HistoryAgent:
         return response
 
 
-@tool
+@tool('chat_with_history')
 def chat_with_history(question: str, session_id: str) -> str:
     """Trả lời câu hỏi của người dùng với lịch sử cuộc hội thoại."""
     agent = HistoryAgent(

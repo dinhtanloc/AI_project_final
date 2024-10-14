@@ -112,7 +112,7 @@ class UserDocumentRAGTool:
         # return [result for result in results]
 
 
-@tool
+@tool('lookup_user_document')
 def lookup_user_document(query: str) -> str:
     """Tìm kiếm các tài liệu đã tải lên của người dùng để tìm thông tin liên quan dựa trên truy vấn."""
     rag_tool = UserDocumentRAGTool(

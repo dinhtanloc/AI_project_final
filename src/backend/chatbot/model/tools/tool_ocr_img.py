@@ -105,7 +105,7 @@ class OCRTool:
         return list(results)
 
 
-@tool
+@tool('ocr_and_lookup')
 def ocr_and_lookup(image: bytes) -> str:
     """Thực hiện OCR trên hình ảnh và tìm kiếm tài liệu liên quan dựa trên văn bản đã trích xuất."""
     ocr_tool = OCRTool(embedding_model="text-embedding-ada-002", k=TOOLS_CFG.user_doc_rag_k)
