@@ -42,7 +42,7 @@ class UserAPITests(APITestCase):
 
     def test_get_current_user(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        response = self.client.get(reverse('user-current-user'))
+        response = self.client.get(reverse('user-test-endpoint'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['response']['username'], 'testuser')
 
