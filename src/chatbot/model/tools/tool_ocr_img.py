@@ -1,6 +1,6 @@
 from langchain_openai import OpenAIEmbeddings
 from langchain_core.tools import tool
-from model.tools.load_tools_config import LoadToolsConfig
+from chatbot.model.tools.load_tools_config import LoadToolsConfig
 import pytesseract
 from PIL import Image
 import io
@@ -23,6 +23,7 @@ class OCRTool:
         Tham số:
         embedding_model (str): Tên của mô hình embedding OpenAI được sử dụng để chuyển đổi các văn bản đã trích xuất thành biểu diễn vector.
         """
+        self.name = "ocr_and_lookup"
         self.embedding_model = embedding_model
         self.embedding_model_instance = OpenAIEmbeddings(model=self.embedding_model)
         self.k=k
@@ -104,7 +105,7 @@ class OCRTool:
         return list(results)
 
 
-@tool
+@tool('ocr_and_lookup')
 def ocr_and_lookup(image: bytes) -> str:
     """Thực hiện OCR trên hình ảnh và tìm kiếm tài liệu liên quan dựa trên văn bản đã trích xuất."""
     ocr_tool = OCRTool(embedding_model="text-embedding-ada-002", k=TOOLS_CFG.user_doc_rag_k)

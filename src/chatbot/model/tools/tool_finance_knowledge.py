@@ -10,16 +10,13 @@ from langchain_openai import ChatOpenAI
 from langchain_core.messages import AIMessage, ToolMessage, HumanMessage
 import datetime
 from langchain_core.prompts import ChatPromptTemplate
-from .finance_toollists import tool_mapping, tools
-from .load_tools_config import LoadToolsConfig
+from chatbot.model.tools.finance_toollists import tool_mapping, tools
+from chatbot.model.tools.load_tools_config import LoadToolsConfig
 
 TOOLS_CFG = LoadToolsConfig()
 
 class FinanceAgent:
-    """
-    SQLAgent với few-shot prompting cho phép mô hình học hỏi từ một vài ví dụ về các truy vấn SQL
-    và cách trả lời trước khi đưa ra câu trả lời cuối cùng.
-    """
+    """SQLAgent cho phép mô hình học hỏi từ ví dụ về các truy vấn SQL trước khi trả lời."""
 
     def __init__(self, llm: str, ques: str, llm_temperature: float, tools ) -> None:
         """
@@ -30,7 +27,7 @@ class FinanceAgent:
             ques (str): Câu hỏi được đưa ra để tìm kiếm thông tin.
             llm_temperature (float): Cài đặt nhiệt độ cho mô hình ngôn ngữ, kiểm soát độ ngẫu nhiên của phản hồi.
         """
-
+        self.name='query_stock_logic'
         self.llm = ChatOpenAI(
             model=llm, temperature=llm_temperature)
         self.sql_agent_llm=self.llm.bind_tools(tools)
@@ -66,9 +63,9 @@ class FinanceAgent:
 
 
 
-@tool
+@tool('query_stock_logic')
 def query_stock_logic(ques: str) -> str:
-    """Truy vấn dữ liệu thị trường chứng khoán Việt Nam từ cơ sở dữ liệu SQL Vnstock với hỗ trợ few-shot prompting."""
+    """Truy vấn dữ liệu thị trường chứng khoán từ cơ sở dữ liệu SQL."""
     messages = [HumanMessage(ques)]
     agent = FinanceAgent(
         llm=TOOLS_CFG.sqlagent_llm,
