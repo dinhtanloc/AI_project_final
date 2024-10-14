@@ -88,3 +88,9 @@ class PasswordChangeAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.user.refresh_from_db()
         self.assertTrue(self.user.check_password('newpassword123'))
+
+
+
+# python manage.py test
+# python manage.py test myapp
+# python manage.py test myapp.tests.MyModelTest
