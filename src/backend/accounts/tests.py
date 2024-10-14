@@ -42,13 +42,13 @@ class UserAPITests(APITestCase):
 
     def test_get_current_user(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        response = self.client.get(reverse('user:current-user'))
+        response = self.client.get(reverse('current-user'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['response']['username'], 'testuser')
 
     def test_update_profile(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        response = self.client.patch(reverse('user:profile'), {
+        response = self.client.patch(reverse('profile'), {
             'full_name': 'Updated User',
             'phone': '0987654321',
             'address': '456 Updated Street'
