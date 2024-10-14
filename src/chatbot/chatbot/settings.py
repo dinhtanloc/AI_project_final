@@ -93,15 +93,12 @@ WSGI_APPLICATION = 'chatbot.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'djongo',
-        'NAME': 'your_db_name', 
-        'ENFORCE_SCHEMA': False,  
-        'CLIENT': {
-            'host': 'mongodb://localhost:27017',  
-            'username': 'your_username',  
-            'password': 'your_password',  
-            'authMechanism': 'SCRAM-SHA-1',  
-        }
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_name'),
+        'USER': os.getenv('DB_user'),
+        'PASSWORD': os.getenv('DB_password'),
+        'HOST': 'localhost',
+        'PORT': os.getenv('DB_port'),
     }
 }
 
