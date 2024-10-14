@@ -90,6 +90,7 @@ class Memory:
         Trả về:
             None
         """
+        print(f"Saving chat interaction: User: {user}, Thread ID: {thread_id}, Query: {user_query}, Response: {response}")
         user_instance = User.objects.get(id=user)
         chat_history = ChatHistory(
             user=user_instance,

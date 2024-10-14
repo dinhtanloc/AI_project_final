@@ -43,10 +43,6 @@ class TestChatBot(TestCase):
         self.assertIn(updated_chatbot[-1][1], [item[1] for item in chat_history]) 
 
 if __name__ == "__main__":
-    
-
-    # print(os.path.dirname(os.path.abspath(__file__)) + '/../')
-
     unittest.main()
 
 
