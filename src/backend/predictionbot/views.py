@@ -13,6 +13,7 @@ import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 from keras.models import Sequential
 from keras.layers import Dense, LSTM
+from rest_framework import status
 
 
 class Data(APIView):
@@ -21,10 +22,13 @@ class Data(APIView):
         start = request.GET.get('start')
         end = request.GET.get('end')
         # print(stock, start, end,'stockstartend')
-        print(start, type(start), 'startttt')
+        if not stock or not start or not end:
+            return Response(
+                {'error': 'Thiếu tham số bắt buộc: stock, start hoặc end.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         # yf.pdr_override()
         df = yf.download(stock,  start=start, end=end)
-        print('hello')
         df.reset_index(inplace=True)
         data = df.filter(['Close'])
         time = df.filter(['Date'])

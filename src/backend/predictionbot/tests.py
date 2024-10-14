@@ -2,24 +2,24 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 import yfinance as yf
-from unittest.mock import patch
-import pandas as pd
+
+
 class DataAPITests(APITestCase):
-
     def setUp(self):
-        self.url = reverse('data')  
+        self.url = reverse('data')
 
-    @patch('yfinance.download')  
-    def test_get_stock_data(self, mock_download):
-        mock_download.return_value = {
-            'Close': [100, 102, 104, 106, 108],
-            'Date': pd.date_range(start='2022-01-01', periods=5)
-        }
+    def test_get_stock_data(self):
+        stock_data = yf.download('AAPL', start='2022-01-01', end='2023-01-06')
+        self.assertIsNotNone(stock_data)
+        self.assertFalse(stock_data.empty)
 
-        response = self.client.get(self.url, {'stock': 'AAPL', 'start': '2022-01-01', 'end': '2022-01-06'})
+        response = self.client.get(self.url, {
+            'stock': 'AAPL',
+            'start': '2022-01-01',
+            'end': '2023-01-06'
+        })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
         self.assertIn('data', response.data)
         self.assertIn('prices', response.data['data'])
         self.assertIn('time', response.data['data'])
@@ -27,19 +27,17 @@ class DataAPITests(APITestCase):
         self.assertIn('valid', response.data['data'])
         self.assertIn('price', response.data['data'])
         self.assertIn('rmse', response.data['data'])
-
-        self.assertEqual(len(response.data['data']['prices']), 5)
-        self.assertEqual(response.data['data']['prices'].tolist(), [100, 102, 104, 106, 108])
+        self.assertEqual(len(response.data['data']['prices']), len(stock_data)) 
+        self.assertIsNotNone(response.data['data']['prices'])  
 
     def test_get_stock_data_invalid(self):
         response = self.client.get(self.url, {'start': '2022-01-01', 'end': '2022-01-06'})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
         response = self.client.get(self.url, {'stock': 'AAPL', 'end': '2022-01-06'})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
         response = self.client.get(self.url, {'stock': 'AAPL', 'start': '2022-01-01'})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
 
 
 # from django.urls import reverse

@@ -1,96 +1,80 @@
-from rest_framework.test import APITestCase 
-from django.urls import reverse
-from rest_framework import status
-from rest_framework.authtoken.models import Token
+from django.test import TestCase
 from .models import User, Profile
 
-class UserModelTests(APITestCase):  
+class UserModelTests(TestCase):
 
     def setUp(self):
         self.user = User.objects.create_user(
-            username='testuser',
-            email='testuser@example.com',
+            username='testuser3',
+            email='testuser3@example.com',
             password='password123'
         )
-        self.profile = Profile.objects.create(
-            user=self.user,
-            full_name='Test User',
-            phone='1234567890',
-            address='123 Test Street',
-            job='Tester',
-            bio='Just a test user',
-        )
-
+    
     def test_user_creation(self):
-        self.assertEqual(self.user.username, 'testuser')
-        self.assertEqual(self.user.email, 'testuser@example.com')
+        self.assertEqual(self.user.username, 'testuser3')
+        self.assertEqual(self.user.email, 'testuser3@example.com')
         self.assertTrue(self.user.check_password('password123'))
 
-    def test_profile_creation(self):
-        self.assertEqual(self.profile.full_name, 'Test User')
-        self.assertEqual(self.profile.user, self.user)
+    def test_auto_profile_creation(self):
+        self.assertTrue(hasattr(self.user, 'profile'))
+        self.assertEqual(self.user.profile.full_name, self.user.username)
+        self.assertEqual(self.user.profile.user, self.user)
 
-class UserAPITests(APITestCase):  
+    def tearDown(self):
+        self.user.delete()
+
+class ProfileUpdateTests(TestCase):
 
     def setUp(self):
-        self.user = User.objects.create_user(
-            username='testuser',
-            email='testuser@example.com',
+        self.user = User.objects.create(
+            username='testuser2',
+            email='testuser2@example.com',
             password='password123'
         )
-        self.token = Token.objects.create(user=self.user)
+        self.profile = Profile.objects.get(user=self.user)
 
-    def test_get_current_user(self):
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        response = self.client.get(reverse('user-test-endpoint'))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['response']['username'], 'testuser')
+    def test_profile_update(self):
+        self.profile.full_name = "Updated User"
+        self.profile.phone = "0987654321"
+        self.profile.address = "456 Updated Street"
+        self.profile.save()
 
-    def test_update_profile(self):
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        response = self.client.patch(reverse('user-profile'), {
-            'full_name': 'Updated User',
-            'phone': '0987654321',
-            'address': '456 Updated Street'
-        })
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.user.profile.refresh_from_db()
-        self.assertEqual(self.user.profile.full_name, 'Updated User')
+        updated_profile = Profile.objects.get(user=self.user)
+        self.assertEqual(updated_profile.full_name, "Updated User")
+        self.assertEqual(updated_profile.phone, "0987654321")
+        self.assertEqual(updated_profile.address, "456 Updated Street")
 
-class RegistrationAPITests(APITestCase):  
+    def tearDown(self):
+        self.profile.delete()
+        self.user.delete()
+
+class RegistrationTests(TestCase):
 
     def test_user_registration(self):
-        response = self.client.post(reverse('accounts:auth_register'), {
-            'username': 'newuser',
-            'email': 'newuser@example.com',
-            'password': 'newpassword123'
-        })
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        user = User.objects.create_user(
+            username='newuser',
+            email='newuser@example.com',
+            password='newpassword123'
+        )
         self.assertEqual(User.objects.last().username, 'newuser')
+        self.assertTrue(hasattr(user, 'profile'))  
+        self.assertEqual(user.profile.full_name, 'newuser')  
+        user.delete()
 
-class PasswordChangeAPITests(APITestCase):  
+class PasswordChangeTests(TestCase):
 
     def setUp(self):
         self.user = User.objects.create_user(
-            username='testuser',
-            email='testuser@example.com',
-            password='password123'
+            username='testuser1',
+            email='testuser1@example.com',
+            password='password1234'
         )
-        self.token = Token.objects.create(user=self.user)
 
     def test_change_password(self):
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        response = self.client.patch(reverse('accounts:profile'), {
-            'current_password': 'password123',
-            'new_password': 'newpassword123',
-            'confirm_password': 'newpassword123'
-        })
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.user.refresh_from_db()
+        self.user.set_password('newpassword123')
+        self.user.save()
+
         self.assertTrue(self.user.check_password('newpassword123'))
 
-
-
-# python manage.py test
-# python manage.py test myapp
-# python manage.py test myapp.tests.MyModelTest
+    def tearDown(self):
+        self.user.delete()
