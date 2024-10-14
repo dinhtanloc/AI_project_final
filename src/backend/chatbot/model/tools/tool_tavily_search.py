@@ -1,7 +1,7 @@
 from langchain_core.tools import tool
 from langchain_community.tools.tavily_search import TavilySearchResults
 
-@tool('load_tavily_search_tool')
+# @tool('load_tavily_search_tool')
 def load_tavily_search_tool(tavily_search_max_results: int):
     """
     Hàm này khởi tạo công cụ tìm kiếm Tavily, công cụ thực hiện các tìm kiếm và trả về kết quả
