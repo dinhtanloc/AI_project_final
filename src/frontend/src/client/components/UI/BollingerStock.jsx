@@ -1,7 +1,7 @@
 // BollingerStock.js
 import React, { useState, useEffect, useRef } from 'react';
 import * as Plot from '@observablehq/plot';
-import getData from '@assets/data/stockData'; 
+import getData from '@client/assets/data/stockData'; 
 
 const BollingerStock = ({n,k}) => {
   // const [n, setN] = useState(20); // Periods

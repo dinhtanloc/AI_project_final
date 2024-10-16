@@ -1,7 +1,7 @@
 import React from "react";
 import Slider from "react-slick";
 
-import "@styles/testimonial.css";
+import "@client/styles/testimonial.css";
 
 import ava01 from "/media/member/Loc_Dinh.jpg"
 import ava02 from "/media/ban_xoi.jpg";

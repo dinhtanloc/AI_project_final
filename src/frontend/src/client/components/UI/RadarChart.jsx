@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import * as Plot from '@observablehq/plot';
 import * as d3 from 'd3';
-import '@styles/rada.css'
-import phoneData from '@assets/data/radaChart.js'
+import '@client/styles/rada.css'
+import phoneData from '@client/assets/data/radaChart.js'
 // Dữ liệu JSON từ CSV
 // const phoneData = [
 //   {

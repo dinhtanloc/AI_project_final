@@ -7,9 +7,9 @@ import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
 import InventoryIcon from '@mui/icons-material/Inventory';
 import Header from "./HeaderDashboard";
-import useAxios from "@utils/useAxios"
-import StockAgChart from "@components/UI/StockAgChart";
-import StatBox from "@components/UI/StatBox";
+import useAxios from "@admin/utils/useAxios"
+import StockAgChart from "@admin/components/UI/StockAgChart";
+import StatBox from "@admin/components/UI/StatBox";
 
 // import downloadExcel from "../utils/downloadExcel";
 

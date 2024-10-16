@@ -1,5 +1,5 @@
 import AtomicSpinner from 'atomic-spinner'
-import "@styles/loading-page.css"
+import "@client/styles/loading-page.css"
 
 const LoadingPage = () =>
     <div className='loading_container'>

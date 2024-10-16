@@ -1,4 +1,4 @@
-import RadarChart from "@components/UI/RadarChart"
+import RadarChart from "@client/components/UI/RadarChart"
 import { Container, Row, Col } from "reactstrap";
 
 const OurFeature = ()=>{

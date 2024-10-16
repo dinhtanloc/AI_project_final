@@ -4,7 +4,7 @@ import Slider from "react-slick";
 import { Container } from "reactstrap";
 import { Link } from "react-router-dom";
 
-import "@styles/hero-slider.css";
+import "@client/styles/hero-slider.css";
 
 const HeroSlider = () => {
   const settings = {

@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { Chart } from "react-google-charts";
-import {data} from '@assets/data/organStructure.js'
+import {data} from '@client/assets/data/organStructure.js'
 import { Container, Row, Col } from "reactstrap";
-import "@styles/about-section.css";
-import "@styles/organstructure.css"
+import "@client/styles/about-section.css";
+import "@client/styles/organstructure.css"
 
 
 export const options = {

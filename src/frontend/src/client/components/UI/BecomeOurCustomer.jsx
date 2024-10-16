@@ -1,5 +1,5 @@
 import React from "react";
-import "@styles/become-driver.css";
+import "@client/styles/become-driver.css";
 import { Container, Row, Col } from "reactstrap";
 
 import driverImg from "/media/our_product.png";

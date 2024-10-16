@@ -1,6 +1,6 @@
 import React from "react";
 import { Container } from "reactstrap";
-import "@styles/common-section.css";
+import "@client/styles/common-section.css";
 
 const CommonSection = ({ title }) => {
   return (

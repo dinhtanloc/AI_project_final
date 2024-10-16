@@ -1,5 +1,5 @@
 import React from "react";
-import "@styles/our-member.css";
+import "@client/styles/our-member.css";
 import { Col } from "reactstrap";
 import { Link } from "react-router-dom";
 import ava01 from "/media/member/Loc_Dinh.jpg";

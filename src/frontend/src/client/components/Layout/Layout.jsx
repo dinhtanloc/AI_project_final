@@ -1,16 +1,16 @@
 import React, { Fragment, useState, useContext, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import AuthContext from '@context/AuthContext.jsx';
+import AuthContext from '@client/context/AuthContext.jsx';
 import useAxios from "@utils/useAxios.js";
-import Login from "@pages/Login";
-import Routers from "@routers/Routers";
+import Login from "@client/pages/Login";
+import Routers from "@client/routers/Routers";
 import axios from 'axios';
 import backgroundImage from '/media/background_login.png'; 
-import "@styles/page.css"
+import "@client/styles/page.css"
 import Topbar from "../global/Topbar"
 import ProSidebar from "../global/ProSidebar"
-import Header from "@components/Header/Header";
-import Footer from "@components/Footer/Footer"
+import Header from "@client/components/Header/Header";
+import Footer from "@client/components/Footer/Footer"
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 axios.defaults.withCredentials = true;

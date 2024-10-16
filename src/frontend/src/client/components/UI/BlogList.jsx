@@ -1,9 +1,9 @@
 import {React, useState,useEffect} from "react";
 import axios from "axios";
 import { Col } from "reactstrap";
-import "@styles/blog-item.css";
+import "@client/styles/blog-item.css";
 import { Link } from "react-router-dom";
-import blogData from "@assets/data/blogData";
+import blogData from "@client/assets/data/blogData";
 
 const BlogList = () => {
   // const [blogData, setBlogdata] = useState([]);

@@ -1,6 +1,6 @@
 import React from "react";
 import { Container, Row, Col } from "reactstrap";
-import "@styles/about-section.css";
+import "@client/styles/about-section.css";
 import aboutImg from "/media/bitcoin.png";
 
 const AboutSection = ({ aboutClass }) => {
