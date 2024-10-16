@@ -52,7 +52,6 @@ const Footer = () => {
             Founded on October 26th, 2022, Moketo Gr. is your go-to platform for expert stock investment advice. With top-tier insights and personalized recommendations, Moketo Gr. helps you invest smartly and confidently. Choose Moketo Gr. for smarter investments today!
             </p>
           </Col>
-
           <Col lg="2" md="4" sm="6">
             <div className="mb-4">
               <h5 className="footer__link-title">Quick Links</h5>
