@@ -19,7 +19,6 @@ const OUR__MEMBERS = [
     linkedinUrl: import.meta.env.VITE_LINKEDIN,
     imgUrl: ava01,
   },
-
   {
     name: "Chi Tran Thi Kim",
     experience: "Project Coordinator",
