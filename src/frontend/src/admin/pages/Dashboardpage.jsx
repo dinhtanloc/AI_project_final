@@ -1,25 +1,25 @@
 import React, { useEffect, useContext,useState } from "react";
-import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
-import { tokens } from "../theme";
+import { Box, Button, useTheme } from "@mui/material";
+import { tokens } from "@theme";
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import InventoryIcon from '@mui/icons-material/Inventory';
-import Header from "./Header";
-import {SummaryLineChart} from "../components/UI/LineChart";
-import GeographyChart from "../components/UI/GeographyChart";
-import BarChart from "../components/UI/BarChart";
-import StatBox from "../components/UI/StatBox";
-import ProgressCircle from "../components/UI/ProgressCircle";
-import useAxios from "../../client/utils/useAxios"
-import RecentTransactions from "../components/UI/RecentTransactions";
-import numeral from 'numeral';
+import Header from "./HeaderDashboard";
+import useAxios from "@utils/useAxios"
+import StockAgChart from "@components/UI/StockAgChart";
+import StatBox from "@components/UI/StatBox";
 
 // import downloadExcel from "../utils/downloadExcel";
 
 const Dashboard = () => {
+  // return(
+  //   <div>Dashboard page</div>
+  // )
+
+
+
   // window.location.reload()
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -28,79 +28,31 @@ const Dashboard = () => {
   const [orderRecent,setorderRecent] = useState([]);
   const api = useAxios();
   
-  useEffect(() => {
-    fetchTotalOrder();
-    fetchProductInventory();
-    fetchOrderList();
-  }, []);
-
-  const fetchOrderList = async () => {
-    try {
-        const response = await api.get('orders/admin/orders/first-ten-orders');
-        const orders = response.data;
-        const firstFiveOrders = orders.slice(0, 5);
-        setorderRecent(firstFiveOrders)
-        
-    } catch (error) {
-        console.error('Error fetching user profile:', error);
-    }
-};
   
-  const fetchTotalOrder = async () => {
-      try {
-          const response = await api.get('orders/admin/orders/total-order/');
-          // setUserProfile(response.data);
-          // checkStaff(response.data.is_staff)
-          console.log(response.data)
-          checkOrderInfo(response.data)
-          
-          
-      } catch (error) {
-          console.error('Error fetching user profile:', error);
-      }
-  };
-
-  const fetchProductInventory = async () => {
-      try {
-          const response = await api.get('categories/admin/products/check_inventory/');
-          // setUserProfile(response.data);
-          // checkStaff(response.data.is_staff)
-          checkProductInfo(response.data)
-          console.log(ProductInfo)
-          
-          // console.log(checkedStaff)
-      } catch (error) {
-          console.error('Error fetching user profile:', error);
-      }
-  };
-
-
-
-
   const handleDownload = async () => {
-    try {
-        const response = await fetch(`${import.meta.env.VITE_DOMAIN_BACKEND}/orders/download-excel/`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            },
-        });
+    // try {
+    //     const response = await fetch(`${import.meta.env.VITE_DOMAIN_BACKEND}/orders/download-excel/`, {
+    //         method: 'GET',
+    //         headers: {
+    //             'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    //         },
+    //     });
 
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
+    //     if (!response.ok) {
+    //         throw new Error('Network response was not ok');
+    //     }
 
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(new Blob([blob]));
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'orders.xlsx');
-        document.body.appendChild(link);
-        link.click();
-        link.parentNode.removeChild(link);
-    } catch (error) {
-        console.error('Error downloading the file', error);
-    }
+    //     const blob = await response.blob();
+    //     const url = window.URL.createObjectURL(new Blob([blob]));
+    //     const link = document.createElement('a');
+    //     link.href = url;
+    //     link.setAttribute('download', 'orders.xlsx');
+    //     document.body.appendChild(link);
+    //     link.click();
+    //     link.parentNode.removeChild(link);
+    // } catch (error) {
+    //     console.error('Error downloading the file', error);
+    // }
 };
   
 
@@ -113,7 +65,6 @@ const Dashboard = () => {
       {/* HEADER */}
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Header title="DASHBOARD" subtitle="Welcome to your dashboard" />
-
         <Box>
           <Button
             sx={{
@@ -135,7 +86,7 @@ const Dashboard = () => {
       <Box
         display="grid"
         gridTemplateColumns="repeat(12, 1fr)"
-        gridAutoRows="128px"
+        gridAutoRows="90px"
         gap="20px"
       >
         {/* ROW 1 */}
@@ -147,7 +98,7 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title={numeral(OrderInfo.total_revenue).format('0.00a $')}
+            title="70000"
             subtitle="Total sale"
             progress="0.75"
             increase="+14%"
@@ -166,7 +117,7 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title={new Intl.NumberFormat('en-US').format(OrderInfo.total_orders)}
+            title={300}
             subtitle="Transactions"
             progress="0.50"
             increase="+21%"
@@ -185,7 +136,7 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title={new Intl.NumberFormat('en-US').format(ProductInfo.total_quantity)}
+            title={10}
             subtitle="Quantity Product"
             progress="0.30"
             increase="+5%"
@@ -204,7 +155,7 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title={ProductInfo.out_of_stock_count}
+            title={5}
             subtitle="Out of stock"
             progress="0.80"
             increase="+43%"
@@ -215,138 +166,15 @@ const Dashboard = () => {
             }
           />
         </Box>
-
         {/* ROW 2 */}
         <Box
-          gridColumn="span 8"
-          gridRow="span 2"
+          gridColumn="span 12"
+          gridRow="span 4"
           backgroundColor={colors.primary[400]}
         >
-          <Box
-            mt="25px"
-            p="0 30px"
-            display="flex "
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Box>
-              <Typography
-                variant="h5"
-                fontWeight="600"
-                color={colors.grey[100]}
-              >
-                Revenue Generated
-              </Typography>
-              <Typography
-                variant="h3"
-                fontWeight="bold"
-                color={colors.greenAccent[500]}
-              >
-                {numeral(OrderInfo.total_revenue).format('0.00a $')}
-              </Typography>
-            </Box>
-            <Box>
-              <IconButton>
-                <DownloadOutlinedIcon
-                  sx={{ fontSize: "26px", color: colors.greenAccent[500] }}
-                />
-              </IconButton>
-            </Box>
-          </Box>
-          <Box height="250px" m="-20px 0 0 0">
-            <SummaryLineChart isDashboard={true} />
-          </Box>
-        </Box>
-        <Box
-          gridColumn="span 4"
-          gridRow="span 2"
-          backgroundColor={colors.primary[400]}
-          overflow="auto"
-        >
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            borderBottom={`4px solid ${colors.primary[500]}`}
-            colors={colors.grey[100]}
-            p="15px"
-          >
-            <Typography color={colors.grey[100]} variant="h5" fontWeight="600">
-              Recent Transactions
-            </Typography>
-          </Box>
-          {orderRecent.map((item, i) => (
-            <RecentTransactions
-              key={`${item.id}`}
-              item = {item}
-              // display="flex"
-              // justifyContent="space-between"
-              // alignItems="center"
-              // borderBottom={`4px solid ${colors.primary[500]}`}
-              // p="15px"
-            />
-            
-          ))}
-        </Box>
-
-        {/* ROW 3 */}
-        <Box
-          gridColumn="span 4"
-          gridRow="span 2"
-          backgroundColor={colors.primary[400]}
-          p="30px"
-        >
-          <Typography variant="h5" fontWeight="600">
-            Campaign
-          </Typography>
-          <Box
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            mt="25px"
-          >
-            <ProgressCircle size="125" />
-            <Typography
-              variant="h5"
-              color={colors.greenAccent[500]}
-              sx={{ mt: "15px" }}
-            >
-              $48,352 revenue generated
-            </Typography>
-            <Typography>Includes extra misc expenditures and costs</Typography>
-          </Box>
-        </Box>
-        <Box
-          gridColumn="span 4"
-          gridRow="span 2"
-          backgroundColor={colors.primary[400]}
-        >
-          <Typography
-            variant="h5"
-            fontWeight="600"
-            sx={{ padding: "30px 30px 0 30px" }}
-          >
-            Sales Quantity
-          </Typography>
-          <Box height="250px" mt="-20px">
-            <BarChart isDashboard={true} />
-          </Box>
-        </Box>
-        <Box
-          gridColumn="span 4"
-          gridRow="span 2"
-          backgroundColor={colors.primary[400]}
-          padding="30px"
-        >
-          <Typography
-            variant="h5"
-            fontWeight="600"
-            sx={{ marginBottom: "15px" }}
-          >
-            Geography Based Traffic
-          </Typography>
-          <Box height="200px">
-            <GeographyChart isDashboard={true} />
+       
+          <Box height="250px" m="0px 0 0 0">
+            <StockAgChart   />
           </Box>
         </Box>
       </Box>

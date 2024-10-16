@@ -1,5 +1,5 @@
 import { Box, useTheme } from "@mui/material";
-import { tokens } from "../../theme";
+import { tokens } from "@theme";
 // import useAxios from "../../../client/utils/useAxios";
 // import React, {useState, useEffect} from 'react'
 

@@ -1,58 +1,112 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect} from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-import Dashboard from "../pages/Dashboardpage";
-import Teampage from "../pages/Teampage";
-import Invoicespage from "../pages/Invoicespage";
-import ProductPage from "../pages/Productpage";
-import Bar from "../pages/Barpage";
-import Form from "../pages/Formpage";
-import Line from "../pages/Linepage";
-import Pie from "../pages/Piepage";
-import FAQ from "../pages/Faqpage";
-import Geography from "../pages/Geographypage";
-import Calendar from "../pages/Calendarpage";
-import Addproduct from "../pages/Addproduct";
-import OrderDashboard from "../pages/OrderDashboard";
-import ProductDashboard from "../pages/ProductDashboard";
-import StaffDashboard from "../pages/StaffDashboard";
-import LoadingPage from "../components/UI/LoadingComponent";
-const Routers = () => {
-  const [isLoading, setIsLoading] = useState(true);
-    const location = useLocation();
+import Dashboard from "@pages/Dashboardpage";
+import HomePage from "@pages/HomePage";
+import LoadingPage from "@components/UI/LoadingPage";
+import Login from "@pages/Login";
+import StockMarket from "@pages/StockMarket";
+import BlogDetails from "@pages/BlogDetails";
+import Blog from "@pages/Blog";
+import About from "@pages/About";
+import MainLayout from "@components/UI/MainLayout";
+import RadarChart from "@components/UI/RadarChart";
+import BollingerStock from "@components/UI/BollingerStock";
+import Contact from "@pages/Contact";
+import TableComponent from "@components/UI/TableComponent"
+import PredictionDashboard from '@pages/PredictionDashboard'
+import Chatbot from '@components/UI/Chatbot'
+import PrivateRoute from '@utils/PrivateRoute'
+import ChatbotContextProvider from '@context/ChatbotContext.jsx'
+import useAxios from "@utils/useAxios";
+// import StockMarket from "@pages/" 
+const Routers = ({ IsDashboard }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [currentUser, setCurrentUser]=useState(false)
+  const isUser = useAxios();
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
-      useEffect(() => {
-            setIsLoading(true);
-        
-            const timer = setTimeout(() => {
-              setIsLoading(false);
-            }, 1000); // Giả lập thời gian tải trang
-        
-            return () => clearTimeout(timer);
-          }, [location]);
-        
-          if (isLoading) {
-            return <LoadingPage />;
-          }
-    return (
-      <Routes>
-              <Route path="/" element={<Navigate to="/admin" />} />
-              <Route path="/admin" element={<Dashboard />} />
-              <Route path="/admin/team" element={<Teampage />} />
-              <Route path="/admin/products" element={<ProductPage />} />
-              <Route path="/admin/products/create-products" element={<Addproduct />} />
-              <Route path="/admin/orders" element={<Invoicespage />} />
-              <Route path="/admin/order-dashboard" element={<OrderDashboard />} />
-              <Route path="/admin/product-dashboard" element={<ProductDashboard />} />
-              <Route path="/admin/staff-dashboard" element={<StaffDashboard />} />
-              <Route path="/admin/form" element={<Form />} />
-              <Route path="/admin/bar" element={<Bar />} />
-              <Route path="/admin/pie" element={<Pie />} />
-              <Route path="/admin/line" element={<Line />} />
-              <Route path="/admin/faq" element={<FAQ />} />
-              <Route path="/admin/calendar" element={<Calendar />} />
-              <Route path="/admin/geography" element={<Geography />} />
-      </Routes>
-    );
+  const fetchUser = async () => {
+      try {
+          const response = await isUser.get('accounts/user/current-user');
+          response ? setCurrentUser(true) : null;          
+      } catch (error) {
+          setCurrentUser(false);
+          console.error('Error fetching user profile:', error);
+      }
   };
+  const location = useLocation();
+
+  useEffect(() => {
+    if(currentUser){
+      setIsLoading(true);
+
+    }
+
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000); 
+
+    return () => clearTimeout(timer);
+  }, [location]);
+
+  if (isLoading) {
+    return <LoadingPage />;
+  }
   
-  export default Routers;
+  console.log(IsDashboard);
+
+  return (
+    <Routes>
+      {IsDashboard ? (
+        <>
+          {/* <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard/prediction" element={<PredictionDashboard />} />
+          <Route path="/dashboard/chatbot" element={
+            <ChatbotContextProvider>
+              <Chatbot />
+            </ChatbotContextProvider>
+            } /> */}
+          <Route path='/dashboard/*' element={<PrivateRoute/>}>
+            <Route path="" element={<Dashboard />} />
+            <Route path="prediction" element={<PredictionDashboard />} />
+            <Route path="chatbot" element={
+              <ChatbotContextProvider>
+                <Chatbot />
+              </ChatbotContextProvider>
+              } />
+          </Route>
+            {/* <Route exact path='/dashboard/*' element={<Profile/>}/> */}
+          {/* <Route exact path='/dashboard/' element={<PrivateRoute/>}> */}
+          {/* </Route> */}
+          {/* <Route path="/dashboard/abc" element={<Login />} /> */}
+          {/* <Route path="/login" element={<Login />} /> */}
+        </>
+      ) : (
+        <Route element={<MainLayout />}>
+
+
+          <Route path="/" element={<Navigate to="/home" />} />
+          <Route path="/home" element={<HomePage />} />
+          {/* <Route path="/dashboard" element={<Dashboard />} /> */}
+          <Route path="/register" element={<Login />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/blogs" element={<Blog />} />
+          <Route path="/blogs/:slug" element={<BlogDetails />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/rada" element={<RadarChart />} />
+          <Route path="/stock-market" element={<StockMarket />} />
+          <Route path="/bollinger" element={<BollingerStock />} />
+          {/* <Route path="/candle" element={<CandleStickChartWithBollingerBandOverlay data={getData()} width={800} ratio={8} />} /> */}
+          <Route path="/table" element={<TableComponent />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/prediction" element={<PredictionDashboard />} />
+          {/* <Route path="/candle" element={<CandleStickChartWithBollingerBandOverlay data={getData()} width={850} ratio={1} />} /> */}
+        </Route>
+      )}
+    </Routes>
+  );
+};
+
+export default Routers;
