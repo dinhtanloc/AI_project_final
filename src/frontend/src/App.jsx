@@ -1,27 +1,27 @@
-import React, { useState, useEffect } from "react";
-import { CssBaseline, ThemeProvider } from "@mui/material";
-import { ColorModeContext, useMode } from "@theme";
-import Layout from "@components/Layout/Layout"
-import { Helmet, HelmetProvider  } from "react-helmet-async";
-// import 'rsuite/dist/rsuite.css';
+// import React, { useState, useEffect } from "react";
+// import { CssBaseline, ThemeProvider } from "@mui/material";
+// import { ColorModeContext, useMode } from "@theme";
+// import Layout from "@components/Layout/Layout"
+// import { Helmet, HelmetProvider  } from "react-helmet-async";
+// // import 'rsuite/dist/rsuite.css';
 
-const App = () => {
-  const [theme, colorMode] = useMode();
-  const [isSidebar, setIsSidebar] = useState(true);
+// const App = () => {
+//   const [theme, colorMode] = useMode();
+//   const [isSidebar, setIsSidebar] = useState(true);
 
 
-  return (
-    <HelmetProvider>
-    <ColorModeContext.Provider value={colorMode}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Layout/>
+//   return (
+//     <HelmetProvider>
+//     <ColorModeContext.Provider value={colorMode}>
+//       <ThemeProvider theme={theme}>
+//         <CssBaseline />
+//         <Layout/>
         
-      </ThemeProvider>
-    </ColorModeContext.Provider>
+//       </ThemeProvider>
+//     </ColorModeContext.Provider>
 
-    </HelmetProvider>
-  );
-}
+//     </HelmetProvider>
+//   );
+// }
 
-export default App;
+// export default App;
