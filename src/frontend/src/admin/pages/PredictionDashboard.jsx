@@ -1,11 +1,11 @@
 import React from "react";
 import useData from "@context/dataContext";
 import { Box, Typography } from "@mui/material";
-import DateStockePicker from "@components/PredictionUI/DateStockePicker";
-import ModelPerformance from "@components/PredictionUI/ModelPerformance";
+import DateStockePicker from "@admin/components/UI/DateStockePicker";
+import ModelPerformance from "@admin/components/UI/ModelPerformance";
 import { DotLoader } from "react-spinners";
-import '@styles/predictions.css';
-import QuoteLIneChart from '@components/PredictionUI/QuoteLIneChart';
+import '@admin/styles/predictions.css';
+import QuoteLIneChart from '@admin/components/UI/QuoteLIneChart';
 import { useTheme } from "@mui/material";
 import { tokens } from "@theme";
 export default function PredictionDashboard() {

@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 // import { CryptoContext } from "./../context/CryptoContext";
 // import { StorageContext } from "./../context/StorageContext";
-import cryptoData from "@client/assets/data/cryptoData"
+import cryptoData from "@assets/data/cryptoData"
 const SaveBtn = ({ data }) => {
 //   const { saveCoin, allCoins, removeCoin } = useContext(StorageContext);
 

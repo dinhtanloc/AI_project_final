@@ -1,25 +1,25 @@
 import { useState, useEffect} from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-import Dashboard from "@pages/Dashboardpage";
-import HomePage from "@pages/HomePage";
-import LoadingPage from "@components/UI/LoadingPage";
-import Login from "@pages/Login";
-import StockMarket from "@pages/StockMarket";
-import BlogDetails from "@pages/BlogDetails";
-import Blog from "@pages/Blog";
-import About from "@pages/About";
-import MainLayout from "@components/UI/MainLayout";
-import RadarChart from "@components/UI/RadarChart";
-import BollingerStock from "@components/UI/BollingerStock";
-import Contact from "@pages/Contact";
-import TableComponent from "@components/UI/TableComponent"
-import PredictionDashboard from '@pages/PredictionDashboard'
-import Chatbot from '@components/UI/Chatbot'
-import PrivateRoute from '@utils/PrivateRoute'
-import ChatbotContextProvider from '@context/ChatbotContext.jsx'
+// import Dashboard from "@client/pages/Dashboardpage";
+import HomePage from "@client/pages/HomePage";
+import LoadingPage from "@client/components/UI/LoadingPage";
+import Login from "@client/pages/Login";
+import StockMarket from "@client/pages/StockMarket";
+import BlogDetails from "@client/pages/BlogDetails";
+import Blog from "@client/pages/Blog";
+import About from "@client/pages/About";
+import MainLayout from "@client/components/UI/MainLayout";
+import RadarChart from "@client/components/UI/RadarChart";
+import BollingerStock from "@client/components/UI/BollingerStock";
+import Contact from "@client/pages/Contact";
+import TableComponent from "@client/components/UI/TableComponent"
+// import PredictionDashboard from '@client/pages/PredictionDashboard'
+// import Chatbot from '@client/components/UI/Chatbot'
+// import PrivateRoute from '@utils/PrivateRoute'
+// import ChatbotContextProvider from '@client/context/ChatbotContext.jsx'
 import useAxios from "@utils/useAxios";
 // import StockMarket from "@pages/" 
-const Routers = ({ IsDashboard }) => {
+const Routers = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [currentUser, setCurrentUser]=useState(false)
   const isUser = useAxios();
@@ -55,35 +55,10 @@ const Routers = ({ IsDashboard }) => {
     return <LoadingPage />;
   }
   
-  console.log(IsDashboard);
 
   return (
     <Routes>
-      {IsDashboard ? (
-        <>
-          {/* <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/dashboard/prediction" element={<PredictionDashboard />} />
-          <Route path="/dashboard/chatbot" element={
-            <ChatbotContextProvider>
-              <Chatbot />
-            </ChatbotContextProvider>
-            } /> */}
-          <Route path='/dashboard/*' element={<PrivateRoute/>}>
-            <Route path="" element={<Dashboard />} />
-            <Route path="prediction" element={<PredictionDashboard />} />
-            <Route path="chatbot" element={
-              <ChatbotContextProvider>
-                <Chatbot />
-              </ChatbotContextProvider>
-              } />
-          </Route>
-            {/* <Route exact path='/dashboard/*' element={<Profile/>}/> */}
-          {/* <Route exact path='/dashboard/' element={<PrivateRoute/>}> */}
-          {/* </Route> */}
-          {/* <Route path="/dashboard/abc" element={<Login />} /> */}
-          {/* <Route path="/login" element={<Login />} /> */}
-        </>
-      ) : (
+     
         <Route element={<MainLayout />}>
 
 
@@ -101,10 +76,9 @@ const Routers = ({ IsDashboard }) => {
           {/* <Route path="/candle" element={<CandleStickChartWithBollingerBandOverlay data={getData()} width={800} ratio={8} />} /> */}
           <Route path="/table" element={<TableComponent />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/prediction" element={<PredictionDashboard />} />
+          {/* <Route path="/prediction" element={<PredictionDashboard />} /> */}
           {/* <Route path="/candle" element={<CandleStickChartWithBollingerBandOverlay data={getData()} width={850} ratio={1} />} /> */}
         </Route>
-      )}
     </Routes>
   );
 };

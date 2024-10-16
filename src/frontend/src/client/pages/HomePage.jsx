@@ -1,14 +1,14 @@
 import React, {useState, useEffect} from "react";
-import HeroSlider from "@components/UI/HeroSlider";
-import Helmet from "@components/Helmet/Helmet";
+import HeroSlider from "@client/components/UI/HeroSlider";
+import Helmet from "@client/components/Helmet/Helmet";
 
 import { Container, Row, Col, Form, FormGroup } from "reactstrap";
-import AboutSection from "@components/UI/AboutSection";
-import ServicesList from "@components/UI/ServicesList";
-import BecomeOurCustomer from "@components/UI/BecomeOurCustomer";
-import Testimonial from "@components/UI/Testimonial";
-import "@styles/find-car-form.css"
-import BlogList from "@components/UI/BlogList";
+import AboutSection from "@client/components/UI/AboutSection";
+import ServicesList from "@client/components/UI/ServicesList";
+import BecomeOurCustomer from "@client/components/UI/BecomeOurCustomer";
+import Testimonial from "@client/components/UI/Testimonial";
+import "@client/styles/find-car-form.css"
+import BlogList from "@client/components/UI/BlogList";
 
 const HomePage = () => {
   const [prompt, setPrompt] = useState('');

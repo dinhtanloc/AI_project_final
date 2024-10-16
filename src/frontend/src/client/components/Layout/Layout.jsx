@@ -1,14 +1,14 @@
 import React, { Fragment, useState, useContext, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import AuthContext from '@client/context/AuthContext.jsx';
+import AuthContext from '@context/AuthContext.jsx';
 import useAxios from "@utils/useAxios.js";
 import Login from "@client/pages/Login";
 import Routers from "@client/routers/Routers";
 import axios from 'axios';
 import backgroundImage from '/media/background_login.png'; 
 import "@client/styles/page.css"
-import Topbar from "../global/Topbar"
-import ProSidebar from "../global/ProSidebar"
+// import Topbar from "../global/Topbar"
+// import ProSidebar from "../global/ProSidebar"
 import Header from "@client/components/Header/Header";
 import Footer from "@client/components/Footer/Footer"
 axios.defaults.xsrfCookieName = 'csrftoken';
@@ -77,7 +77,7 @@ const Layout = () => {
 
   const isLoginPage = location.pathname === "/login" || location.pathname === "/register";
   // const isDashboard = location.pathname === "/dashboard";
-  const isDashboard = location.pathname.startsWith("/dashboard");
+  // const isDashboard = location.pathname.startsWith("/dashboard");
 
 
 
@@ -98,28 +98,16 @@ const Layout = () => {
           <Login />
         </div>
       ) : (
-        isDashboard ? (
-          <Fragment>
-            <div className="app" style={{display:'flex'}}>
-              <ProSidebar isSidebar={isSidebar}  data={{name:name, image:img}} />
-              <main className="content" style={{flex:'1', overflowY:'auto', padding:'20px'}}>
-                <Topbar setIsSidebar={setIsSidebar} />
-                <Routers IsDashboard ={isDashboard}/>
-              </main>
-            </div>
-          </Fragment>
-          // <HomePage/>
-            
-      ) : (
+
         <Fragment>
           <Header onSearch={handleSearch} />
-          <Routers IsDashboard ={isDashboard} />
+          <Routers/>
           
           {/* <ChatPopup /> */}
           <Footer />
         </Fragment>
 
-      )
+      
       )}
     </>
   );

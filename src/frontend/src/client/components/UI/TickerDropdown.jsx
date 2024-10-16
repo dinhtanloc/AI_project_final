@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ticker from "@client/assets/data/tickerData";  // Đảm bảo đường dẫn chính xác
+import ticker from "@assets/data/tickerData";  // Đảm bảo đường dẫn chính xác
 import "@client/styles/dropdown.css"
 
 const TickerDropdown = (props) => {

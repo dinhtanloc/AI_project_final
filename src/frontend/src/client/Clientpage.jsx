@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "@theme";
-import Layout from "@components/Layout/Layout"
+import Layout from "@client/components/Layout/Layout"
 import { Helmet, HelmetProvider  } from "react-helmet-async";
 // import 'rsuite/dist/rsuite.css';
 

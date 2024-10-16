@@ -1,11 +1,11 @@
 import { useState, useEffect} from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-import Dashboard from "@pages/Dashboardpage";
-import LoadingPage from "@components/UI/LoadingPage";
-import PredictionDashboard from '@pages/PredictionDashboard'
-import Chatbot from '@components/UI/Chatbot'
+import Dashboard from "@admin/pages/Dashboardpage";
+import LoadingPage from "@admin/components/UI/LoadingPage";
+import PredictionDashboard from '@admin/pages/PredictionDashboard'
+// import Chatbot from '@admin/components/UI/Chatbot'
 import PrivateRoute from '@utils/PrivateRoute'
-import ChatbotContextProvider from '@context/ChatbotContext.jsx'
+// import ChatbotContextProvider from '@admin/context/ChatbotContext.jsx'
 import useAxios from "@utils/useAxios";
 // import StockMarket from "@pages/" 
 const Routers = () => {
@@ -40,11 +40,11 @@ const Routers = () => {
           <Route path='/dashboard/*' element={<PrivateRoute/>}>
             <Route path="" element={<Dashboard />} />
             <Route path="prediction" element={<PredictionDashboard />} />
-            <Route path="chatbot" element={
+            {/* <Route path="chatbot" element={
               <ChatbotContextProvider>
                 <Chatbot />
               </ChatbotContextProvider>
-              } />
+              } /> */}
           </Route>
       </Routes>
      

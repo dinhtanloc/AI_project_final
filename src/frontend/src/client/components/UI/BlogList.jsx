@@ -3,7 +3,7 @@ import axios from "axios";
 import { Col } from "reactstrap";
 import "@client/styles/blog-item.css";
 import { Link } from "react-router-dom";
-import blogData from "@client/assets/data/blogData";
+import blogData from "@assets/data/blogData";
 
 const BlogList = () => {
   // const [blogData, setBlogdata] = useState([]);

@@ -1,10 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Container, Row, Col, Form, FormGroup, Input } from "reactstrap";
-import Helmet from "@components/Helmet/Helmet";
-import CommonSection from "@components/UI/CommonSection";
+import Helmet from "@client/components/Helmet/Helmet";
+import CommonSection from "@client/components/UI/CommonSection";
 
-import "@styles/contact.css";
+import "@client/styles/contact.css";
 
 const socialLinks = [
   {

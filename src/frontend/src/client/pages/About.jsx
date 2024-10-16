@@ -1,14 +1,14 @@
 import React from "react";
 
-import CommonSection from "@components/UI/CommonSection";
-import Helmet from "@components/Helmet/Helmet";
-import AboutSection from "@components/UI/AboutSection";
+import CommonSection from "@client/components/UI/CommonSection";
+import Helmet from "@client/components/Helmet/Helmet";
+import AboutSection from "@client/components/UI/AboutSection";
 import { Container, Row, Col } from "reactstrap";
 import driveImg from "@assets/all-images/upward.png";
-import OurMembers from "@components/UI/OurMembers";
-import "@styles/about.css";
-import OrgStructure from '@components/UI/OrgStructure';
-import OurFeature from "@components/UI/OurFeature";
+import OurMembers from "@client/components/UI/OurMembers";
+import "@client/styles/about.css";
+import OrgStructure from '@client/components/UI/OrgStructure';
+import OurFeature from "@client/components/UI/OurFeature";
 const About = () => {
   return (
     <Helmet title="About">

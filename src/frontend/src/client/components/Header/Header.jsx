@@ -3,9 +3,9 @@ import { jwtDecode }  from "jwt-decode";
 import { Container, Row, Col } from "reactstrap";
 import { Link, NavLink,useNavigate  } from "react-router-dom";
 import "@client/styles/header.css";
-import AuthContext from '@client/context/AuthContext.jsx'
+import AuthContext from '@context/AuthContext.jsx'
 import useAxios from "@utils/useAxios"
-import  AuthLoginContext  from "@client/context/AuthLoginContext.jsx";
+import  AuthLoginContext  from "@context/AuthLoginContext.jsx";
 
 
 

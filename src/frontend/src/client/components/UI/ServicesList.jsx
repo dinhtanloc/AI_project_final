@@ -1,7 +1,7 @@
 import React from "react";
 import { Col } from "reactstrap";
 import "@client/styles/services-list.css";
-import serviceData from "@client/assets/data/serviceData";
+import serviceData from "@assets/data/serviceData";
 
 const ServicesList = () => {
   return (

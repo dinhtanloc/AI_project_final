@@ -1,11 +1,11 @@
-import "../../styles/page.css"
+import "@client/styles/page.css"
 import { useEffect, useState, Fragment } from "react";
-import { useMode } from "../../theme";
+import { useMode } from "@theme";
 
-import Routers from "../../routers/Router";
+import Routers from "@admin/routers/Router";
 import Topbar from "../global/Topbar"
-import Sidebar from "../global/Sidebar"
-import useAxios from "../../../client/utils/useAxios";
+import Sidebar from "../global/ProSidebar"
+import useAxios from "@utils/useAxios";
 
 const Layout =() =>{
     const [theme, colorMode] = useMode();

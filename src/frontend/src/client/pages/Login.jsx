@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import "@styles/login.css";
+import "@client/styles/login.css";
 import AuthContext from '@context/AuthContext'
 import  AuthLoginContext  from '@context/AuthLoginContext';
 import { useEffect } from 'react';

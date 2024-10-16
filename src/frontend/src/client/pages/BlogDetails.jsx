@@ -3,12 +3,12 @@ import { Container, Row, Col, Form, FormGroup, Input } from "reactstrap";
 
 import { useParams } from "react-router-dom";
 import blogData from "@assets/data/blogData";
-import Helmet from "@components/Helmet/Helmet";
+import Helmet from "@client/components/Helmet/Helmet";
 import { Link } from "react-router-dom";
 
 import commentImg from "/media/member/Loc_Dinh.jpg";
 
-import "@styles/blog-details.css";
+import "@client/styles/blog-details.css";
 
 const BlogDetails = () => {
   // console.log(blogData)

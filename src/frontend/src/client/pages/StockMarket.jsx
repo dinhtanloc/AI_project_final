@@ -1,13 +1,13 @@
 import React, { useRef, useState, useEffect } from "react";
-import Helmet from "@components/Helmet/Helmet";
+import Helmet from "@client/components/Helmet/Helmet";
 import { Container, Row } from "reactstrap";
 import { Box } from "@mui/material";
-import "@styles/about.css";
-import CandleStickChartWithBollingerBandOverlay from "@components/UI/CandleStickChartWithBollingerBandOverlay";
+import "@client/styles/about.css";
+import CandleStickChartWithBollingerBandOverlay from "@client/components/UI/CandleStickChartWithBollingerBandOverlay";
 import getData from "@assets/data/stockData"
-import BollingerStock from "@components/UI/BollingerStock";
-import TableComponent from "@components/UI/TableComponent";
-import TickerDropdown from "@components/UI/TickerDropdown";
+import BollingerStock from "@client/components/UI/BollingerStock";
+import TableComponent from "@client/components/UI/TableComponent";
+import TickerDropdown from "@client/components/UI/TickerDropdown";
 
 const HorizontalSelection = () => {
   // Trạng thái để lưu tùy chọn đang được chọn
