@@ -25,7 +25,7 @@ PRJ_DIR =BASE_DIR.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-*6ui_f$j+4ek!cf1hu#3g)han%8+3w%g+o+y#v12fwdl$snk%u'
+SECRET_KEY = os.getenv('Chatbot_keys')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
