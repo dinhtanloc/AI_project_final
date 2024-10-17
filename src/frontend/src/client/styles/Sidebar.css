@@ -5,6 +5,7 @@
     justify-content: space-between;
     background-color: #f0f4f9;
     padding: 25px 15px;
+    color:black;
 }
 
 .sidebar img {
@@ -30,10 +31,19 @@
     cursor: pointer;
 }
 
+@keyframes fadeIn {
+    from {
+        opacity: 0;  
+    }
+    to {
+        opacity: 1;  
+    }
+}
+
 .sidebar .recent {
     display: flex;
     flex-direction: column;
-    animation: fadeIn 1.5s;
+    animation: fadeIn 0.75s ease-in-out;  
 }
 
 .sidebar .recent-title {

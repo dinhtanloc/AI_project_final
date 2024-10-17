@@ -75,15 +75,14 @@ const Routers = () => {
           <Route path="/bollinger" element={<BollingerStock />} />
           <Route path="/table" element={<TableComponent />} />
           <Route path="/contact" element={<Contact />} />
-          {/* <Route path="/chatbot" element={<ChatbotPage />} /> */}
-          <Route path='/chatbot' element={
-            <PrivateRoute>
+     
+          <Route exact path='/chatbot/' element={<PrivateRoute/>}>
+            <Route exact path='/chatbot/'element={
                 <ChatbotContextProvider>
                   <ChatbotPage />
                 </ChatbotContextProvider>
-            </PrivateRoute>
-            }/>
-          
+                }/>
+          </Route>
           
         </Route>
     </Routes>
