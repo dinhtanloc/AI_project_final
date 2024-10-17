@@ -1,5 +1,5 @@
 import { useContext, useRef } from 'react';
-import '@styles/chatbot.css';
+import '@client/styles/chatbot.css';
 import { useTheme } from "@mui/material";
 import { assets } from '@assets/chatbot/assets';
 import { ChatbotContext } from '@context/ChatbotContext';

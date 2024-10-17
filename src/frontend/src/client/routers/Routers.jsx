@@ -13,10 +13,11 @@ import RadarChart from "@client/components/UI/RadarChart";
 import BollingerStock from "@client/components/UI/BollingerStock";
 import Contact from "@client/pages/Contact";
 import TableComponent from "@client/components/UI/TableComponent"
+import ChatbotPage from "@client/pages/ChatbotPage"
 // import PredictionDashboard from '@client/pages/PredictionDashboard'
 // import Chatbot from '@client/components/UI/Chatbot'
-// import PrivateRoute from '@utils/PrivateRoute'
-// import ChatbotContextProvider from '@client/context/ChatbotContext.jsx'
+import PrivateRoute from '@utils/PrivateRoute'
+import ChatbotContextProvider from '@context/ChatbotContext.jsx'
 import useAxios from "@utils/useAxios";
 // import StockMarket from "@pages/" 
 const Routers = () => {
@@ -64,7 +65,6 @@ const Routers = () => {
 
           <Route path="/" element={<Navigate to="/home" />} />
           <Route path="/home" element={<HomePage />} />
-          {/* <Route path="/dashboard" element={<Dashboard />} /> */}
           <Route path="/register" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/blogs" element={<Blog />} />
@@ -73,11 +73,18 @@ const Routers = () => {
           <Route path="/rada" element={<RadarChart />} />
           <Route path="/stock-market" element={<StockMarket />} />
           <Route path="/bollinger" element={<BollingerStock />} />
-          {/* <Route path="/candle" element={<CandleStickChartWithBollingerBandOverlay data={getData()} width={800} ratio={8} />} /> */}
           <Route path="/table" element={<TableComponent />} />
           <Route path="/contact" element={<Contact />} />
-          {/* <Route path="/prediction" element={<PredictionDashboard />} /> */}
-          {/* <Route path="/candle" element={<CandleStickChartWithBollingerBandOverlay data={getData()} width={850} ratio={1} />} /> */}
+          {/* <Route path="/chatbot" element={<ChatbotPage />} /> */}
+          <Route path='/chatbot' element={
+            <PrivateRoute>
+                <ChatbotContextProvider>
+                  <ChatbotPage />
+                </ChatbotContextProvider>
+            </PrivateRoute>
+            }/>
+          
+          
         </Route>
     </Routes>
   );
