@@ -77,7 +77,7 @@ const Layout = () => {
 
   const isLoginPage = location.pathname === "/login" || location.pathname === "/register";
   // const isDashboard = location.pathname === "/dashboard";
-  // const isDashboard = location.pathname.startsWith("/dashboard");
+  const isChatbot = location.pathname.startsWith("/chatbot");
 
 
 
@@ -98,19 +98,22 @@ const Layout = () => {
           <Login />
         </div>
       ) : (
-
-        <Fragment>
-          <Header onSearch={handleSearch} />
-          <Routers/>
-          
-          {/* <ChatPopup /> */}
-          <Footer />
-        </Fragment>
-
-      
+        isChatbot ? (
+          <Fragment>
+            <Routers />
+          </Fragment>
+        ) : (
+          <Fragment>
+            <Header onSearch={handleSearch} />
+            <Routers />
+            {/* <ChatPopup /> */}
+            <Footer />
+          </Fragment>
+        )
       )}
     </>
   );
+  
 };
 
 export default Layout;

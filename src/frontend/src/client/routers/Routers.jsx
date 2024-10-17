@@ -4,7 +4,7 @@ import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import HomePage from "@client/pages/HomePage";
 import LoadingPage from "@client/components/UI/LoadingPage";
 import Login from "@client/pages/Login";
-import StockMarket from "@client/pages/StockMarket";
+import Market from "@client/pages/Market";
 import BlogDetails from "@client/pages/BlogDetails";
 import Blog from "@client/pages/Blog";
 import About from "@client/pages/About";
@@ -19,7 +19,7 @@ import ChatbotPage from "@client/pages/ChatbotPage"
 import PrivateRoute from '@utils/PrivateRoute'
 import ChatbotContextProvider from '@context/ChatbotContext.jsx'
 import useAxios from "@utils/useAxios";
-// import StockMarket from "@pages/" 
+// import Market from "@pages/" 
 const Routers = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [currentUser, setCurrentUser]=useState(false)
@@ -71,7 +71,7 @@ const Routers = () => {
           <Route path="/blogs/:slug" element={<BlogDetails />} />
           <Route path="/about" element={<About />} />
           <Route path="/rada" element={<RadarChart />} />
-          <Route path="/stock-market" element={<StockMarket />} />
+          <Route path="/stock-market" element={<Market />} />
           <Route path="/bollinger" element={<BollingerStock />} />
           <Route path="/table" element={<TableComponent />} />
           <Route path="/contact" element={<Contact />} />
