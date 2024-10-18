@@ -10,12 +10,7 @@ import useAxios from "@utils/useAxios";
 // import StockMarket from "@pages/" 
 const Routers = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [currentUser, setCurrentUser]=useState(false)
-  const isUser = useAxios();
-  useEffect(() => {
-    fetchUser();
-  }, []);
-
+ 
   
   const location = useLocation();
 
@@ -37,7 +32,7 @@ const Routers = () => {
   return (
     <Routes>
 
-          <Route path='/dashboard/*' element={<PrivateRoute/>}>
+          <Route path='admin/*' element={<PrivateRoute/>}>
             <Route path="" element={<Dashboard />} />
             <Route path="prediction" element={<PredictionDashboard />} />
             {/* <Route path="chatbot" element={

@@ -38,7 +38,7 @@ const ProSidebar = (data) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
   console.log(data)
-  console.log(data.data.image)
+  console.log(data.data.profile.image)
 
   return (
     <Box
@@ -99,7 +99,7 @@ const ProSidebar = (data) => {
                   alt="profile-user"
                   width="100px"
                   height="100px"
-                  src={data.data.image}
+                  src={data.data.profile.image}
                   style={{ cursor: "pointer", borderRadius: "50%" }}
                 />
               </Box>
@@ -110,7 +110,7 @@ const ProSidebar = (data) => {
                   fontWeight="bold"
                   sx={{ m: "10px 0 0 0" }}
                 >
-                  {data.data.name}
+                  {data.data.profile.full_name}
                 </Typography>
                 {/* <Typography variant="h5" color={colors.greenAccent[500]}>
                   Shop Assistant
@@ -122,7 +122,7 @@ const ProSidebar = (data) => {
           <Box paddingLeft={isCollapsed ? undefined : "10%"}>
             <Item
               title="Dashboard"
-              to="/dashboard"
+              to="/admin"
               icon={<HomeOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
@@ -135,23 +135,23 @@ const ProSidebar = (data) => {
             >
               Data
             </Typography>
-            <Item
-              title="Market Analysys"
+            {/* <Item
+              title=""
               to="/dashboard"
               icon={<PeopleOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
             <Item
-              title="Stock Predictions"
-              to="/dashboard/prediction"
+              title="Training model"
+              to="/admin/prediction"
               icon={<ContactsOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
-              title="Stock Autoadvisor"
-              to="/dashboard/chatbot"
+              title="Chatbot Statistic"
+              to="/admin/chatbot"
               icon={<ReceiptOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}

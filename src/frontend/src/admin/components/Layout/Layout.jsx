@@ -4,7 +4,7 @@ import { useMode } from "@theme";
 
 import Routers from "@admin/routers/Router";
 import Topbar from "../global/Topbar"
-import Sidebar from "../global/ProSidebar"
+import ProSidebar from "../global/ProSidebar"
 import useAxios from "@utils/useAxios";
 
 const Layout =() =>{
@@ -18,12 +18,14 @@ const Layout =() =>{
 
     useEffect(() => {
       fetchStaffChecking();
+
     }, []);
 
     const fetchStaffChecking = async () => {
         try {
             const response = await isStaff.get('accounts/user/staff/');
             // setUserProfile(response.data);
+            console.log(response)
             checkStaff(response.data.is_staff);
             ListstaffInfo(response.data.staff)
             
@@ -40,7 +42,7 @@ const Layout =() =>{
         <Fragment>
 
         <div className="app">
-          <Sidebar isSidebar={isSidebar}  data={staffInfo} />
+          <ProSidebar isSidebar={isSidebar}  data={staffInfo} />
           <main className="content">
             <Topbar setIsSidebar={setIsSidebar} />
             <Routers/>

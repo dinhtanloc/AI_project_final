@@ -3,14 +3,23 @@ import Helmet from "@client/components/Helmet/Helmet";
 import { Container, Row } from "reactstrap";
 import { Box, Button, Typography, Icon } from "@mui/material";
 import "@client/styles/about.css";
+import InfoBase from "@client/components/UI/InfoBase";
 import CandleStickChartWithBollingerBandOverlay from "@client/components/UI/CandleStickChartWithBollingerBandOverlay";
 import getData from "@assets/data/stockData"
 import BollingerStock from "@client/components/UI/BollingerStock";
+import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
+
 import TableComponent from "@client/components/UI/TableComponent";
 import TickerDropdown from "@client/components/UI/TickerDropdown";
 import ChatIcon from '@mui/icons-material/Chat'; // Import icon Chat
 import { useNavigate } from "react-router-dom"; // Điều hướng
 import StockAgChart from "@client/components/UI/StockAgChart";
+import StatBox from '@client/components/UI/StatBox'
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
+import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import InventoryIcon from '@mui/icons-material/Inventory';
 const Market = () => {
     const boxRef = useRef(null);
     const [chartWidth, setChartWidth] = useState(0);
@@ -50,6 +59,19 @@ const Market = () => {
                                 alignItems="center"
                                 justifyContent="center"
                             >
+                                  <StatBox
+                            
+                            title={300}
+                            subtitle="Open"
+                            progress="0.60"
+                            increase="+21%"
+                            icon={
+                            <MonetizationOnIcon
+                                sx={{ color: "#4951a3", fontSize: "26px" }}
+                            />
+                            }
+                        />
+                                
          
  
                             </Box>
@@ -60,26 +82,59 @@ const Market = () => {
                                 alignItems="center"
                                 justifyContent="center"
                             >
+                                  <StatBox
+                            title={300}
+                            subtitle="Close"
+                            progress="0.50"
+                            increase="+21%"
+                            icon={
+                            <PointOfSaleIcon
+                                sx={{ color: "#4951a3", fontSize: "26px" }}
+                            />
+                            }
+                        />
          
  
                             </Box>
-                               <Box
-                                gridColumn="span 3"
-                                backgroundColor={"#f0f3f7"}
-                                display="flex"
-                                alignItems="center"
-                                justifyContent="center"
+                            <Box
+                            gridColumn="span 3"
+                            backgroundColor={"#f0f3f7"}
+                            display="flex"
+                            alignItems="center"
+                            justifyContent="center"
                             >
+                                  <StatBox
+                            title={300}
+                            subtitle="High"
+                            progress="0.50"
+                            increase="+21%"
+                            icon={
+                            <PointOfSaleIcon
+                                sx={{ color: "#4951a3", fontSize: "26px" }}
+                            />
+                            }
+                        />
          
  
                             </Box>
-                               <Box
-                                gridColumn="span 3"
-                                backgroundColor={"#f0f3f7"}
-                                display="flex"
-                                alignItems="center"
-                                justifyContent="center"
+                            <Box
+                            gridColumn="span 3"
+                            backgroundColor={"#f0f3f7"}
+                            display="flex"
+                            alignItems="center"
+                            justifyContent="center"
                             >
+                                  <StatBox
+                            title={300}
+                            subtitle="Low"
+                            progress="0.50"
+                            increase="+21%"
+                            icon={
+                            <PointOfSaleIcon
+                                sx={{ color: "#4951a3", fontSize: "26px" }}
+                            />
+                            }
+                        />
          
  
                             </Box>
@@ -164,9 +219,12 @@ const Market = () => {
                             // ref={boxRef}
                             display="flex"
                             justifyContent="center"
-                            alignItems="center"
+                            alignItems="flex-start"
                             height="450"
+                            overflow="auto"
+                            padding={2}
                         >
+                            <InfoBase/>
                         </Box>
                        
                         <Box
