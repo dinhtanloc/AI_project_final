@@ -4,6 +4,11 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from .models import ChatHistory
 from .serializers import ChatHistorySerializer
+import requests
+import os
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv())
+
 # from model.chatbot_backend import ChatBot
 class ChatbotViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
@@ -42,7 +47,25 @@ class ChatbotViewSet(viewsets.ViewSet):
         serializer = ChatHistorySerializer(chat_history, many=True)
         return Response(serializer.data)
     
+    @action(detail=False, methods=['get'])
+    def performance(self, request):
+        """
+        Get chatbot performance data from LangSmith API.
+        """
+        langsmith_api_url = "https://api.smith.langchain.com/performance"
+        headers = {
+            'Authorization': f"Bearer {os.getenv('LANGCHAIN_API_KEY')}",
+            'Content-Type': 'application/json'
+        }
 
+        try:
+            response = requests.get(langsmith_api_url, headers=headers)
+            response.raise_for_status()  
+
+            return Response(response.json(), status=response.status_code)
+
+        except requests.exceptions.RequestException as e:
+            return Response({'error': str(e)}, status=500)
 
 
 # from rest_framework import viewsets, status

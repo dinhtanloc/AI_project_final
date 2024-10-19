@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'accounts',
     'chatbot',
     'predictionbot',
+    'stock',
 
     # Third Party
     'import_export',
