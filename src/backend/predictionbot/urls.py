@@ -3,20 +3,20 @@ from . import views
 from rest_framework.routers import DefaultRouter
 
 
-router = DefaultRouter()
-router.register(r'', views.StockPredictionViewSet, basename='machine-learning')
+# router = DefaultRouter()
+# router.register(r'', views.StockPredictionViewSet, basename='machine-learning')
 
 
-# app_name='predictions'
-urlpatterns = [
-    path('', include(router.urls)),
-
-]
-
-
-# from django.urls import path
-# from . import views
-
+# # app_name='predictions'
 # urlpatterns = [
-#     path('', views.Data.as_view(),name='data')
+#     path('', include(router.urls)),
+
 # ]
+
+
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.Data.as_view(),name='data')
+]

@@ -27,7 +27,7 @@ class StockTracking(viewsets.ViewSet):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.symbol='ACB'
-        self.stock = get_vnstock(symbol=self.symbolƯ)  
+        self.stock = get_vnstock(symbol=self.symbol)  
 
     def get_stock_price_data(self, start, end, interval):
         if end is None:
