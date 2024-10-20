@@ -20,12 +20,63 @@ import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import InventoryIcon from '@mui/icons-material/Inventory';
+import useAxios from '@utils/useAxios'
+
 const Market = () => {
     const boxRef = useRef(null);
     const [chartWidth, setChartWidth] = useState(0);
+    const stock = useAxios();
+    const [stockData, setStockData]=useState([]);
+    const [name, setName]=useState("ACB");
     const navigate = useNavigate();
 
     useEffect(() => {
+        
+        const Tracking = async () => {
+            try {
+              const res = await stock.get("/stock/stocktracking/tracking/");
+              console.log(res);
+            } catch (error) {
+                console.error('Có lỗi xảy ra khi truy cập dữ liệu:', error);
+                
+            }
+        };
+        const fetchStockTracking = async () => {
+            try {
+              const res = await stock.get("/stock/stocktracking/tracking_stockprice/");
+            //   console.log(res.data.price_data);
+            //   console.log(res.data.company);
+            const formattedData = res.data.price_data.map(item => ({
+                ...item,
+                time: new Date(item.time), // Chuyển đổi chuỗi thành Date
+            }));
+            setStockData(formattedData);
+            
+            console.log(formattedData); // Dữ liệu đã chuyển đổi
+              
+              setName(res.data.company);
+            } catch (error) {
+                console.error('Có lỗi xảy ra khi truy cập dữ liệu:', error);
+                
+            }
+        };
+        
+        const fetchCompanyInfo = async () => {
+            try {
+                const res = await stock.get("/stock/stocktracking/tracking_stockinformation/");
+                console.log(res);
+
+                // setName(profile)
+            } catch (error) {
+                console.error('Có lỗi xảy ra khi truy cập dữ liệu:', error);
+                
+            }
+            
+          };
+      
+        //   Tracking();
+          fetchStockTracking();
+        //   fetchCompanyInfo();
         const handleResize = () => {
             if (boxRef.current) {
                 setChartWidth(boxRef.current.offsetWidth);
@@ -37,7 +88,25 @@ const Market = () => {
         window.addEventListener('resize', handleResize);
 
         return () => window.removeEventListener('resize', handleResize);
-    }, []);
+        
+    }, [stockData, name]);
+
+    // const prediction = async(e) => {
+    //     //Thực hiện lệnh post request tới API
+    //     e.preventDefault()
+    //     try {
+    //         const response = await stock.post('/prediction/predict/', {
+    //             prompt: symbbol,
+    //         });
+    //     } catch (error) {
+    //         console.error('There was an error fetching the data!', error);
+    //     }
+        
+    // }
+    const stockDataFunc = ()=>{
+        return stockData
+    }
+
 
     return (
         <Helmet title="Stock Analysis">
@@ -210,7 +279,8 @@ const Market = () => {
                             alignItems="center"
                             height="450"
                         >
-                            <StockAgChart/>
+                            {/* <StockAgChart data={stockDataFunc()} name={name}/> */}
+                            <StockAgChart />
                         </Box>
                         <Box
                             gridColumn="span 5"

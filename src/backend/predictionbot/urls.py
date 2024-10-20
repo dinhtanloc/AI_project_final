@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 
 
 router = DefaultRouter()
-router.register(r'prediction', views.StockPredictionViewSet, basename='machine-learning')
+router.register(r'', views.StockPredictionViewSet, basename='machine-learning')
 
 
 # app_name='predictions'

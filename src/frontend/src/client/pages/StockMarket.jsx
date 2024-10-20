@@ -13,7 +13,6 @@ const HorizontalSelection = () => {
   // Trạng thái để lưu tùy chọn đang được chọn
   const [selectedOption, setSelectedOption] = useState(null);
 
-  // Mảng chứa các tùy chọn
   const options = ["1M", "3M", "6M", "YTD", "1Y", "All"];
 
   // Hàm xử lý khi người dùng nhấp vào tùy chọn

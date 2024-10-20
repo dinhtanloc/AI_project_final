@@ -28,7 +28,7 @@ class StockTracking(viewsets.ViewSet):
         self.stock = Vnstock().stock(symbol=self.symbol, source='VCI')  
 
 
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=['post'])
     def update_symbol(self, request):
         self.symbol = request.GET.get('symbol', self.symbol) 
         self.stock = Vnstock().stock(symbol=self.symbol, source='VCI')  
@@ -65,10 +65,11 @@ class StockTracking(viewsets.ViewSet):
     def tracking_stockprice(self, request):
         start = request.GET.get('start', '2000-01-01') 
         end = datetime.now().strftime('%Y-%m-%d')
-        interval = request.GET.get('interval', '1m')  
+        interval = request.GET.get('interval', '1D')  
 
-        df = self.stock.quote.history(start=start, end=end, interval=interval)
-        return Response({'price_data': df.to_dict()}, status=status.HTTP_200_OK)
+        df = self.stock.quote.history(start=start, end=end, interval='1m')
+        df.rename(columns={'time': 'date'}, inplace=True)
+        return Response({'price_data': df.to_dict(orient='records'), 'company':df.name}, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['get'])
     def tracking_stockinformation(self, request):
