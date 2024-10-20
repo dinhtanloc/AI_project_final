@@ -14,6 +14,8 @@ from pathlib import Path
 import os
 from datetime import timedelta
 from dotenv import load_dotenv, find_dotenv
+from celery.schedules import crontab
+
 load_dotenv(find_dotenv())
 
 
@@ -61,6 +63,7 @@ INSTALLED_APPS = [
     'stock',
 
     # Third Party
+    'channels',
     'import_export',
     'crispy_forms',
     'mathfilters',
@@ -74,6 +77,23 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
 ]
+
+
+CELERY_BEAT_SCHEDULE = {
+    'fetch-stock-data-every-minute': {
+        'task': 'stock.tasks.fetch_stock_data',
+        'schedule': crontab(minute='*/1'),  
+    },
+}
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_TIMEZONE = 'Asia/Ho_Chi_Minh'  
+
+ASGI_APPLICATION = 'backend.asgi.application'  
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
