@@ -50,15 +50,22 @@ const StockAgChart = () => {
 
     socket.onmessage = (event) => {
         const data = JSON.parse(event.data);
-        setStockData(prevData => [...prevData, ...data.new_data]); 
-        console.log('Received stock data:', data.new_data);
+        const formattedStockData = data.map(item => ({
+          ...item,
+          date: new Date(item.date) ,
+          open: item.open * 10,       
+          high: item.high * 10,        
+          low: item.low * 10,          
+          close: item.close * 10,
+        }));
+        setStockData(prevData => [...prevData, ...formattedStockData]); 
+        console.log('Received data:', data);
     };
 
     socket.onclose = () => {
         console.log('WebSocket connection closed');
     };
 
-    // Dọn dẹp khi component unmount
     return () => {
         socket.close();
     };
@@ -78,15 +85,13 @@ const StockAgChart = () => {
     height: 412,
   });
 
-  // Cập nhật options khi stockData thay đổi
   useEffect(() => {
     setOptions((prevOptions) => ({
       ...prevOptions,
-      data: stockData,  // Cập nhật dữ liệu mới vào options
+      data: stockData,  
     }));
   }, [stockData]);
 
-  // Cập nhật options khi theme thay đổi
   useEffect(() => {
     setOptions((prevOptions) => ({
       ...prevOptions,

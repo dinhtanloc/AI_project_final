@@ -52,7 +52,7 @@ const Market = () => {
             }));
             setStockData(formattedData);
             
-            console.log(formattedData); // Dữ liệu đã chuyển đổi
+            // console.log(formattedData); // Dữ liệu đã chuyển đổi
               
               setName(res.data.company);
             } catch (error) {
@@ -75,7 +75,7 @@ const Market = () => {
           };
       
         //   Tracking();
-          fetchStockTracking();
+        //   fetchStockTracking();
         //   fetchCompanyInfo();
         const handleResize = () => {
             if (boxRef.current) {

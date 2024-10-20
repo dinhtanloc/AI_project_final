@@ -16,13 +16,20 @@ const TickerDropdown = (props) => {
 
       socketConnection.onopen = () => {
         console.log('WebSocket connection established');
+        // console.log(event.data)
       };
+      socketConnection.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        // setStockData(prevData => [...prevData, ...data.new_data]); 
+        console.log('Received stock data:', event);
+        console.log('Received stock data:', event.data);
+    };
 
-      socketConnection.onclose = () => {
-        console.log('WebSocket connection closed');
-      };
+    socketConnection.onclose = () => {
+      console.log('WebSocket connection closed');
+    };
+    setSocket(socketConnection);
 
-      setSocket(socketConnection);
 
       return () => {
         socketConnection.close(); // Đóng kết nối WebSocket khi component unmount
@@ -34,7 +41,7 @@ const TickerDropdown = (props) => {
     const ListVN30 = async () => {
       try {
         const res = await company.get("/stock/stocktracking/list_companyVN30/");
-        console.log(res.data.companies);
+        // console.log(res.data.companies);
         setTicker(res.data.companies)
       } catch (error) {
           console.error('Có lỗi xảy ra khi truy cập dữ liệu:', error);
