@@ -50,8 +50,8 @@ const StockAgChart = () => {
 
     socket.onmessage = (event) => {
         const data = JSON.parse(event.data);
-        setStockData(data); 
-        console.log('Received stock data:', data);
+        setStockData(prevData => [...prevData, ...data.new_data]); 
+        console.log('Received stock data:', data.new_data);
     };
 
     socket.onclose = () => {
