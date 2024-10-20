@@ -1,13 +1,15 @@
 from datetime import datetime
 from celery import shared_task
-from .views import StockTracking 
+from .utils import get_vnstock
 from vnstock3 import Vnstock 
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
+from datetime import datetime
 @shared_task
-def fetch_stock_data(symbol='ACB', start='2000-01-01', end=None, interval='1D'):
-    stock_tracking = StockTracking()
-    df = stock_tracking.get_stock_price_data(start, datetime.now().strftime('%Y-%m-%d'), interval)
+def fetch_stock_data(symbol='ACB', start='2000-01-01', end=datetime.now().strftime('%Y-%m-%d'), interval='1m'):
+    stock_tracking = get_vnstock(symbol)
+    stock_tracking.update_symbol(symbol)
+    df = stock_tracking.quote.history(start=start, end=end, interval=interval)  
 
     if df.empty:
         print(f'Không có dữ liệu cho mã cổ phiếu {symbol}.')

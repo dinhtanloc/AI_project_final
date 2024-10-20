@@ -8,6 +8,26 @@ const TickerDropdown = (props) => {
   const [selectedTicker, setSelectedTicker] = useState('Select a ticker');
   const [ticker, setTicker]=useState([]);
   const company = useAxios();
+  const [socket, setSocket] = useState(null);
+
+
+  useEffect(() => {
+      const socketConnection = new WebSocket('ws://localhost:8001/ws/stocks/');
+
+      socketConnection.onopen = () => {
+        console.log('WebSocket connection established');
+      };
+
+      socketConnection.onclose = () => {
+        console.log('WebSocket connection closed');
+      };
+
+      setSocket(socketConnection);
+
+      return () => {
+        socketConnection.close(); // Đóng kết nối WebSocket khi component unmount
+      };
+    }, []);
 
 
   useEffect(() => {
@@ -30,6 +50,9 @@ const TickerDropdown = (props) => {
             symbol: symbol,
         });
         console.log('đã cập nhật thành công')
+        if (socket) {
+          socket.send(JSON.stringify({ symbol: symbol })); // Gửi dữ liệu lên WebSocket
+        }
     } catch (error) {
         console.error('There was an error fetching the data!', error);
     }

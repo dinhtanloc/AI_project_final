@@ -19,19 +19,27 @@ from rest_framework import viewsets
 from rest_framework.decorators import action, permission_classes
 from vnstock3 import Vnstock
 from datetime import datetime
+from .utils import get_vnstock  # Import hàm từ utils.py
+from .tasks import fetch_stock_data  
 class StockTracking(viewsets.ViewSet):
     permission_classes = [AllowAny]
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.symbol='ACB'
-        self.stock = Vnstock().stock(symbol=self.symbol, source='VCI')  
+        self.stock = get_vnstock(symbol=self.symbolƯ)  
 
+    def get_stock_price_data(self, start, end, interval):
+        if end is None:
+            end = datetime.now().strftime('%Y-%m-%d')
+        df = self.stock.quote.history(start=start, end=end, interval='1m')
+        return df
 
     @action(detail=False, methods=['post'])
     def update_symbol(self, request):
         self.symbol = request.GET.get('symbol', self.symbol) 
-        self.stock = Vnstock().stock(symbol=self.symbol, source='VCI')  
+        self.stock = get_vnstock(symbol=self.symbol)  
+        fetch_stock_data.delay(self.symbol)
         return Response({'message': f'Mã cổ phiếu đã được cập nhật thành {self.symbol}'}, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['get'])
@@ -42,7 +50,7 @@ class StockTracking(viewsets.ViewSet):
     @action(detail=False, methods=['get'])
     def tracking(self, request):
         symbol = request.GET.get('symbol', self.symbol)
-        stock = Vnstock().stock(symbol=symbol, source='VCI')
+        stock = get_vnstock(symbol=symbol)
 
         df_latest = stock.quote.history(start=datetime.now().strftime('%Y-%m-%d'), end=datetime.now().strftime('%Y-%m-%d'), interval='1m')
 
@@ -70,6 +78,7 @@ class StockTracking(viewsets.ViewSet):
         df = self.stock.quote.history(start=start, end=end, interval='1m')
         df.rename(columns={'time': 'date'}, inplace=True)
         return Response({'price_data': df.to_dict(orient='records'), 'company':df.name}, status=status.HTTP_200_OK)
+    
 
     @action(detail=False, methods=['get'])
     def tracking_stockinformation(self, request):
