@@ -51,6 +51,7 @@
     "react-stockcharts": "^0.7.8",
     "react-use-measure": "^2.1.1",
     "reactstrap": "^9.2.2",
+    "recharts": "^2.13.0",
     "remixicon": "^4.3.0",
     "rsuite": "^5.70.1",
     "shortid": "^2.2.16",

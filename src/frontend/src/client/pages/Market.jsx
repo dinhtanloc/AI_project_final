@@ -21,7 +21,7 @@ import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantity
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import useAxios from '@utils/useAxios'
-
+// import { useNavigate } from 'react-router-dom';
 const Market = () => {
     const boxRef = useRef(null);
     const [chartWidth, setChartWidth] = useState(0);
@@ -310,7 +310,7 @@ const Market = () => {
                             <Button
                             variant="contained"
                             color="primary"
-                            onClick={() => alert('Prediction clicked!')}
+                            onClick={() => navigate('/stock-dashboard')}
                             sx={{
                                 padding: '16px 32px', 
                                 fontSize: '14px',     

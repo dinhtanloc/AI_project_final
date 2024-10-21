@@ -79,6 +79,26 @@ class StockTracking(viewsets.ViewSet):
         df.rename(columns={'time': 'date'}, inplace=True)
         return Response({'price_data': df.to_dict(orient='records'), 'company':df.name}, status=status.HTTP_200_OK)
     
+    @action(detail=False, methods=['get'])
+    def historicaldata(self, request):
+        start = request.GET.get('start', '2020-01-01') 
+        end = datetime.now().strftime('%Y-%m-%d')
+        interval = request.GET.get('interval', '1D')  
+
+        df = self.stock.quote.history(start=start, end=end, interval=interval)
+        df.rename(columns={'time': 'date'}, inplace=True)
+        return Response({'price_data': df.to_dict(orient='records'), 'company':df.name}, status=status.HTTP_200_OK)
+    
+    @action(detail=False, methods=['get'])
+    def historicalclosedata(self, request):
+        start = request.GET.get('start', '2020-01-01') 
+        end = datetime.now().strftime('%Y-%m-%d')
+        interval = request.GET.get('interval', '1D')  
+
+        df = self.stock.quote.history(start=start, end=end, interval=interval)
+        df.rename(columns={'time': 'date'}, inplace=True)
+        df.rename(columns={'close': 'value'}, inplace=True)
+        return Response({'price_data': df[['value','date']].to_dict(orient='records'), 'company':df.name}, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['get'])
     def tracking_stockinformation(self, request):

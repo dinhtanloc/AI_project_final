@@ -18,6 +18,7 @@ export default defineConfig({
       '@utils': path.resolve(__dirname, 'src/utils'),
       '@context': path.resolve(__dirname, 'src/context'),
       '@assets': path.resolve(__dirname, 'src/assets'),
+      '@constants': path.resolve(__dirname, 'src/constants'),
       //client
       '@client': path.resolve(__dirname, 'src/client'),
       '@client/styles': path.resolve(__dirname, 'src/client/styles'),
