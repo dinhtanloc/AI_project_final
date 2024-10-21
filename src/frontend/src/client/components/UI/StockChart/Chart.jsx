@@ -9,9 +9,11 @@ import {
   AreaChart,
   Tooltip,
 } from "recharts";
+import ChatIcon from '@mui/icons-material/Chat'; // Import icon Chat
+
 import ThemeContext from "@context/ThemeContext";
 import StockContext from "@context/StockContext";
-// import { fetchHistoricalData } from "@utils/api/stock-api";
+import { Box, Button, Typography, Icon } from "@mui/material";
 import {
   createDate,
   convertDateToUnixTimestamp,
@@ -19,9 +21,13 @@ import {
 } from "@utils/date-helper";
 import { chartConfig } from "@constants/config";
 import useAxios from '@utils/useAxios';
+import { useNavigate } from "react-router-dom"; // Điều hướng
+
+
+
 const Chart = () => {
   const [filter, setFilter] = useState("1W");
-
+  const navigate = useNavigate()
   const { darkMode } = useContext(ThemeContext);
 
   const { stockSymbol } = useContext(StockContext);
@@ -29,12 +35,35 @@ const Chart = () => {
   const [data, setData] = useState([]);
   const stock=useAxios();
 
-  const formatData = (data) => {
-    console.log(data)
-    return data.map((item, index) => {
+  const formatData = (data, resolution) => {
+    // console.log(data);
+    return data.map((item) => {
+      const date = new Date(item.date); // Chuyển chuỗi thành Date object
+  
+      // Định dạng ngày theo resolution
+      let formattedDate;
+      const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  
+      switch (resolution) {
+        case '1D':
+          formattedDate = `${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+          break;
+        case '1m':
+          formattedDate = `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+          break;
+        case '1W':
+          formattedDate = `${monthNames[date.getMonth()]}-${String(date.getDate()).padStart(2, '0')}`;
+          break;
+        case '1M':
+          formattedDate = `${monthNames[date.getMonth()]}-${date.getFullYear()}`;
+          break;
+        default:
+          formattedDate = date.toString();
+      }
+  
       return {
         ...item,
-        date: new Date(item.date),
+        date: formattedDate, // Cập nhật trường date với định dạng tương ứng
       };
     });
   };
@@ -43,40 +72,61 @@ const Chart = () => {
     const getDateRange = () => {
       const { days, weeks, months, years } = chartConfig[filter];
 
-      const endDate = new Date();
-      const startDate = createDate(endDate, -days, -weeks, -months, -years);
+      var endDate = new Date();
+      const yearendDate = endDate.getFullYear();
+      const monthendDate = String(endDate.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
+      const dayendDate = String(endDate.getDate()).padStart(2, '0');
+      endDate = `${yearendDate}-${monthendDate}-${dayendDate}`;
+      
+      var startDate = createDate(endDate, -days, -weeks, -months, -years);
+      const year = startDate.getFullYear();
+      const month = String(startDate.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
+      const day = String(startDate.getDate()).padStart(2, '0');
+      startDate = `${year}-${month}-${day}`;
+      console.log(startDate)
       console.log(endDate)
       console.log(filter)
-
-      const startTimestampUnix = convertDateToUnixTimestamp(startDate);
-      const endTimestampUnix = convertDateToUnixTimestamp(endDate);
-      console.log({ startTimestampUnix, endTimestampUnix });
-      return { startTimestampUnix, endTimestampUnix };
+      
+      // const startTimestampUnix = convertDateToUnixTimestamp(startDate);
+      // const endTimestampUnix = convertDateToUnixTimestamp(endDate);
+      // console.log({ startTimestampUnix, endTimestampUnix });
+      return startDate
     };
-
+    
     const fetchStockTracking = async () => {
-        try {
-          const { startTimestampUnix, endTimestampUnix } = getDateRange();
-          const resolution = chartConfig[filter].resolution;
-          const res = await stock.get("/stock/stocktracking/historicalclosedata/");
-          setData(formatData(res.data.price_data));
-          // const formattedData = res.data.price_data.map(item => ({
-          //   ...item,
-          //   date: new Date(item.date), // Chuyển chuỗi thành Date object
-          //   // open: parseFloat(item.open),
-          //   // high: parseFloat(item.high),
-          //   // low: parseFloat(item.low),
-          //   // close: parseFloat(item.close),
-          //   // volume: parseInt(item.volume, 10),
-          // }))
-          // setName(res.data.company)
-          // .filter(item => 
-          //   item.high >= Math.max(item.open, item.close, item.low) &&
-          //   item.low <= Math.min(item.open, item.close, item.high) 
-          // );
-          
-          // setQuote(formattedData);
-          // setName(res.data.company);
+      try {
+        const startTimestampUnix  = getDateRange();
+        console.log(startTimestampUnix)
+        // console.log(endTimestampUnix)
+        const resolution = chartConfig[filter].resolution;
+          const res = await stock.post("/stock/stocktracking/historicalclosedata/", {
+            start: startTimestampUnix, 
+            interval: resolution 
+          });
+          // const formattedData = res.data.price_data.map(item => {
+          //   const date = new Date(item.date); // Chuyển chuỗi thành Date object
+      
+          //   // Kiểm tra độ phân giải để định dạng ngày
+          //   let formattedDate;
+          //   if (resolution === '1D') {
+          //     // Định dạng 'YYYY-MM-DD' cho 1D
+          //     formattedDate = date.toISOString().split('T')[0];
+          //   } else if (resolution === '1m') {
+          //     // Định dạng 'YYYY-MM-DD HH:mm' cho 1m
+          //     formattedDate = date.toISOString().split('T')[0] + ' ' + date.toTimeString().split(' ')[0].slice(0, 5); // Lấy giờ và phút
+          //   } else {
+          //     // Nếu không có độ phân giải cụ thể, giữ nguyên
+          //     formattedDate = date.toISOString();
+          //   }
+      
+          //   return {
+          //     ...item,
+          //     date: formattedDate // Cập nhật trường date với định dạng tương ứng
+          //   };
+          // });
+          // console.log(formattedData)
+          console.log(formatData(res.data.price_data, resolution))
+          setData(formatData(res.data.price_data,resolution));
         } catch (error) {
           setData([]);
           console.error('Có lỗi xảy ra khi truy cập dữ liệu:', error);
@@ -106,6 +156,7 @@ const Chart = () => {
   }, [filter]);
 
   return (
+    <>
     <Card>
       <ul className="flex absolute top-2 right-2 z-40">
         {Object.keys(chartConfig).map((item) => (
@@ -153,6 +204,8 @@ const Chart = () => {
         </AreaChart>
       </ResponsiveContainer>
     </Card>
+    
+    </>
   );
 };
 

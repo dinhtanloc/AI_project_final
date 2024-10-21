@@ -27,44 +27,16 @@ const Market = () => {
     const [chartWidth, setChartWidth] = useState(0);
     const stock = useAxios();
     const [stockData, setStockData]=useState([]);
+    const [infoCompany, setInfo] = useState([]);
     const [name, setName]=useState("ACB");
     const navigate = useNavigate();
 
     useEffect(() => {
-        
-        const Tracking = async () => {
-            try {
-              const res = await stock.get("/stock/stocktracking/tracking/");
-              console.log(res);
-            } catch (error) {
-                console.error('Có lỗi xảy ra khi truy cập dữ liệu:', error);
-                
-            }
-        };
-        const fetchStockTracking = async () => {
-            try {
-              const res = await stock.get("/stock/stocktracking/tracking_stockprice/");
-            //   console.log(res.data.price_data);
-            //   console.log(res.data.company);
-            const formattedData = res.data.price_data.map(item => ({
-                ...item,
-                time: new Date(item.time), // Chuyển đổi chuỗi thành Date
-            }));
-            setStockData(formattedData);
-            
-            // console.log(formattedData); // Dữ liệu đã chuyển đổi
-              
-              setName(res.data.company);
-            } catch (error) {
-                console.error('Có lỗi xảy ra khi truy cập dữ liệu:', error);
-                
-            }
-        };
-        
         const fetchCompanyInfo = async () => {
             try {
                 const res = await stock.get("/stock/stocktracking/tracking_stockinformation/");
-                console.log(res);
+                console.log(res.data);
+                setInfo(res.data)
 
                 // setName(profile)
             } catch (error) {
@@ -76,7 +48,7 @@ const Market = () => {
       
         //   Tracking();
         //   fetchStockTracking();
-        //   fetchCompanyInfo();
+          fetchCompanyInfo();
         const handleResize = () => {
             if (boxRef.current) {
                 setChartWidth(boxRef.current.offsetWidth);
@@ -294,7 +266,7 @@ const Market = () => {
                             overflow="auto"
                             padding={2}
                         >
-                            <InfoBase/>
+                            <InfoBase data={infoCompany} />
                         </Box>
                        
                         <Box

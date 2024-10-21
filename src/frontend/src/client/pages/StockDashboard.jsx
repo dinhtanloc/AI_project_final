@@ -6,15 +6,52 @@ import Chart from "@client/components/UI/StockChart/Chart";
 import Header from "@client/components/UI/StockChart/Header";
 import StockContext from "@context/StockContext";
 // import { fetchStockDetails, fetchQuote } from "@utils/api/stock-api";
+import ChatIcon from '@mui/icons-material/Chat'; // Import icon Chat
+import { Box, Button, Typography, Icon } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+
+
+const ActionButton = ({ onClick, label }) => (
+  <Button
+    variant="contained"
+    color="primary"
+    onClick={onClick}
+    sx={{
+      padding: '16px 32px',
+      fontSize: '14px',
+      borderRadius: '8px',
+      fontWeight: 'bold',
+      backgroundColor: '#3f51b5',
+      '&:hover': {
+        backgroundColor: '#303f9f',
+        transform: 'scale(1.05)',
+      },
+      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
+      transition: 'all 0.3s ease',
+    }}
+  >
+    {label}
+  </Button>
+);
 
 const StockDashboard = () => {
   const { darkMode } = useContext(ThemeContext);
+  const navigate=useNavigate();
 
   const { stockSymbol } = useContext(StockContext);
 
-  const [stockDetails, setStockDetails] = useState({});
+  // const [stockDetails, setStockDetails] = useState({});
 
   const [quote, setQuote] = useState({});
+  const stockDetails = {
+    name: "Công ty ABC",
+    country: "Việt Nam",
+    currency: "3.27",
+    exchange: "HOSE",
+    ipo: "2006-06-01", // Ngày IPO
+    marketCapitalization: 4466.7, // Dữ liệu tính bằng triệu
+    finnhubIndustry: "Ngân hàng"
+  };
 
   useEffect(() => {
       // const fetchStockTracking = async () => {
@@ -92,6 +129,34 @@ const StockDashboard = () => {
       </div>
       <div className="row-span-2 xl:row-span-3">
         <Details details={stockDetails} />
+      </div>
+      <div className="col-span-3">
+      <Box display="grid" gridTemplateColumns="repeat(15, 1fr)" gridAutoRows="90px" gap="20px">
+        <Box gridColumn="span 2" gridRow="span 1" display="flex" justifyContent="center" alignItems="center" height="450">
+          <ActionButton onClick={() => navigate('/stock-market')} label="Return" />
+        </Box>
+        <Box gridColumn="span 11" gridRow="span 1" display="flex" justifyContent="center" alignItems="center" height="450" />
+        <Box
+          display="flex"
+          gridColumn="span 2"
+          gridRow="span 1"
+          alignItems="center"
+          sx={{
+            cursor: "pointer",
+            color: "orange",
+            fontWeight: "bold",
+            '&:hover': {
+              transform: "scale(1.1)",
+              color: "#FF8C00",
+            },
+            transition: "all 0.3s ease",
+          }}
+          onClick={() => navigate('/chatbot')}
+        >
+          <ChatIcon sx={{ marginRight: "8px" }} />
+          <Typography variant="h4">Go to Chatbot</Typography>
+        </Box>
+      </Box>
       </div>
     </div>
   );

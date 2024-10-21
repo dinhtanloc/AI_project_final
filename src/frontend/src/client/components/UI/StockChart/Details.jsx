@@ -4,6 +4,8 @@ import ThemeContext from "@context/ThemeContext";
 
 const Details = ({ details }) => {
   const { darkMode } = useContext(ThemeContext);
+ 
+  
 
   const detailsList = {
     name: "Name",
@@ -28,9 +30,9 @@ const Details = ({ details }) => {
       >
         {Object.keys(detailsList).map((item) => {
           return (
-            <li key={item} className="flex-1 flex justify-between items-center">
+            <li key={item} className="flex-1 flex justify-between items-center text-black">
               <span>{detailsList[item]}</span>
-              <span className="font-bold">
+              <span className="font-bold text-black">
                 {item === "marketCapitalization"
                   ? `${convertMillionToBillion(details[item])}B`
                   : details[item]}

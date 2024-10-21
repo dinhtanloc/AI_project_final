@@ -1,6 +1,6 @@
 from datetime import datetime
 from celery import shared_task
-from .utils import get_vnstock
+from .utils import get_vnstock_VCI
 from vnstock3 import Vnstock 
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
@@ -10,7 +10,7 @@ previous_data = pd.DataFrame()
 @shared_task
 def fetch_stock_data(symbol='ACB', start='2000-01-01', end=datetime.now().strftime('%Y-%m-%d'), interval='1m'):
     global previous_data
-    stock_tracking = get_vnstock(symbol)
+    stock_tracking = get_vnstock_VCI(symbol)
     stock_tracking.update_symbol(symbol)
     
     new_data = stock_tracking.quote.history(start=start, end=end, interval=interval)  
