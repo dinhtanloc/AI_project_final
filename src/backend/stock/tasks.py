@@ -9,8 +9,21 @@ import pandas as pd
 previous_data = pd.DataFrame()
 
 @shared_task
-def fetch_stock_data(symbol, start,interval, end=datetime.now().strftime('%Y-%m-%d') ):
+def fetch_stock_data():
     global previous_data
+    from .views import StockTracking
+    viewset = StockTracking()
+    try:
+        symbol = viewset.stock_requests[-1]['symbol']
+        start = viewset.stock_requests[-1]['start']
+        interval = viewset.stock_requests[-1]['interval']
+    except:
+        symbol='ACB'
+        start='2024-10-16'
+        interval='1D'
+    viewset.stock_requests.clear()
+
+    end = datetime.now().strftime('%Y-%m-%d')
     stock_tracking = get_vnstock_VCI(symbol)
     stock_tracking.update_symbol(symbol)
     

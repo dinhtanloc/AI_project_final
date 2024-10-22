@@ -23,12 +23,30 @@ from .utils import get_vnstock_VCI,get_vnstock_TCBS
 # from .tasks import fetch_stock_data  
 class StockTracking(viewsets.ViewSet):
     permission_classes = [AllowAny]
+    stock_requests = []
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.symbol='ACB'
         self.stock = get_vnstock_VCI(symbol=self.symbol)  
-        self.stockCompany = get_vnstock_TCBS(symbol=self.symbol)  
+        self.stockCompany = get_vnstock_TCBS(symbol=self.symbol)
+
+    @action(detail=False, methods=['post'])
+    def create_stock_data(self, request):
+        symbol = request.data.get('symbol')
+        start = request.data.get('start')
+        interval = request.data.get('interval')
+
+        if symbol and start and interval:
+            self.stock_requests.append({
+                'symbol': symbol,
+                'start': start,
+                'interval': interval
+            })
+            print(self.stock_requests)
+            return Response({'status': 'Stock data request received'}, status=status.HTTP_201_CREATED)
+        
+        return Response({'error': 'Missing required fields'}, status=status.HTTP_400_BAD_REQUEST)
 
     def get_stock_price_data(self, start, end, interval):
         if end is None:
