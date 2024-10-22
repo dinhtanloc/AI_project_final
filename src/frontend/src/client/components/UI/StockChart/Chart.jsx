@@ -71,38 +71,15 @@ const Chart = () => {
   useEffect(() => {
 
     const socket = new WebSocket('ws://localhost:8001/ws/stocks/');
-      const getDateRange = () => {
-        const { days, weeks, months, years } = chartConfig[filter];
-
-        var endDate = new Date();
-        const yearendDate = endDate.getFullYear();
-        const monthendDate = String(endDate.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
-        const dayendDate = String(endDate.getDate()).padStart(2, '0');
-        endDate = `${yearendDate}-${monthendDate}-${dayendDate}`;
-        
-        var startDate = createDate(endDate, -days, -weeks, -months, -years);
-        const year = startDate.getFullYear();
-        const month = String(startDate.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
-        const day = String(startDate.getDate()).padStart(2, '0');
-        startDate = `${year}-${month}-${day}`;
-    
-        
-      
-        return startDate
-      };
-      const startTimestampUnix  = getDateRange();
-      console.log(startTimestampUnix)
-      // console.log(endTimestampUnix)
-      const resolution = chartConfig[filter].resolution;
-    
+    const resolution = chartConfig[filter].resolution;
         socket.onopen = () => {
             console.log('WebSocket connection established');
-            const symbolData = JSON.stringify({ 
-              symbol: stockSymbol, 
-              start: startTimestampUnix, 
-              interval: resolution});
-              socket.send(symbolData);
-              console.log(symbolData);
+            // const symbolData = JSON.stringify({ 
+            //   symbol: stockSymbol, 
+            //   start: startTimestampUnix, 
+            //   interval: resolution});
+            //   socket.send(symbolData);
+            //   console.log(symbolData);
         };
     
         socket.onmessage = (event) => {
@@ -120,89 +97,47 @@ const Chart = () => {
         // };
     }, [filter]);
 
-  // useEffect(() => {
-  //   const getDateRange = () => {
-  //     const { days, weeks, months, years } = chartConfig[filter];
+  useEffect(() => {
+    const getDateRange = () => {
+      const { days, weeks, months, years } = chartConfig[filter];
 
-  //     var endDate = new Date();
-  //     const yearendDate = endDate.getFullYear();
-  //     const monthendDate = String(endDate.getMonth() + 1).padStart(2, '0'); 
-  //     const dayendDate = String(endDate.getDate()).padStart(2, '0');
-  //     endDate = `${yearendDate}-${monthendDate}-${dayendDate}`;
+      var endDate = new Date();
+      const yearendDate = endDate.getFullYear();
+      const monthendDate = String(endDate.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
+      const dayendDate = String(endDate.getDate()).padStart(2, '0');
+      endDate = `${yearendDate}-${monthendDate}-${dayendDate}`;
       
-  //     var startDate = createDate(endDate, -days, -weeks, -months, -years);
-  //     const year = startDate.getFullYear();
-  //     const month = String(startDate.getMonth() + 1).padStart(2, '0');
-  //     const day = String(startDate.getDate()).padStart(2, '0');
-  //     startDate = `${year}-${month}-${day}`;
+      var startDate = createDate(endDate, -days, -weeks, -months, -years);
+      const year = startDate.getFullYear();
+      const month = String(startDate.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
+      const day = String(startDate.getDate()).padStart(2, '0');
+      startDate = `${year}-${month}-${day}`;
   
       
-     
-  //     return startDate
-  //   };
     
-  //   const fetchStockTracking = async () => {
-  //     try {
-  //       const startTimestampUnix  = getDateRange();
-  //       console.log(startTimestampUnix)
-  //       // console.log(endTimestampUnix)
-  //       const resolution = chartConfig[filter].resolution;
-  //         const res = await stock.post("/stock/stocktracking/historicalclosedata/", {
-  //           symbol:stockSymbol,
-  //           start: startTimestampUnix, 
-  //           interval: resolution 
-  //         });
-  //         // const formattedData = res.data.price_data.map(item => {
-  //         //   const date = new Date(item.date); // Chuyển chuỗi thành Date object
+      return startDate
+    };
+    const startTimestampUnix  = getDateRange();
+    console.log(startTimestampUnix)
+    // console.log(endTimestampUnix)
+    const resolution = chartConfig[filter].resolution;
+    const updateChartData = async () => {
+      try {
+        const res = await stock.post("/stock/stocktracking/create_stock_data/",
+              { 
+              symbol: stockSymbol, 
+              start: startTimestampUnix, 
+              interval: resolution}
+        );
       
-  //         //   // Kiểm tra độ phân giải để định dạng ngày
-  //         //   let formattedDate;
-  //         //   if (resolution === '1D') {
-  //         //     // Định dạng 'YYYY-MM-DD' cho 1D
-  //         //     formattedDate = date.toISOString().split('T')[0];
-  //         //   } else if (resolution === '1m') {
-  //         //     // Định dạng 'YYYY-MM-DD HH:mm' cho 1m
-  //         //     formattedDate = date.toISOString().split('T')[0] + ' ' + date.toTimeString().split(' ')[0].slice(0, 5); // Lấy giờ và phút
-  //         //   } else {
-  //         //     // Nếu không có độ phân giải cụ thể, giữ nguyên
-  //         //     formattedDate = date.toISOString();
-  //         //   }
-      
-  //         //   return {
-  //         //     ...item,
-  //         //     date: formattedDate // Cập nhật trường date với định dạng tương ứng
-  //         //   };
-  //         // });
-  //         // console.log(formattedData)
-  //         console.log(formatData(res.data.price_data, resolution))
-  //         setData(formatData(res.data.price_data,resolution));
-  //       } catch (error) {
-  //         setData([]);
-  //         console.error('Có lỗi xảy ra khi truy cập dữ liệu:', error);
-  //       }
-  //     };
-
-  //   const updateChartData = async () => {
-  //     // try {
-  //     //   const { startTimestampUnix, endTimestampUnix } = getDateRange();
-  //     //   const resolution = chartConfig[filter].resolution;
-  //     //   const result = await fetchHistoricalData(
-  //     //     stockSymbol,
-  //     //     resolution,
-  //     //     startTimestampUnix,
-  //     //     endTimestampUnix
-  //     //   );
-  //     //   setData(formatData(result));
-  //     // } catch (error) {
-  //     //   setData([]);
-  //     //   console.log(error);
-  //     // }
-  //   };
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
 
-  //   fetchStockTracking();
-  //   updateChartData();
-  // }, [filter]);
+    updateChartData();
+  }, [filter]);
 
   return (
     <>
