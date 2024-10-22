@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useTheme } from "@mui/material";
 import { AgFinancialCharts } from "ag-charts-react";
 import { AgCharts as AgChartsEnterprise } from "ag-charts-enterprise";
@@ -8,16 +8,22 @@ AgChartsEnterprise.setLicenseKey(import.meta.env.VITE_AG_CHART);
 console.log(import.meta.env.VITE_AG_CHART)
 import "ag-charts-enterprise";
 import getData from '@assets/data/stockData'
+import StockContext from "@context/StockContext";
+
 const StockAgChart = () => {
   const theme = useTheme();
   const stock = useAxios();
   const [stockData, setStockData] = useState([]);
-  const [name, setName] = useState("ACB");
+  const [company, setCompany] = useState("");
+  const { stockSymbol } = useContext(StockContext);
 
   useEffect(() => {
     const fetchStockTracking = async () => {
+      console.log(`Stock char ${stockSymbol}`)
       try {
-        const res = await stock.get("/stock/stocktracking/historicaldata/");
+        const res = await stock.post("/stock/stocktracking/historicaldata/", {
+          symbol: stockSymbol, 
+        });
         
         const formattedData = res.data.price_data.map(item => ({
           ...item,
@@ -28,21 +34,22 @@ const StockAgChart = () => {
           // close: parseFloat(item.close),
           // volume: parseInt(item.volume, 10),
         }))
-        setName(res.data.company)
+        console.log(res.data)
+        setCompany(res.data.company)
         // .filter(item => 
         //   item.high >= Math.max(item.open, item.close, item.low) &&
         //   item.low <= Math.min(item.open, item.close, item.high) 
         // );
         
         setStockData(formattedData);
-        setName(res.data.company);
+        // setName(res.data.company);
       } catch (error) {
         console.error('Có lỗi xảy ra khi truy cập dữ liệu:', error);
       }
     };
 
     fetchStockTracking();
-  }, []); 
+  }, [stockSymbol]); 
 
 //   useEffect(() => {
 //     const socket = new WebSocket('ws://localhost:8001/ws/stocks/');
@@ -77,7 +84,7 @@ const StockAgChart = () => {
   const [options, setOptions] = useState({
     data: stockData,  
     // data: getData(),  
-    title: { text: `${name} .Inc` },
+    title: { text: `${company} .Inc` },
     theme: 'ag-financial',
     navigator: true,
     toolbar: true,
@@ -92,6 +99,7 @@ const StockAgChart = () => {
   useEffect(() => {
     setOptions((prevOptions) => ({
       ...prevOptions,
+      title: { text: `${company} .Inc` },
       data: stockData,  
     }));
   }, [stockData]);

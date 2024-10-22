@@ -28,7 +28,7 @@ const Routers = () => {
   const [currentUser, setCurrentUser]=useState(false)
   const isUser = useAxios();
   const [darkMode, setDarkMode] = useState(false);
-  const [stockSymbol, setStockSymbol] = useState("MSFT");
+  const [stockSymbol, setStockSymbol] = useState("ABC");
   useEffect(() => {
     fetchUser();
   }, []);
@@ -76,7 +76,14 @@ const Routers = () => {
           <Route path="/blogs/:slug" element={<BlogDetails />} />
           <Route path="/about" element={<About />} />
           <Route path="/rada" element={<RadarChart />} />
-          <Route path="/stock-market" element={<Market />} />
+          <Route path="/stock-market" element={
+            <ThemeContext.Provider value={{ darkMode, setDarkMode }}>
+            <StockContext.Provider value={{ stockSymbol, setStockSymbol }}>
+              <Market />
+
+            </StockContext.Provider>
+            </ThemeContext.Provider>
+            } />
           <Route path="/bollinger" element={<BollingerStock />} />
           <Route path="/table" element={<TableComponent />} />
           <Route path="/contact" element={<Contact />} />

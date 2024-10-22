@@ -82,7 +82,7 @@ INSTALLED_APPS = [
 CELERY_BEAT_SCHEDULE = {
     'fetch-stock-data-every-minute': {
         'task': 'stock.tasks.fetch_stock_data',
-        'schedule': crontab(minute='*/1'),  
+        'schedule': timedelta(seconds=30),  
     },
 }
 

@@ -13,6 +13,8 @@ import TableComponent from "@client/components/UI/TableComponent";
 import TickerDropdown from "@client/components/UI/TickerDropdown";
 import ChatIcon from '@mui/icons-material/Chat'; // Import icon Chat
 import { useNavigate } from "react-router-dom"; // Điều hướng
+import { useContext } from "react";
+
 import StockAgChart from "@client/components/UI/StockAgChart";
 import StatBox from '@client/components/UI/StatBox'
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
@@ -21,6 +23,8 @@ import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantity
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import useAxios from '@utils/useAxios'
+import StockContext from "@context/StockContext";
+
 // import { useNavigate } from 'react-router-dom';
 const Market = () => {
     const boxRef = useRef(null);
@@ -30,11 +34,14 @@ const Market = () => {
     const [infoCompany, setInfo] = useState([]);
     const [name, setName]=useState("ACB");
     const navigate = useNavigate();
+    const { stockSymbol } = useContext(StockContext);
 
     useEffect(() => {
         const fetchCompanyInfo = async () => {
             try {
-                const res = await stock.get("/stock/stocktracking/tracking_stockinformation/");
+                const res = await stock.post("/stock/stocktracking/tracking_stockinformation/", {
+                    symbol: stockSymbol, 
+                  });
                 console.log(res.data);
                 setInfo(res.data)
 
@@ -61,7 +68,7 @@ const Market = () => {
 
         return () => window.removeEventListener('resize', handleResize);
         
-    }, [stockData, name]);
+    }, [stockData,stockSymbol, name]);
 
     // const prediction = async(e) => {
     //     //Thực hiện lệnh post request tới API
@@ -102,10 +109,10 @@ const Market = () => {
                             >
                                   <StatBox
                             
-                            title={300}
-                            subtitle="Open"
-                            progress="0.60"
-                            increase="+21%"
+                            title={infoCompany?.overview?.issue_share?.[0] ? `${Math.round(infoCompany.overview.issue_share[0])}B` : ""}
+                            subtitle="Market Capital"
+                            progress={Math.random()}
+                            increase={`+${Math.floor(Math.random() * 100)}%`}
                             icon={
                             <MonetizationOnIcon
                                 sx={{ color: "#4951a3", fontSize: "26px" }}
@@ -124,10 +131,10 @@ const Market = () => {
                                 justifyContent="center"
                             >
                                   <StatBox
-                            title={300}
-                            subtitle="Close"
-                            progress="0.50"
-                            increase="+21%"
+                            title={infoCompany?.overview?.delta_in_month ?? ""}
+                            subtitle="Delta (month)"
+                            progress={Math.random()}
+                            increase={`+${Math.floor(Math.random() * 100)}%`}
                             icon={
                             <PointOfSaleIcon
                                 sx={{ color: "#4951a3", fontSize: "26px" }}
@@ -145,10 +152,10 @@ const Market = () => {
                             justifyContent="center"
                             >
                                   <StatBox
-                            title={300}
-                            subtitle="High"
-                            progress="0.50"
-                            increase="+21%"
+                            title={infoCompany?.overview?.no_shareholders?.toLocaleString('de-DE') ?? ""}
+                            subtitle="Shareholders"
+                            progress={Math.random()}
+                            increase={`+${Math.floor(Math.random() * 100)}%`}
                             icon={
                             <PointOfSaleIcon
                                 sx={{ color: "#4951a3", fontSize: "26px" }}
@@ -165,17 +172,18 @@ const Market = () => {
                             alignItems="center"
                             justifyContent="center"
                             >
-                                  <StatBox
-                            title={300}
-                            subtitle="Low"
-                            progress="0.50"
-                            increase="+21%"
-                            icon={
-                            <PointOfSaleIcon
-                                sx={{ color: "#4951a3", fontSize: "26px" }}
-                            />
-                            }
-                        />
+                                 <StatBox
+                                    title={infoCompany?.overview?.stock_rating ?? "N/A"}  
+                                    subtitle="Rating"
+                                    progress={infoCompany?.overview?.stock_rating ? infoCompany.overview.stock_rating / 5 : 0}
+                                    increase={infoCompany?.overview?.stock_rating ? `+${Math.round(100 * infoCompany.overview.stock_rating / 5)}%` : "N/A"}
+                                    icon={
+                                        <PointOfSaleIcon
+                                            sx={{ color: "#4951a3", fontSize: "26px" }}
+                                        />
+                                    }
+                                />
+
          
  
                             </Box>

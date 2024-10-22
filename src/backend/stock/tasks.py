@@ -7,8 +7,9 @@ from asgiref.sync import async_to_sync
 from datetime import datetime
 import pandas as pd
 previous_data = pd.DataFrame()
+
 @shared_task
-def fetch_stock_data(symbol='ACB', start='2000-01-01', end=datetime.now().strftime('%Y-%m-%d'), interval='1m'):
+def fetch_stock_data(symbol, start,interval, end=datetime.now().strftime('%Y-%m-%d') ):
     global previous_data
     stock_tracking = get_vnstock_VCI(symbol)
     stock_tracking.update_symbol(symbol)
@@ -19,6 +20,7 @@ def fetch_stock_data(symbol='ACB', start='2000-01-01', end=datetime.now().strfti
         new_data.rename(columns={'time': 'date'}, inplace=True)
         new_data['date'] = pd.to_datetime(new_data['date'])
         last_observation = new_data.iloc[-1] if not new_data.empty else None
+        new_data.rename(columns={'close': 'value'}, inplace=True)
 
         if not previous_data.empty:
             new_records = new_data[new_data['date'] > previous_data['date'].max()]
@@ -27,7 +29,7 @@ def fetch_stock_data(symbol='ACB', start='2000-01-01', end=datetime.now().strfti
                 new_records['date'] = new_records['date'].dt.strftime('%Y-%m-%d %H:%M:%S')
                 channel_layer = get_channel_layer()
                 data_to_send = {
-                    "new_data": new_records.to_dict(orient="records"),
+                    "new_data": new_records[['value', 'date']].to_dict(orient="records"),
                     "latest_observation": {
                         "open": last_observation['open'],
                         "high": last_observation['high'],
@@ -43,7 +45,20 @@ def fetch_stock_data(symbol='ACB', start='2000-01-01', end=datetime.now().strfti
                     }
                 )
                 print(f'Dữ liệu mới được cập nhật')
-            else: print('Dữ liệu chưa có gì mới hết')
+            else: 
+                print('Dữ liệu chưa có gì mới hết')
+                if not previous_data.empty:
+                    previous_data['date'] = pd.to_datetime(previous_data['date'], errors='coerce')
+                    previous_data['date'] = previous_data['date'].dt.strftime('%Y-%m-%d %H:%M:%S')
+                    channel_layer = get_channel_layer()
+                    async_to_sync(channel_layer.group_send)(
+                        "stocks",
+                        {
+                            "type": "send_stock_data",
+                            "data": previous_data[['value', 'date']].to_dict(orient="records"),
+                        }
+                    )
+                    print('Gửi dữ liệu cũ.')
         else:
             new_data['date'] = new_data['date'].dt.strftime('%Y-%m-%d %H:%M:%S')
             channel_layer = get_channel_layer()
@@ -51,7 +66,7 @@ def fetch_stock_data(symbol='ACB', start='2000-01-01', end=datetime.now().strfti
                 "stocks",
                 {
                     "type": "send_stock_data",
-                    "data": new_data.to_dict(orient="records"),
+                    "data": new_data[['value', 'date']].to_dict(orient="records"),
                 }
             )
             print(f'Dữ liệu mới được tải')
@@ -60,3 +75,5 @@ def fetch_stock_data(symbol='ACB', start='2000-01-01', end=datetime.now().strfti
 
     else:
         print('Không có dữ liệu mới để cập nhật.')
+
+    

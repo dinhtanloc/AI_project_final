@@ -5,7 +5,6 @@ const InfoBase = ({ data }) => {
         return <Typography variant="body1">Không có dữ liệu.</Typography>;
     }
 
-    // Kiểm tra nếu data không rỗng
     if (Object.keys(data).length === 0) {
         return <Typography variant="body1">Đang tải dữ liệu...</Typography>;
     }

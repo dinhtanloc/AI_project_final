@@ -9,6 +9,7 @@ import StockContext from "@context/StockContext";
 import ChatIcon from '@mui/icons-material/Chat'; // Import icon Chat
 import { Box, Button, Typography, Icon } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import useAxios from '@utils/useAxios';
 
 
 const ActionButton = ({ onClick, label }) => (
@@ -37,21 +38,15 @@ const ActionButton = ({ onClick, label }) => (
 const StockDashboard = () => {
   const { darkMode } = useContext(ThemeContext);
   const navigate=useNavigate();
+  const stock=useAxios();
+
 
   const { stockSymbol } = useContext(StockContext);
 
-  // const [stockDetails, setStockDetails] = useState({});
+  const [stockDetails, setStockDetails] = useState({});
 
   const [quote, setQuote] = useState({});
-  const stockDetails = {
-    name: "Công ty ABC",
-    country: "Việt Nam",
-    currency: "3.27",
-    exchange: "HOSE",
-    ipo: "2006-06-01", // Ngày IPO
-    marketCapitalization: 4466.7, // Dữ liệu tính bằng triệu
-    finnhubIndustry: "Ngân hàng"
-  };
+ 
 
   useEffect(() => {
       // const fetchStockTracking = async () => {
@@ -83,28 +78,31 @@ const StockDashboard = () => {
       // fetchStockTracking();
 
     const updateStockDetails = async () => {
-    //   try {
-    //     const result = await fetchStockDetails(stockSymbol);
-    //     setStockDetails(result);
-    //   } catch (error) {
-    //     setStockDetails({});
-    //     console.log(error);
-    //   }
+      try {
+        const res = await stock.post("/stock/stocktracking/tracking_stockinformation/", {
+          symbol: stockSymbol, 
+        });
+      // console.log(res.data);
+      // setInfo(res.data)
+        setStockDetails({
+          name: res.data.overview.short_name,
+          country: "Việt Nam",
+          currency: "VND",
+          exchange: res.data.overview.exchange,
+          ipo: res.data.overview.established_year,
+          marketCapitalization: `${Math.round(res.data.overview.issue_share[0])} triệu`,
+          finnhubIndustry: res.data.overview.industry
+        });
+      } catch (error) {
+        setStockDetails({});
+        console.log(error);
+      }
     };
 
-    const updateStockOverview = async () => {
-    //   try {
-    //     const result = await fetchQuote(stockSymbol);
-    //     setQuote(result);
-    //   } catch (error) {
-    //     setQuote({});
-    //     console.log(error);
-    //   }
-    };
+
 
     updateStockDetails();
-    updateStockOverview();
-  }, [stockSymbol]);
+  }, []);
 
   return (
     <div
@@ -121,10 +119,10 @@ const StockDashboard = () => {
       <div>
         <Overview
           symbol={stockSymbol}
-          price={quote.pc}
-          change={quote.d}
-          changePercent={quote.dp}
-          currency={stockDetails.currency}
+          price={200}
+          change={13/12}
+          changePercent={"5%"}
+          currency={'VND'}
         />
       </div>
       <div className="row-span-2 xl:row-span-3">

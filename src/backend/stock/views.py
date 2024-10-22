@@ -20,7 +20,7 @@ from rest_framework.decorators import action, permission_classes
 from vnstock3 import Vnstock
 from datetime import datetime
 from .utils import get_vnstock_VCI,get_vnstock_TCBS
-from .tasks import fetch_stock_data  
+# from .tasks import fetch_stock_data  
 class StockTracking(viewsets.ViewSet):
     permission_classes = [AllowAny]
 
@@ -40,7 +40,7 @@ class StockTracking(viewsets.ViewSet):
     def update_symbol(self, request):
         self.symbol = request.GET.get('symbol', self.symbol) 
         self.stock = get_vnstock_VCI(symbol=self.symbol)  
-        fetch_stock_data.delay(self.symbol)
+        # fetch_stock_data.delay(self.symbol)
         return Response({'message': f'Mã cổ phiếu đã được cập nhật thành {self.symbol}'}, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['get'])
@@ -80,11 +80,13 @@ class StockTracking(viewsets.ViewSet):
         df.rename(columns={'time': 'date'}, inplace=True)
         return Response({'price_data': df.to_dict(orient='records'), 'company':df.name}, status=status.HTTP_200_OK)
     
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=['post'])
     def historicaldata(self, request):
-        start = request.GET.get('start','2020-01-01') 
+        symbol = request.data.get('symbol')
+        start = request.data.get('start', '2020-01-01') 
         end = datetime.now().strftime('%Y-%m-%d')
-        interval = request.GET.get('interval', '1D')  
+        interval = request.data.get('interval', '1D')
+        self.stock = get_vnstock_VCI(symbol)  
 
         df = self.stock.quote.history(start=start, end=end, interval=interval)
         df.rename(columns={'time': 'date'}, inplace=True)
@@ -103,10 +105,12 @@ class StockTracking(viewsets.ViewSet):
     @action(detail=False, methods=['post'])
     def historicalclosedata(self, request):
         # Lấy các tham số từ request body
+        symbol = request.data.get('symbol')
         start = request.data.get('start') 
         end = request.data.get('end', datetime.now().strftime('%Y-%m-%d'))
         interval = request.data.get('interval', '1W')  
         print(f"{start}-----{end}-----------{interval}")
+        self.stock = get_vnstock_VCI(symbol) 
 
         # Gọi API lấy dữ liệu lịch sử giá cổ phiếu
         df = self.stock.quote.history(start=start, end=end, interval=interval)
@@ -121,8 +125,10 @@ class StockTracking(viewsets.ViewSet):
             status=status.HTTP_200_OK
         )
 
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=['post'])
     def tracking_stockinformation(self, request):
+        symbol = request.data.get('symbol')
+        self.stockCompany = get_vnstock_TCBS(symbol=symbol)
         company = self.stockCompany.company
         overview = company.overview()
         profile = company.profile()

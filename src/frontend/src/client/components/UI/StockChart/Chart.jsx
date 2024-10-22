@@ -38,7 +38,7 @@ const Chart = () => {
   const formatData = (data, resolution) => {
     // console.log(data);
     return data.map((item) => {
-      const date = new Date(item.date); // Chuyển chuỗi thành Date object
+      const date = new Date(item.date); 
   
       // Định dạng ngày theo resolution
       let formattedDate;
@@ -69,91 +69,140 @@ const Chart = () => {
   };
 
   useEffect(() => {
-    const getDateRange = () => {
-      const { days, weeks, months, years } = chartConfig[filter];
 
-      var endDate = new Date();
-      const yearendDate = endDate.getFullYear();
-      const monthendDate = String(endDate.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
-      const dayendDate = String(endDate.getDate()).padStart(2, '0');
-      endDate = `${yearendDate}-${monthendDate}-${dayendDate}`;
-      
-      var startDate = createDate(endDate, -days, -weeks, -months, -years);
-      const year = startDate.getFullYear();
-      const month = String(startDate.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
-      const day = String(startDate.getDate()).padStart(2, '0');
-      startDate = `${year}-${month}-${day}`;
-      console.log(startDate)
-      console.log(endDate)
-      console.log(filter)
-      
-      // const startTimestampUnix = convertDateToUnixTimestamp(startDate);
-      // const endTimestampUnix = convertDateToUnixTimestamp(endDate);
-      // console.log({ startTimestampUnix, endTimestampUnix });
-      return startDate
-    };
+    const socket = new WebSocket('ws://localhost:8001/ws/stocks/');
+      const getDateRange = () => {
+        const { days, weeks, months, years } = chartConfig[filter];
+
+        var endDate = new Date();
+        const yearendDate = endDate.getFullYear();
+        const monthendDate = String(endDate.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
+        const dayendDate = String(endDate.getDate()).padStart(2, '0');
+        endDate = `${yearendDate}-${monthendDate}-${dayendDate}`;
+        
+        var startDate = createDate(endDate, -days, -weeks, -months, -years);
+        const year = startDate.getFullYear();
+        const month = String(startDate.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
+        const day = String(startDate.getDate()).padStart(2, '0');
+        startDate = `${year}-${month}-${day}`;
     
-    const fetchStockTracking = async () => {
-      try {
-        const startTimestampUnix  = getDateRange();
-        console.log(startTimestampUnix)
-        // console.log(endTimestampUnix)
-        const resolution = chartConfig[filter].resolution;
-          const res = await stock.post("/stock/stocktracking/historicalclosedata/", {
-            start: startTimestampUnix, 
-            interval: resolution 
-          });
-          // const formattedData = res.data.price_data.map(item => {
-          //   const date = new Date(item.date); // Chuyển chuỗi thành Date object
+        
       
-          //   // Kiểm tra độ phân giải để định dạng ngày
-          //   let formattedDate;
-          //   if (resolution === '1D') {
-          //     // Định dạng 'YYYY-MM-DD' cho 1D
-          //     formattedDate = date.toISOString().split('T')[0];
-          //   } else if (resolution === '1m') {
-          //     // Định dạng 'YYYY-MM-DD HH:mm' cho 1m
-          //     formattedDate = date.toISOString().split('T')[0] + ' ' + date.toTimeString().split(' ')[0].slice(0, 5); // Lấy giờ và phút
-          //   } else {
-          //     // Nếu không có độ phân giải cụ thể, giữ nguyên
-          //     formattedDate = date.toISOString();
-          //   }
-      
-          //   return {
-          //     ...item,
-          //     date: formattedDate // Cập nhật trường date với định dạng tương ứng
-          //   };
-          // });
-          // console.log(formattedData)
-          console.log(formatData(res.data.price_data, resolution))
-          setData(formatData(res.data.price_data,resolution));
-        } catch (error) {
-          setData([]);
-          console.error('Có lỗi xảy ra khi truy cập dữ liệu:', error);
-        }
+        return startDate
       };
+      const startTimestampUnix  = getDateRange();
+      console.log(startTimestampUnix)
+      // console.log(endTimestampUnix)
+      const resolution = chartConfig[filter].resolution;
+    
+        socket.onopen = () => {
+            console.log('WebSocket connection established');
+            const symbolData = JSON.stringify({ 
+              symbol: stockSymbol, 
+              start: startTimestampUnix, 
+              interval: resolution});
+              socket.send(symbolData);
+              console.log(symbolData);
+        };
+    
+        socket.onmessage = (event) => {
+            const res = JSON.parse(event.data);
+            setData(formatData(res,resolution));
+            console.log('Received data:', data);
+        };
+    
+        // socket.onclose = () => {
+        //     console.log('WebSocket connection closed');
+        // };
+    
+        // return () => {
+        //     socket.close();
+        // };
+    }, [filter]);
 
-    const updateChartData = async () => {
-      // try {
-      //   const { startTimestampUnix, endTimestampUnix } = getDateRange();
-      //   const resolution = chartConfig[filter].resolution;
-      //   const result = await fetchHistoricalData(
-      //     stockSymbol,
-      //     resolution,
-      //     startTimestampUnix,
-      //     endTimestampUnix
-      //   );
-      //   setData(formatData(result));
-      // } catch (error) {
-      //   setData([]);
-      //   console.log(error);
-      // }
-    };
+  // useEffect(() => {
+  //   const getDateRange = () => {
+  //     const { days, weeks, months, years } = chartConfig[filter];
+
+  //     var endDate = new Date();
+  //     const yearendDate = endDate.getFullYear();
+  //     const monthendDate = String(endDate.getMonth() + 1).padStart(2, '0'); 
+  //     const dayendDate = String(endDate.getDate()).padStart(2, '0');
+  //     endDate = `${yearendDate}-${monthendDate}-${dayendDate}`;
+      
+  //     var startDate = createDate(endDate, -days, -weeks, -months, -years);
+  //     const year = startDate.getFullYear();
+  //     const month = String(startDate.getMonth() + 1).padStart(2, '0');
+  //     const day = String(startDate.getDate()).padStart(2, '0');
+  //     startDate = `${year}-${month}-${day}`;
+  
+      
+     
+  //     return startDate
+  //   };
+    
+  //   const fetchStockTracking = async () => {
+  //     try {
+  //       const startTimestampUnix  = getDateRange();
+  //       console.log(startTimestampUnix)
+  //       // console.log(endTimestampUnix)
+  //       const resolution = chartConfig[filter].resolution;
+  //         const res = await stock.post("/stock/stocktracking/historicalclosedata/", {
+  //           symbol:stockSymbol,
+  //           start: startTimestampUnix, 
+  //           interval: resolution 
+  //         });
+  //         // const formattedData = res.data.price_data.map(item => {
+  //         //   const date = new Date(item.date); // Chuyển chuỗi thành Date object
+      
+  //         //   // Kiểm tra độ phân giải để định dạng ngày
+  //         //   let formattedDate;
+  //         //   if (resolution === '1D') {
+  //         //     // Định dạng 'YYYY-MM-DD' cho 1D
+  //         //     formattedDate = date.toISOString().split('T')[0];
+  //         //   } else if (resolution === '1m') {
+  //         //     // Định dạng 'YYYY-MM-DD HH:mm' cho 1m
+  //         //     formattedDate = date.toISOString().split('T')[0] + ' ' + date.toTimeString().split(' ')[0].slice(0, 5); // Lấy giờ và phút
+  //         //   } else {
+  //         //     // Nếu không có độ phân giải cụ thể, giữ nguyên
+  //         //     formattedDate = date.toISOString();
+  //         //   }
+      
+  //         //   return {
+  //         //     ...item,
+  //         //     date: formattedDate // Cập nhật trường date với định dạng tương ứng
+  //         //   };
+  //         // });
+  //         // console.log(formattedData)
+  //         console.log(formatData(res.data.price_data, resolution))
+  //         setData(formatData(res.data.price_data,resolution));
+  //       } catch (error) {
+  //         setData([]);
+  //         console.error('Có lỗi xảy ra khi truy cập dữ liệu:', error);
+  //       }
+  //     };
+
+  //   const updateChartData = async () => {
+  //     // try {
+  //     //   const { startTimestampUnix, endTimestampUnix } = getDateRange();
+  //     //   const resolution = chartConfig[filter].resolution;
+  //     //   const result = await fetchHistoricalData(
+  //     //     stockSymbol,
+  //     //     resolution,
+  //     //     startTimestampUnix,
+  //     //     endTimestampUnix
+  //     //   );
+  //     //   setData(formatData(result));
+  //     // } catch (error) {
+  //     //   setData([]);
+  //     //   console.log(error);
+  //     // }
+  //   };
 
 
-    fetchStockTracking();
-    updateChartData();
-  }, [filter]);
+  //   fetchStockTracking();
+  //   updateChartData();
+  // }, [filter]);
 
   return (
     <>
