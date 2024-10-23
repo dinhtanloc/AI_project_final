@@ -21,15 +21,59 @@ from vnstock3 import Vnstock
 from datetime import datetime
 from .utils import get_vnstock_VCI,get_vnstock_TCBS
 # from .tasks import fetch_stock_data  
+from .models import StockData
 class StockTracking(viewsets.ViewSet):
     permission_classes = [AllowAny]
     stock_requests = []
+   
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.symbol='ACB'
         self.stock = get_vnstock_VCI(symbol=self.symbol)  
         self.stockCompany = get_vnstock_TCBS(symbol=self.symbol)
+
+    
+    
+
+    @action(detail=False, methods=['get', 'post'])
+    def update_data(self, request):
+        if request.method == 'POST':
+            symbol = request.data.get('symbol', 'ACB')  
+            start = request.data.get('start', '2000-01-01')
+            interval = request.data.get('interval', '1D')
+
+            stock_data, created = StockData.objects.update_or_create(
+                defaults={'start': start, 'interval': interval},
+                symbol=symbol
+            )
+
+            return Response({
+                'message': 'Dữ liệu đã được cập nhật thành công',
+                'updated_data': {
+                    'symbol': stock_data.symbol,
+                    'start': stock_data.start,
+                    'interval': stock_data.interval
+                }
+            }, status=status.HTTP_200_OK)
+
+        elif request.method == 'GET':
+            stock_data = StockData.objects.last()  
+            print('giaodich',stock_data)
+            if stock_data:
+                return Response({
+                    'message': 'Dữ liệu hiện tại',
+                    'stored_data': {
+                        'symbol': stock_data.symbol,
+                        'start': stock_data.start,
+                        'interval': stock_data.interval
+                    }
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({
+                    'message': 'Chưa có dữ liệu'
+                }, status=status.HTTP_404_NOT_FOUND)
+
 
     @action(detail=False, methods=['post'])
     def create_stock_data(self, request):

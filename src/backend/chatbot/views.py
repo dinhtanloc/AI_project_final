@@ -68,6 +68,28 @@ class ChatbotViewSet(viewsets.ViewSet):
             return Response({'error': str(e)}, status=500)
 
 
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.core.files.storage import FileSystemStorage
+from backend.settings import MEDIA_ROOT
+@csrf_exempt  # Tạm thời bỏ qua CSRF để kiểm tra dễ dàng
+def upload_pdf(request):
+    if request.method == 'POST' and request.FILES['pdf_file']:
+        pdf_file = request.FILES['pdf_file']
+
+        # Lưu file vào thư mục media/ sử dụng FileSystemStorage
+        print(f'{MEDIA_ROOT}/documents')
+        fs = FileSystemStorage(location=f'{MEDIA_ROOT}/documents')
+        filename = fs.save(pdf_file.name, pdf_file)
+
+        # Lấy URL của file đã lưu
+        file_url = fs.url(filename)
+
+        return JsonResponse({'file_url': file_url}, status=200)
+
+    return JsonResponse({'error': 'No file uploaded'}, status=400)
+
 # from rest_framework import viewsets, status
 # from rest_framework.permissions import IsAuthenticated  # Thêm permission
 # from rest_framework.response import Response

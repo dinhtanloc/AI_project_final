@@ -17,18 +17,15 @@ import ChatbotPage from "@client/pages/ChatbotPage"
 // import PredictionDashboard from '@client/pages/PredictionDashboard'
 // import Chatbot from '@client/components/UI/Chatbot'
 import PrivateRoute from '@utils/PrivateRoute'
-import ChatbotContextProvider from '@context/ChatbotContext.jsx'
 import useAxios from "@utils/useAxios";
 import StockDashboard from "@client/pages/StockDashboard";
 // import Market from "@pages/" 
-import StockContext from "@context/StockContext";
-import ThemeContext from "@context/ThemeContext";
+
 const Routers = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [currentUser, setCurrentUser]=useState(false)
   const isUser = useAxios();
-  const [darkMode, setDarkMode] = useState(false);
-  const [stockSymbol, setStockSymbol] = useState("ABC");
+
   useEffect(() => {
     fetchUser();
   }, []);
@@ -76,32 +73,19 @@ const Routers = () => {
           <Route path="/blogs/:slug" element={<BlogDetails />} />
           <Route path="/about" element={<About />} />
           <Route path="/rada" element={<RadarChart />} />
-          <Route path="/stock-market" element={
-            <ThemeContext.Provider value={{ darkMode, setDarkMode }}>
-            <StockContext.Provider value={{ stockSymbol, setStockSymbol }}>
-              <Market />
-
-            </StockContext.Provider>
-            </ThemeContext.Provider>
-            } />
+          <Route path="/stock-market" element={<Market /> } />
           <Route path="/bollinger" element={<BollingerStock />} />
           <Route path="/table" element={<TableComponent />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/stock-dashboard" element={
-            <ThemeContext.Provider value={{ darkMode, setDarkMode }}>
-            <StockContext.Provider value={{ stockSymbol, setStockSymbol }}>
+            
               <StockDashboard />
-            </StockContext.Provider>
-          </ThemeContext.Provider>
+            
             // <StockDashboard />
             } />
      
           <Route exact path='/chatbot/' element={<PrivateRoute/>}>
-            <Route exact path='/chatbot/'element={
-                <ChatbotContextProvider>
-                  <ChatbotPage />
-                </ChatbotContextProvider>
-                }/>
+            <Route exact path='/chatbot/'element={<ChatbotPage />}/>
           </Route>
           
         </Route>

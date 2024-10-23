@@ -36,7 +36,8 @@ const Chart = () => {
   const stock=useAxios();
 
   const formatData = (data, resolution) => {
-    // console.log(data);
+    console.log(data);
+    console.log(Array.isArray(data));
     return data.map((item) => {
       const date = new Date(item.date); 
   
@@ -68,34 +69,34 @@ const Chart = () => {
     });
   };
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    const socket = new WebSocket('ws://localhost:8001/ws/stocks/');
-    const resolution = chartConfig[filter].resolution;
-        socket.onopen = () => {
-            console.log('WebSocket connection established');
-            // const symbolData = JSON.stringify({ 
-            //   symbol: stockSymbol, 
-            //   start: startTimestampUnix, 
-            //   interval: resolution});
-            //   socket.send(symbolData);
-            //   console.log(symbolData);
-        };
+  //   const socket = new WebSocket('ws://localhost:8001/ws/stocks/');
+  //   const resolution = chartConfig[filter].resolution;
+  //       socket.onopen = () => {
+  //           console.log('WebSocket connection established');
+  //           // const symbolData = JSON.stringify({ 
+  //           //   symbol: stockSymbol, 
+  //           //   start: startTimestampUnix, 
+  //           //   interval: resolution});
+  //           //   socket.send(symbolData);
+  //           //   console.log(symbolData);
+  //       };
     
-        socket.onmessage = (event) => {
-            const res = JSON.parse(event.data);
-            setData(formatData(res,resolution));
-            console.log('Received data:', data);
-        };
+  //       socket.onmessage = (event) => {
+  //           const res = JSON.parse(event.data);
+  //           setData(formatData(res,resolution));
+  //           console.log('Received data:', data);
+  //       };
     
-        // socket.onclose = () => {
-        //     console.log('WebSocket connection closed');
-        // };
+  //       // socket.onclose = () => {
+  //       //     console.log('WebSocket connection closed');
+  //       // };
     
-        // return () => {
-        //     socket.close();
-        // };
-    }, [filter]);
+  //       // return () => {
+  //       //     socket.close();
+  //       // };
+  //   }, [filter]);
 
   useEffect(() => {
     const getDateRange = () => {
@@ -123,12 +124,14 @@ const Chart = () => {
     const resolution = chartConfig[filter].resolution;
     const updateChartData = async () => {
       try {
-        const res = await stock.post("/stock/stocktracking/create_stock_data/",
+        const res = await stock.post("/stock/stocktracking/historicalclosedata/",
               { 
               symbol: stockSymbol, 
               start: startTimestampUnix, 
               interval: resolution}
         );
+        console.log(res)
+        setData(formatData(res.data.price_data,resolution));
       
       } catch (error) {
         console.log(error);
@@ -137,6 +140,10 @@ const Chart = () => {
 
 
     updateChartData();
+    const intervalId = setInterval(updateChartData, 60000);
+
+        // Dọn dẹp khi component unmount
+    return () => clearInterval(intervalId);
   }, [filter]);
 
   return (

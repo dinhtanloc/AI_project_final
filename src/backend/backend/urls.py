@@ -23,6 +23,7 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('prediction/', include('predictionbot.urls')),
     path('stock/', include('stock.urls')),
+    path('chatbot/', include('chatbot.urls')),
 
     #authentication
     path('ckeditor/', include('ckeditor_uploader.urls')),

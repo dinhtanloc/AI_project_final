@@ -6,22 +6,20 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 from datetime import datetime
 import pandas as pd
+import requests
+from dotenv import find_dotenv, load_dotenv
+import os
+load_dotenv(find_dotenv())
 previous_data = pd.DataFrame()
 
 @shared_task
 def fetch_stock_data():
     global previous_data
-    from .views import StockTracking
-    viewset = StockTracking()
-    try:
-        symbol = viewset.stock_requests[-1]['symbol']
-        start = viewset.stock_requests[-1]['start']
-        interval = viewset.stock_requests[-1]['interval']
-    except:
-        symbol='ACB'
-        start='2024-10-16'
-        interval='1D'
-    viewset.stock_requests.clear()
+    response_get = requests.get(os.getenv('StockURL'))
+    symbol=response_get.json()['stored_data']['symbol']
+    start=response_get.json()['stored_data']['start']
+    interval=response_get.json()['stored_data']['interval']
+    print(symbol, start, interval)
 
     end = datetime.now().strftime('%Y-%m-%d')
     stock_tracking = get_vnstock_VCI(symbol)
