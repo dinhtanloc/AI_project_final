@@ -189,8 +189,10 @@ from sklearn.preprocessing import MinMaxScaler
 from keras.models import Sequential
 from keras.layers import Dense, LSTM
 import os
+from datetime import datetime
 from backend.settings import WEIGHTS_DIR
-MODEL_WEIGHTS_PATH = f'{WEIGHTS_DIR}/model_weights.weights.h5'
+from stock.utils import get_vnstock_VCI
+MODEL_WEIGHTS_PATH = f'{WEIGHTS_DIR}'
 
 
 
@@ -199,64 +201,154 @@ class StockDataViewSet(viewsets.ViewSet):
 
     @action(detail=False, methods=['get'], permission_classes=[AllowAny])
     def predict(self, request):
-        stock = request.GET.get('stock')
+        symbol = request.GET.get('symbol')
         start = request.GET.get('start')
-        end = request.GET.get('end')
+        interval = request.GET.get('interval')  
 
-        if not stock or not start or not end:
-            return Response({"error": "Missing required parameters: stock, start, end."},
+        if not symbol or not start or not interval:
+            return Response({"error": "Missing required parameters: stock, start, interval."},
                             status=status.HTTP_400_BAD_REQUEST)
 
-        df = yf.download(stock, start=start, end=end)
-        df.reset_index(inplace=True)
+        end = datetime.now().strftime('%Y-%m-%d')
 
-        predictions, rmse, train, valid = self.make_predictions(df)
+        self.stock = get_vnstock_VCI(symbol) 
 
-        return Response(
-            {
-                'data': {
-                    'prices': df['Close'].tolist(),
-                    "time": df['Date'].tolist(),
-                    "train": train.to_dict(orient='records'),
-                    "valid": valid.to_dict(orient='records'),
-                    "predictions": predictions.tolist(),
-                    "rmse": rmse
-                }
-            }
-        )
+        df = self.stock.quote.history(start=start, end=end, interval=interval)
+
+        if df.empty:
+            return Response({"error": "No data returned for the given parameters."},
+                            status=status.HTTP_404_NOT_FOUND)
+        
+        df.rename(columns={'time': 'date'}, inplace=True)
+        df.rename(columns={'close': 'value'}, inplace=True)
+
+        data = df.filter(['value'])
+        dataset = data.values
+
+        scaler = MinMaxScaler(feature_range=(0, 1))
+        scaled_data = scaler.fit_transform(dataset)
+
+        if interval == '1m':
+            num_predictions = 60  # Dự đoán cho 60 phút
+            num_observations = 60  # Quan sát 60 phút
+            timedelta = pd.Timedelta(minutes=1)  
+        elif interval == '1D':
+            num_predictions = 7  # Dự đoán cho 7 ngày
+            num_observations = 60 if len(scaled_data) >= 60 else len(scaled_data) - 1
+            timedelta = pd.Timedelta(days=1)  
+        elif interval == '1W':
+            num_predictions = 4  # Dự đoán cho 4 tuần
+            num_observations = 7 if len(scaled_data) >= 7 else len(scaled_data) - 1
+            timedelta = pd.Timedelta(weeks=1)  # 1 tuần
+        elif interval == '1M':
+            num_predictions = 6  # Dự đoán cho 6 tháng
+            num_observations = 30 if len(scaled_data) >= 30 else len(scaled_data) - 1
+            timedelta = pd.DateOffset(months=1)  
+        else:
+            return Response({"error": "Invalid interval. Use '1m', '1d', '1w', or '1m'."},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        if len(scaled_data) < num_observations:
+            return Response({"error": f"Not enough data points for prediction. Minimum required is {num_observations}."},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        x_train = []
+        for i in range(num_observations, len(scaled_data)):
+            x_train.append(scaled_data[i - num_observations:i, 0])  
+        x_train = np.array(x_train)
+
+        x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))
+
+        model = self.create_model(x_train)
+        model.load_weights(f'{MODEL_WEIGHTS_PATH}/model_weights_{interval}.weights.h5')
+        
+        # Lấy 60 ngày cuối cùng cho dự đoán
+        last_60_days = scaled_data[-num_observations:]  
+        predictions = []
+
+        # Dự đoán nhiều giá trị
+        for _ in range(num_predictions):
+            x_test = last_60_days.reshape((1, last_60_days.shape[0], 1))
+            prediction = model.predict(x_test)
+            predictions.append(prediction[0][0])  # Lưu giá trị dự đoán
+
+            # Cập nhật last_60_days để dự đoán bước tiếp theo
+            last_60_days = np.append(last_60_days[1:], prediction)  
+
+        predictions = scaler.inverse_transform(np.array(predictions).reshape(-1, 1))  # Chuyển đổi lại về giá trị thực
+
+        records = []
+
+        for i in range(len(df)):
+            if i == len(df)-1:
+                records.append({
+                'date': df['date'].iloc[i],
+                'value': df['value'].iloc[i],
+                'predict_value': df['value'].iloc[i] 
+            })
+                break
+            records.append({
+            'date': df['date'].iloc[i],
+            'value': df['value'].iloc[i],
+            'predict_value': None 
+        })
+        
+        print(predictions)
+        print(predictions.shape)
+
+        for i in range(num_predictions):
+            predicted_date = df['date'].iloc[-1] + timedelta * (i + 1) 
+            records.append({
+            'date': predicted_date,
+            'value': None, 
+            'predict_value': predictions[i][0]
+        })
+
+        response_data = {
+            'data': records
+        }
+
+        return Response(response_data, status=status.HTTP_200_OK)
+
 
     @action(detail=False, methods=['get'], permission_classes=[AllowAny])
     def train(self, request):
-        stock = request.GET.get('stock')
+        symbol = request.GET.get('symbol')
         start = request.GET.get('start')
         end = request.GET.get('end')
+        interval = request.GET.get('interval')
 
-        if not stock or not start or not end:
+        if not symbol or not start or not end:
             return Response({"error": "Missing required parameters: stock, start, end."},
                             status=status.HTTP_400_BAD_REQUEST)
 
-        df = yf.download(stock, start=start, end=end)
+        self.stock = get_vnstock_VCI(symbol) 
+
+        df = self.stock.quote.history(start=start, end=end, interval=interval)
         df.reset_index(inplace=True)
+        print(df)
+
+        df.rename(columns={'time': 'date'}, inplace=True)
+        df.rename(columns={'close': 'value'}, inplace=True)
 
         # Huấn luyện mô hình và thực hiện dự đoán
-        pred_price, rmse, train, valid = self.make_predictions(df)
-
+        pred_price, rmse, train, valid = self.make_predictions(df,interval)
+       
         return Response(
             {
-                'data': {
-                    'prices': df['Close'],
-                    "time": df['Date'],
-                    "train": train,
-                    "valid": valid,
-                    "price": pred_price,
-                    "rmse": rmse
-                }
+
+                'prices': df['value'],
+                "time": df['date'],
+                "train": train,
+                "valid": valid,
+                "price": pred_price,
+                "rmse": rmse
             }
         )
 
-    def make_predictions(self, df):
-        data = df.filter(['Close'])
-        time = df.filter(['Date'])
+    def make_predictions(self, df,interval):
+        data = df.filter(['value'])
+        time = df.filter(['date'])
         dataset = data.values
         training_data_len = math.ceil(len(dataset) * .8)
 
@@ -269,7 +361,7 @@ class StockDataViewSet(viewsets.ViewSet):
 
         model = self.create_model(x_train)
         model.fit(x_train, y_train, batch_size=1, epochs=1)
-        model.save_weights(MODEL_WEIGHTS_PATH)
+        model.save_weights(f'{MODEL_WEIGHTS_PATH}/model_weights_{interval}.weights.h5')
 
         # Dữ liệu kiểm tra
         test_data = scaled_data[training_data_len - 60:, :]
@@ -294,6 +386,7 @@ class StockDataViewSet(viewsets.ViewSet):
         x_test = np.reshape(x_test, (x_test.shape[0],x_test.shape[1],1))
         pred_price = model.predict(x_test)
         pred_price = scaler.inverse_transform(pred_price)
+        pred_price = np.nan_to_num(pred_price, nan=0.0, posinf=0.0, neginf=0.0)
 
         # Trả về dữ liệu huấn luyện và kiểm tra
         return pred_price, rmse, train, valid

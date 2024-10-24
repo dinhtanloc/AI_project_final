@@ -35,25 +35,29 @@ export default function useRequestResource() {
         .get(`${query}`)
         .then((res) => {
           // Update state with received data
+          // console.log(res)
+          // console.log((res.data.prices))
+          // console.log((res.data.train.timeTrain))
+          // console.log((res.data.train.value))
 
           // History Prices
-          getHistoryPrices(res.data.data.prices);
-          getTimeSeries(res.data.data.time);
+          getHistoryPrices(res.data.prices);
+          getTimeSeries(res.data.time);
 
           // Train Data
-          getTrainTime(res.data.data.train.timeTrain);
-          getTrainPrices(res.data.data.train.Close);
+          getTrainTime(res.data.train.timeTrain);
+          getTrainPrices(res.data.train.value);
 
           // Table Data
-          getPriceClose(res.data.data.valid.Close);
-          getPredictionClose(res.data.data.valid.Predictions);
-          getTimePrediction(res.data.data.valid.timeValid);
+          getPriceClose(res.data.valid.value);
+          getPredictionClose(res.data.valid.Predictions);
+          getTimePrediction(res.data.valid.timeValid);
 
           // RMSE
-          getRmse([res.data.data.rmse]);
+          getRmse([res.data.rmse]);
 
           // Predicted prices
-          getPredPrice(res.data.data.price);
+          getPredPrice(res.data.price);
 
           // Toggle loading state
           Loading();

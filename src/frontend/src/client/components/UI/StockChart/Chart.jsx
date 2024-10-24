@@ -3,6 +3,7 @@ import ChartFilter from "./ChartFilter";
 import Card from "./Card";
 import {
   Area,
+  Line,
   XAxis,
   YAxis,
   ResponsiveContainer,
@@ -124,14 +125,15 @@ const Chart = () => {
     const resolution = chartConfig[filter].resolution;
     const updateChartData = async () => {
       try {
-        const res = await stock.post("/stock/stocktracking/historicalclosedata/",
-              { 
-              symbol: stockSymbol, 
-              start: startTimestampUnix, 
-              interval: resolution}
-        );
-        console.log(res)
-        setData(formatData(res.data.price_data,resolution));
+        // const res = await stock.post("/stock/stocktracking/historicalclosedata/",
+        //       { 
+        //       symbol: stockSymbol, 
+        //       start: startTimestampUnix, 
+        //       interval: resolution}
+        // );
+        const response = await stock.get(`/prediction/predict/?start=${startTimestampUnix}&symbol=${stockSymbol}&interval=${resolution}`);
+        console.log(response.data.data)
+        setData(formatData(response.data.data,resolution));
       
       } catch (error) {
         console.log(error);
@@ -165,7 +167,7 @@ const Chart = () => {
       <ResponsiveContainer>
         <AreaChart data={data}>
           <defs>
-            <linearGradient id="chartColor" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id="StockColor" x1="0" y1="0" x2="0" y2="1">
               <stop
                 offset="5%"
                 stopColor={darkMode ? "#312e81" : "rgb(199 210 254)"}
@@ -174,6 +176,18 @@ const Chart = () => {
               <stop
                 offset="95%"
                 stopColor={darkMode ? "#312e81" : "rgb(199 210 254)"}
+                stopOpacity={0}
+              />
+            </linearGradient>
+            <linearGradient id="PredictColor" x1="0" y1="0" x2="0" y2="1">
+              <stop
+                offset="5%"
+                stopColor={darkMode ? "#b52b37" : "#1897c9"}
+                stopOpacity={0.8}
+              />
+              <stop
+                offset="95%"
+                stopColor={darkMode ? "#b52b37" : "#1897c9"}
                 stopOpacity={0}
               />
             </linearGradient>
@@ -186,9 +200,17 @@ const Chart = () => {
             type="monotone"
             dataKey="value"
             stroke="#312e81"
-            fill="url(#chartColor)"
+            fill="url(#StockColor)"
             fillOpacity={1}
             strokeWidth={0.5}
+          />
+          <Area
+            type="monotone"
+            dataKey="predict_value"  
+            stroke="#1897c9"
+            fill="url(#PredictColor)"
+            fillOpacity={1}
+            strokeWidth={0.5}  
           />
           <XAxis dataKey="date" />
           <YAxis domain={["dataMin", "dataMax"]} />

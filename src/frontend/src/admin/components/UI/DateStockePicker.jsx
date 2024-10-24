@@ -18,12 +18,29 @@ import {
 } from "@mui/material";
 import { useTheme } from "@mui/material";
 import { tokens } from "@theme";
+import useAxios from '@utils/useAxios'
 export default function DateStockPicker() {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [open, setOpen] = useState(false);
   const { getResourceData } = useRequestResource();
   const [startDate, setStartDate] = useState("");
+  const [stockMenu,setstockMenu]=useState([]);
+  const ticket=useAxios();
+  useEffect(() => {
+    const ListVN30 = async () => {
+      try {
+        const res = await ticket.get("/stock/stocktracking/list_companyVN30/");
+        // console.log(res.data.companies);
+        setstockMenu(res.data.companies)
+      } catch (error) {
+          console.error('Có lỗi xảy ra khi truy cập dữ liệu:', error);
+          
+      }
+    };
+    ListVN30()
+
+   }, []);
   const handleChangeStart = (start) => {
     setStartDate(format(new Date(start), "yyyy-MM-dd"));
   };
@@ -34,6 +51,10 @@ export default function DateStockPicker() {
   const [stock, setStock] = useState("");
   const handleChangeStock = (event) => {
     setStock(event.target.value);
+  };
+  const [interval, setInterval] = useState("");
+  const handleChangeInterval = (event) => {
+    setInterval(event.target.value);
   };
 
   const handleClose = () => {
@@ -58,7 +79,7 @@ export default function DateStockPicker() {
   useEffect(() => {
     if (totalDays > 365 && stock !== "") {
       getResourceData({
-        query: `?start=${startDate}&end=${endDate}&stock=${stock}`,
+        query: `?start=${startDate}&end=${endDate}&symbol=${stock}&interval=${interval}`,
       });
     } else {
       stock !== "" ? setOpen(true) : null;
@@ -66,7 +87,7 @@ export default function DateStockPicker() {
   }, [stock, request]);
 
 
-  const stockMenu = ["NFLX", "NVDA", "DIS", "AAPL", "MSFT"];
+  const intervalMenu = ["1m", "1D", "1W", "1M"];
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -113,6 +134,34 @@ export default function DateStockPicker() {
               id="stock-label"
               sx={{ color: colors.lightPred[400] }}
             >
+              Interval
+            </InputLabel>
+           
+            <Select
+              sx={{ color: colors.lightPred[400] }}
+              id="demo-simple-select"
+              value={interval}
+              label="Interval"
+              onChange={handleChangeInterval}
+            >
+              {intervalMenu.map((interval) => (
+                <MenuItem
+                  key={interval}
+                  value={interval}
+             
+                >
+                  {interval}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
+        <Box sx={{ minWidth: 120 }}>
+          <FormControl fullWidth>
+            <InputLabel
+              id="stock-label"
+              sx={{ color: colors.lightPred[400] }}
+            >
               Stock
             </InputLabel>
             <Select
@@ -126,12 +175,13 @@ export default function DateStockPicker() {
                 <MenuItem
                   key={stock}
                   value={stock}
-                  onClick={() => setRequest(!request)}
+                  // onClick={() => setRequest(!request)}
                 >
                   {stock}
                 </MenuItem>
               ))}
             </Select>
+           
           </FormControl>
         </Box>
       </Stack>
