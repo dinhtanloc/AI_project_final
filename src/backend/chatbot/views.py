@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated,AllowAny
 from .models import ChatHistory
 from .serializers import ChatHistorySerializer
 import requests
@@ -11,7 +11,7 @@ load_dotenv(find_dotenv())
 
 # from model.chatbot_backend import ChatBot
 class ChatbotViewSet(viewsets.ViewSet):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     @action(detail=False, methods=['post'])
     def interact(self, request):
@@ -73,12 +73,10 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.files.storage import FileSystemStorage
 from backend.settings import MEDIA_ROOT
-@csrf_exempt  # Tạm thời bỏ qua CSRF để kiểm tra dễ dàng
+@csrf_exempt 
 def upload_pdf(request):
     if request.method == 'POST' and request.FILES['pdf_file']:
         pdf_file = request.FILES['pdf_file']
-
-        # Lưu file vào thư mục media/ sử dụng FileSystemStorage
         print(f'{MEDIA_ROOT}/documents')
         fs = FileSystemStorage(location=f'{MEDIA_ROOT}/documents')
         filename = fs.save(pdf_file.name, pdf_file)
