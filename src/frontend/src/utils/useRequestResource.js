@@ -1,10 +1,11 @@
 import { useCallback, useContext } from "react";
 import axios from "axios";
 import useData from "@context/dataContext";
-
+// import useAxios from './useAxios'
 // Create an axios client with a base URL
+// const client = useAxios()
 const client = axios.create({
-  baseURL: "http://127.0.0.1:8000/prediction",
+  baseURL: "http://127.0.0.1:8000/prediction/train",
 });
 
 // Custom hook to request resources

@@ -1,4 +1,4 @@
-import "@client/styles/page.css"
+import "@admin/styles/page.css"
 import { useEffect, useState, Fragment } from "react";
 import { useMode } from "@theme";
 

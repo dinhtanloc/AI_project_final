@@ -24,6 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 PRJ_DIR =BASE_DIR.parent
 PUBLIC_DIR =os.path.join(PRJ_DIR,'frontend','public')
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
+WEIGHTS_DIR = os.path.join(PRJ_DIR.parent, 'models','weights')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
