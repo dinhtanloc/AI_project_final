@@ -10,6 +10,10 @@ from langchain_openai import ChatOpenAI
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from chatbot.model.tools.load_tools_config import LoadToolsConfig
+import pymongo
+import os
+from dotenv import find_dotenv, load_dotenv
+load_dotenv(find_dotenv())
 
 TOOLS_CFG = LoadToolsConfig()
 
@@ -27,14 +31,15 @@ class HistoryAgent:
         __init__: Khởi tạo với cấu hình cần thiết.
     """
 
-    def __init__(self, llm: str, llm_temperature: float, session_id: str) -> None:
+    def __init__(self, llm: str, llm_temperature: float, thread_id: str) -> None:
         """
         Khởi tạo HistoryAgent với các cấu hình cần thiết.
 
         Tham số:
             llm (str): Tên của mô hình ngôn ngữ sẽ được sử dụng để tạo ra phản hồi.
             llm_temperature (float): Cài đặt nhiệt độ cho mô hình ngôn ngữ, kiểm soát độ ngẫu nhiên của phản hồi.
-            session_id (str): ID phiên để quản lý lịch sử cuộc hội thoại.
+            thread_id (str): Mã phiên để theo dõi và quản lý lịch sử hội thoại của người dùng.
+          
         """
         self.name='chat_with_history'
         self.history_agent_llm = ChatOpenAI(
@@ -49,10 +54,11 @@ class HistoryAgent:
         answer_prompt = PromptTemplate.from_template(self.system_role)
         self.chain = RunnableWithMessageHistory(
             answer_prompt | self.history_agent_llm | StrOutputParser(),
-            lambda session_id: self.chat_history
+            lambda thread_id: self.chat_history
         )
-        self.session_id = session_id 
+        self.thread_id = thread_id
 
+      
     def add_user_message(self, message: str):
         """Thêm tin nhắn của người dùng vào lịch sử cuộc hội thoại."""
         self.chat_history.add_user_message(message)
@@ -65,17 +71,21 @@ class HistoryAgent:
         """Gọi chuỗi để tạo phản hồi cho câu hỏi của người dùng."""
         response = self.chain.invoke({"question": question, "chat_history": self.chat_history.messages})
         return response
+    
+  
 
 
 @tool('chat_with_history')
-def chat_with_history(question: str, session_id: str) -> str:
-    """Trả lời câu hỏi của người dùng với lịch sử cuộc hội thoại."""
+def chat_with_history(query: str,user_id:str, thread_id: str) -> str:
+    """Trả lời câu hỏi của người dùng với lịch sử cuộc hội thoại, tìm kiếm nhanh."""
     agent = HistoryAgent(
         llm=TOOLS_CFG.history_agent_llm,
         llm_temperature=TOOLS_CFG.history_agent_llm_temperature,
-        session_id=session_id 
+        thread_id=thread_id,
     )
-    agent.add_user_message(question) 
-    response = agent.invoke(question)
+    agent.add_user_message(query) 
+    response = agent.invoke(query)
     agent.add_ai_message(response)  
     return response
+
+

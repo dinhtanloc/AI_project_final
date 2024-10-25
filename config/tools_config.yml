@@ -14,6 +14,17 @@ document_rag_pdf:
   chunk_overlap: 100
 
 
+chatbot_history:
+  llm: gpt-4o-mini
+  collection_name: rag_history
+  db_name: docpdf
+  # embedding_model: text-embedding-3-small
+  k: 2
+  llm_temperature: 0.0
+  chunk_size: 500
+  chunk_overlap: 100
+
+
 sqlagent_configs:
   sqldb_dir: ""
   llm: "gpt-3.5-turbo"

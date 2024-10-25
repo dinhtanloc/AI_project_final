@@ -4,6 +4,9 @@ from sentence_transformers import SentenceTransformer
 from langchain_core.tools import tool
 from chatbot.model.tools.load_tools_config import LoadToolsConfig
 from chatbot.utils.prepare_vectodb import PrepareVectorDB
+import os
+from dotenv import find_dotenv, load_dotenv
+load_dotenv(find_dotenv())
 # Load cấu hình từ file config
 TOOLS_CFG = LoadToolsConfig()
 
@@ -22,7 +25,7 @@ class UserDocumentRAGTool:
     __init__: Khởi tạo công cụ bằng cách thiết lập mô hình embedding, cơ sở dữ liệu vector, và các tham số truy xuất.
     """
 
-    def __init__(self, vectordb_dir: str, k: int, collection_name: str) -> None:
+    def __init__(self, vectordb_dir: str, db_name:str, k: int, collection_name: str) -> None:
         """
         Khởi tạo công cụ UserDocumentRAGTool với cấu hình cần thiết.
 
@@ -35,6 +38,8 @@ class UserDocumentRAGTool:
         self.name = "lookup_user_document"
         self.embedding_model = SentenceTransformer("keepitreal/vietnamese-sbert")
         self.vectordb_dir = vectordb_dir
+        self.db_name=db_name
+        self.mongodb_uri=os.getenv('MONGODB_URL')
         self.k = k
         self.vectordb = PrepareVectorDB(
             doc_dir=TOOLS_CFG.user_doc_rag_unstructured_docs,

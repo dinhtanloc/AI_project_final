@@ -9,6 +9,7 @@ from chatbot.model.tools.tool_sqlagent import query_stock_sqldb
 from chatbot.model.tools.load_tools_config import LoadToolsConfig
 from chatbot.model.tools.tool_ocr_img import ocr_and_lookup
 from chatbot.model.tools.tool_history import chat_with_history
+from chatbot.model.tools.tool_history_mongodb import chat_with_history_with_db_using_mongodb
 from chatbot.model.agent_graph.agent_backend import State, BasicToolNode, route_tools, plot_agent_schema
 
 TOOLS_CFG = LoadToolsConfig()
@@ -55,7 +56,9 @@ def build_graph():
     tools = [search_tool,
             lookup_user_document,
             query_stock_logic,
+            query_stock_sqldb,
             chat_with_history,
+            chat_with_history_with_db_using_mongodb,
             # load_tavily_search_tool,
             ocr_and_lookup
              ]
@@ -72,7 +75,9 @@ def build_graph():
             search_tool,
             lookup_user_document,
             query_stock_logic,
+            query_stock_sqldb,
             chat_with_history,
+            chat_with_history_with_db_using_mongodb,
             # load_tavily_search_tool,
             ocr_and_lookup
         ])

@@ -35,6 +35,16 @@ class LoadToolsConfig:
         self.policy_rag_k = app_config["document_rag_pdf"]["k"]
         self.policy_rag_collection_name = app_config["document_rag_pdf"]["collection_name"]
 
+        # History RAG configs
+        self.history_rag_llm_temperature = float(
+            app_config["chatbot_history"]["llm_temperature"])
+        self.history_rag_embedding_model = app_config["chatbot_history"]["embedding_model"]
+        # self.history_rag_vectordb_directory = str(here(
+        #     app_config["chatbot_history"]["vectordb"]))  # needs to be strin for summation in chromadb backend: self._settings.require("persist_directory") + "/chroma.sqlite3"
+        self.history_rag_k = app_config["chatbot_history"]["k"]
+        self.history_rag_collection_name = app_config["chatbot_history"]["collection_name"]
+        self.history_rag_db_name = app_config["chatbot_history"]["db_name"]
+
 
         #SQL Agent configs
         self.sqldb_directory = str(here(
