@@ -6,6 +6,8 @@ from PIL import Image
 import io
 from chatbot.utils.prepare_vectodb import PrepareVectorDB
 import os
+from sentence_transformers import SentenceTransformer
+
 
 TOOLS_CFG = LoadToolsConfig()
 
@@ -18,7 +20,7 @@ class OCRTool:
     embedding_model (str): Tên của mô hình embedding OpenAI để tạo ra các biểu diễn vector của văn bản đã trích xuất.
     """
 
-    def __init__(self, embedding_model: str, k:int) -> None:
+    def __init__(self, k:int) -> None:
         """
         Khởi tạo công cụ OCRTool với cấu hình cần thiết.
 
@@ -26,8 +28,8 @@ class OCRTool:
         embedding_model (str): Tên của mô hình embedding OpenAI được sử dụng để chuyển đổi các văn bản đã trích xuất thành biểu diễn vector.
         """
         self.name = "ocr_and_lookup"
-        self.embedding_model = embedding_model
-        self.embedding_model_instance = OpenAIEmbeddings(model=self.embedding_model)
+        self.embedding_model = SentenceTransformer("keepitreal/vietnamese-sbert")
+        # self.embedding_model_instance = OpenAIEmbeddings(model=self.embedding_model)
         self.k=k
         self.image_dir = 'document/image'
         self.vectordb = PrepareVectorDB(
@@ -62,26 +64,31 @@ class OCRTool:
         list: Danh sách các văn bản đã trích xuất từ tất cả hình ảnh.
         """
         extracted_texts = []
-        for filename in os.listdir(self.image_dir):
-            if filename.endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp')):
-                image_path = os.path.join(self.image_dir, filename)
-                with open(image_path, 'rb') as image_file:
-                    image_data = image_file.read()
-                    text = self.perform_ocr(image_data)
-                    extracted_texts.append(text)
+        try:
+            for filename in os.listdir(self.image_dir):
+                if filename.endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp')):
+                    image_path = os.path.join(self.image_dir, filename)
+                    with open(image_path, 'rb') as image_file:
+                        image_data = image_file.read()
+                        text = self.perform_ocr(image_data)
+                        extracted_texts.append(text)
+
+                    os.remove(image_path)
+        except Exception as e:
+            raise e
         return extracted_texts
 
-    def embed_text(self, text: str):
-        """
-        Nhúng văn bản đã trích xuất thành vector.
+    # def embed_text(self, text: str):
+    #     """
+    #     Nhúng văn bản đã trích xuất thành vector.
 
-        Tham số:
-        text (str): Văn bản đã trích xuất.
+    #     Tham số:
+    #     text (str): Văn bản đã trích xuất.
 
-        Trả về:
-        list: Vector của văn bản.
-        """
-        return self.embedding_model_instance.embed_documents([text])[0]
+    #     Trả về:
+    #     list: Vector của văn bản.
+    #     """
+    #     return self.embedding_model_instance.embed_documents([text])[0]
     
     def similarity_search(self, query: str, k: int = None):
         """
@@ -137,7 +144,7 @@ class OCRTool:
 @tool('ocr_and_lookup')
 def ocr_and_lookup(query: str) -> str:
     """Thực hiện OCR trên hình ảnh và tìm kiếm tài liệu liên quan dựa trên văn bản đã trích xuất."""
-    ocr_tool = OCRTool(embedding_model="text-embedding-ada-002", k=TOOLS_CFG.user_doc_rag_k)
+    ocr_tool = OCRTool(k=TOOLS_CFG.user_doc_rag_k)
     extracted_texts = ocr_tool.extract_images()
     combined_text = ' '.join(extracted_texts)
     prompt = f"{query} {combined_text}"

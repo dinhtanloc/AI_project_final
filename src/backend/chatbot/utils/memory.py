@@ -91,7 +91,12 @@ class Memory:
             None
         """
         print(f"Saving chat interaction: User: {user}, Thread ID: {thread_id}, Query: {user_query}, Response: {response}")
-        user_instance = User.objects.get(id=user)
+        # user_instance = User.objects.get(id=user)
+        try:
+            user_instance = User.objects.get(id=user)
+        except User.DoesNotExist:
+            print(f"User with id {user} does not exist.")
+            return  # hoặc xử lý theo cách khác
         chat_history = ChatHistory(
             user=user_instance,
             thread_id=thread_id,

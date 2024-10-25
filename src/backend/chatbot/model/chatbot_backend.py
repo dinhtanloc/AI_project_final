@@ -1,4 +1,5 @@
 from typing import List, Tuple
+import uuid
 from chatbot.utils.load_config import LoadProjectConfig
 from chatbot.model.tools.load_tools_config import LoadToolsConfig
 from chatbot.model.agent_graph.build_full_graph import build_graph
@@ -16,7 +17,7 @@ PROJECT_CFG = LoadProjectConfig()
 TOOLS_CFG = LoadToolsConfig()
 
 graph = build_graph()
-config = {"configurable": {"thread_id": TOOLS_CFG.thread_id}}
+# config = {"configurable": {"thread_id": TOOLS_CFG.thread_id}}
 
 create_directory("memory")
 
@@ -34,8 +35,12 @@ class ChatBot:
             Xử lý tin nhắn người dùng thông qua đồ thị tác nhân, sinh ra phản hồi,
             thêm phản hồi vào lịch sử hội thoại và lưu lịch sử hội thoại vào một tệp bộ nhớ.
     """
-    @staticmethod
-    def respond(chatbot: List,image_byte:str, message: str, user_id:int) -> Tuple:
+    def __init__(self, user_id, thread_id=None):
+        self.thread_id = thread_id or str(uuid.uuid4())
+        self.user_id = user_id
+
+    # @staticmethod
+    def respond(self, chatbot: List, message: str) -> Tuple:
         """
         Xử lý một tin nhắn từ người dùng bằng cách sử dụng đồ thị tác nhân, sinh ra phản hồi và thêm phản hồi vào lịch sử hội thoại.
         Lịch sử hội thoại cũng được lưu vào một tệp bộ nhớ để tham khảo trong tương lai.
@@ -52,7 +57,9 @@ class ChatBot:
                    và lịch sử hội thoại đã được cập nhật.
         """
         events = graph.stream(
-            {"messages": [("user", message)]}, config, stream_mode="values"
+            {"messages": [("user", message)]}, 
+            {"configurable": {"thread_id": self.thread_id}}, 
+            stream_mode="values"
         )
         for event in events:
             event["messages"][-1].pretty_print()
@@ -70,5 +77,5 @@ class ChatBot:
         # Memory.write_chat_history_to_cache(
         #     gradio_chatbot=chatbot, thread_id=TOOLS_CFG.thread_id, user=userid
         # )
-        Memory.save_chat_interaction(user=user_id, thread_id=TOOLS_CFG.thread_id, user_query=message, response=response_content)
+        Memory.save_chat_interaction(user=self.user_id, thread_id=self.thread_id, user_query=message, response=response_content)
         return "", chatbot
