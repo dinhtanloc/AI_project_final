@@ -4,6 +4,8 @@ from chatbot.model.tools.load_tools_config import LoadToolsConfig
 import pytesseract
 from PIL import Image
 import io
+from chatbot.utils.prepare_vectodb import PrepareVectorDB
+import os
 
 TOOLS_CFG = LoadToolsConfig()
 
@@ -27,6 +29,16 @@ class OCRTool:
         self.embedding_model = embedding_model
         self.embedding_model_instance = OpenAIEmbeddings(model=self.embedding_model)
         self.k=k
+        self.image_dir = 'document/image'
+        self.vectordb = PrepareVectorDB(
+            doc_dir=TOOLS_CFG.user_doc_rag_unstructured_docs,
+            chunk_size=TOOLS_CFG.user_doc_rag_chunk_size,
+            chunk_overlap=TOOLS_CFG.user_doc_rag_chunk_overlap,
+            embedding_model=self.embedding_model,
+            mongodb_uri=self.mongodb_uri,
+            db_name=self.db_name,
+            collection_name=self.collection_name
+        )
 
     def perform_ocr(self, image_data: bytes) -> str:
         """
@@ -41,6 +53,23 @@ class OCRTool:
         image = Image.open(io.BytesIO(image_data))
         extracted_text = pytesseract.image_to_string(image)
         return extracted_text
+    
+    def extract_images(self):
+        """
+        Kiểm tra thư mục hình ảnh và tải lên các hình ảnh có sẵn để thực hiện OCR.
+
+        Trả về:
+        list: Danh sách các văn bản đã trích xuất từ tất cả hình ảnh.
+        """
+        extracted_texts = []
+        for filename in os.listdir(self.image_dir):
+            if filename.endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp')):
+                image_path = os.path.join(self.image_dir, filename)
+                with open(image_path, 'rb') as image_file:
+                    image_data = image_file.read()
+                    text = self.perform_ocr(image_data)
+                    extracted_texts.append(text)
+        return extracted_texts
 
     def embed_text(self, text: str):
         """
@@ -106,11 +135,14 @@ class OCRTool:
 
 
 @tool('ocr_and_lookup')
-def ocr_and_lookup(image: bytes) -> str:
+def ocr_and_lookup(query: str) -> str:
     """Thực hiện OCR trên hình ảnh và tìm kiếm tài liệu liên quan dựa trên văn bản đã trích xuất."""
     ocr_tool = OCRTool(embedding_model="text-embedding-ada-002", k=TOOLS_CFG.user_doc_rag_k)
-    extracted_text = ocr_tool.perform_ocr(image)
-    vector = ocr_tool.embed_text(extracted_text)
-    results = ocr_tool.similarity_search(vector, k=ocr_tool.k)
+    extracted_texts = ocr_tool.extract_images()
+    combined_text = ' '.join(extracted_texts)
+    prompt = f"{query} {combined_text}"
+    # vector = ocr_tool.embed_text(extracted_text)
+    results = ocr_tool.similarity_search(prompt, k=ocr_tool.k)
 
     return "\n\n".join(results)
+    # return "\n\n".join([doc.page_content for doc in results])

@@ -43,7 +43,7 @@ class UserDocumentRAGTool:
             embedding_model=self.embedding_model,
             mongodb_uri=self.mongodb_uri,
             db_name=self.db_name,
-            collection_name=self.collection_name
+            collection_name=collection_name
         )
         print("Number of vectors in vectordb: ", self.vectordb.collection.count(), "\n\n")
 
@@ -120,5 +120,6 @@ def lookup_user_document(query: str) -> str:
         k=TOOLS_CFG.user_doc_rag_k,
         collection_name=TOOLS_CFG.user_doc_rag_collection_name
     )
-    docs = rag_tool.similarity_search(query, k=rag_tool.k)
-    return "\n\n".join([doc.page_content for doc in docs])
+    results = rag_tool.similarity_search(query, k=rag_tool.k)
+    # return "\n\n".join([doc.page_content for doc in docs])
+    return "\n\n".join(results)

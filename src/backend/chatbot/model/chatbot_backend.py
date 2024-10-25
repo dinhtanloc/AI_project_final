@@ -7,6 +7,8 @@ from chatbot.utils.memory import Memory
 # from chatbot.utils.langsmith_metrics import log_event
 from chatbot.utils.langsmith_metrics import *
 from datetime import datetime
+import pytesseract
+from PIL import Image
 URL = "https://github.com/Farzad-R/LLM-Zero-to-Hundred/tree/master/RAG-GPT"
 hyperlink = f"[RAG-GPT user guideline]({URL})"
 
@@ -33,7 +35,7 @@ class ChatBot:
             thêm phản hồi vào lịch sử hội thoại và lưu lịch sử hội thoại vào một tệp bộ nhớ.
     """
     @staticmethod
-    def respond(chatbot: List, message: str, user_id:int) -> Tuple:
+    def respond(chatbot: List,image_byte:str, message: str, user_id:int) -> Tuple:
         """
         Xử lý một tin nhắn từ người dùng bằng cách sử dụng đồ thị tác nhân, sinh ra phản hồi và thêm phản hồi vào lịch sử hội thoại.
         Lịch sử hội thoại cũng được lưu vào một tệp bộ nhớ để tham khảo trong tương lai.

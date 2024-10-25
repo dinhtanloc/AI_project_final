@@ -73,6 +73,32 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.files.storage import FileSystemStorage
 from backend.settings import MEDIA_ROOT
+
+
+@csrf_exempt
+def upload_file(request):
+    if request.method == 'POST' and request.FILES:
+        uploaded_file = request.FILES['file']
+        file_type = uploaded_file.content_type
+
+        if file_type == 'application/pdf':
+            directory = 'pdf'
+        elif file_type.startswith('image/'):
+            directory = 'images'
+        else:
+            return JsonResponse({'error': 'Unsupported file type'}, status=400)
+
+        save_path = os.path.join(MEDIA_ROOT,'documents', directory)
+        os.makedirs(save_path, exist_ok=True)
+
+        fs = FileSystemStorage(location=save_path)
+        filename = fs.save(uploaded_file.name, uploaded_file)
+        file_url = fs.url(filename)
+
+        return JsonResponse({'file_url': file_url}, status=200)
+
+    return JsonResponse({'error': 'No file uploaded'}, status=400)
+
 @csrf_exempt 
 def upload_pdf(request):
     if request.method == 'POST' and request.FILES['pdf_file']:
