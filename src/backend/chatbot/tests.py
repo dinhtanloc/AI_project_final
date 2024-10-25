@@ -43,13 +43,13 @@ class TestChatBot(TestCase):
             "Hãy tìm kiếm trên mạng, Vnstock là gì"
         ]
         self.user_id = 1
-        self.bot = ChatBot(thread_id=TOOLS_CFG.thread_id)
+        self.bot = ChatBot( thread_id=self.thread_id, user_id=self.user_id)
 
     def test_respond(self):
         # expected_response = ""  
         expected_responses = ["", "", "", "", ""]
         for i, message in enumerate(self.messages):
-            response, updated_chatbot = self.bot.respond(self.chatbot, message, self.user_id)
+            response, updated_chatbot = self.bot.respond(self.chatbot, message)
 
             self.assertEqual(response, expected_responses[i], f"Unexpected response for message '{message}'")
             self.assertIn(message, [m[0] for m in updated_chatbot])
@@ -60,7 +60,7 @@ class TestChatBot(TestCase):
 
     def test_chat_history_saved(self):
         for message in self.messages:
-            _, updated_chatbot = self.bot.respond(self.chatbot, message, self.user_id)
+            _, updated_chatbot = self.bot.respond(self.chatbot, message)
 
         chat_history = Memory.get_chat_history(self.user_id, self.thread_id)
         
@@ -88,9 +88,10 @@ class ChatbotViewSetTests(APITestCase):
             password='testpassword'
         )
         self.client.login(username='testuser', password='testpassword')
+        self.client.force_authenticate(user=self.user)
 
     def test_interact_with_valid_message(self):
-        url = reverse('chatbot-interact')  # Thay đổi tên URL nếu cần
+        url = reverse('chatbot-interact') 
         response = self.client.post(url, {'message': 'Hello!'})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn('response', response.data)
@@ -103,13 +104,13 @@ class ChatbotViewSetTests(APITestCase):
         self.assertEqual(response.data, {'error': 'No message provided'})
 
     def test_history(self):
-        url = reverse('chatbot-history')  # Thay đổi tên URL nếu cần
+        url = reverse('chatbot-history') 
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIsInstance(response.data, list)  # Kiểm tra xem trả về là danh sách
 
     # def test_performance(self):
-    #     url = reverse('chatbot-performance')  # Thay đổi tên URL nếu cần
+    #     url = reverse('chatbot-performance') 
     #     response = self.client.get(url)
     #     self.assertIn(response.status_code, [status.HTTP_200_OK, status.HTTP_500_INTERNAL_SERVER_ERROR])  # Kiểm tra cả 2 mã trả về
 
@@ -119,4 +120,3 @@ if __name__ == "__main__":
     from django.core.management import execute_from_command_line
     execute_from_command_line(sys.argv)
 
-# python -m unittest test_chatbot.py

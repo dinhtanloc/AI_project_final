@@ -8,23 +8,22 @@ from langchain_core.runnables import RunnablePassthrough
 from operator import itemgetter
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import AIMessage, ToolMessage, HumanMessage
-import datetime
+from datetime import datetime
 from langchain_core.prompts import ChatPromptTemplate
 from chatbot.model.tools.finance_toollists import tool_mapping, tools
 from chatbot.model.tools.load_tools_config import LoadToolsConfig
-
+import json
 TOOLS_CFG = LoadToolsConfig()
 
 class FinanceAgent:
     """SQLAgent cho phép mô hình học hỏi từ ví dụ về các truy vấn SQL trước khi trả lời."""
 
-    def __init__(self, llm: str, ques: str, llm_temperature: float, tools ) -> None:
+    def __init__(self, llm: str, llm_temperature: float, tools ) -> None:
         """
         Khởi tạo SQLAgent với các cấu hình cần thiết.
 
         Tham số:
             llm (str): Tên của mô hình ngôn ngữ sẽ được sử dụng để tạo ra và diễn giải các truy vấn SQL.
-            ques (str): Câu hỏi được đưa ra để tìm kiếm thông tin.
             llm_temperature (float): Cài đặt nhiệt độ cho mô hình ngôn ngữ, kiểm soát độ ngẫu nhiên của phản hồi.
         """
         self.name='query_stock_logic'
@@ -58,7 +57,7 @@ class FinanceAgent:
         )
 
 
-        self.chain = {"query": RunnablePassthrough()} | few_shot_prompt | self.sql_agent_llm | StrOutputParser()
+        self.chain = {"query": RunnablePassthrough()} | few_shot_prompt | self.sql_agent_llm
 
 
 
@@ -68,9 +67,8 @@ def query_stock_logic(ques: str) -> str:
     """Truy vấn dữ liệu thị trường chứng khoán từ cơ sở dữ liệu SQL."""
     messages = [HumanMessage(ques)]
     agent = FinanceAgent(
-        llm=TOOLS_CFG.sqlagent_llm,
-        sqldb_directory=TOOLS_CFG.sqldb_directory,
-        llm_temerature=TOOLS_CFG.sqlagent_llm_temperature,
+        llm=TOOLS_CFG.funcagent_llm,
+        llm_temperature=TOOLS_CFG.funcagent_llm_temperature,
         tools=tools
     )
     ai_msg = agent.chain.invoke(ques)
@@ -80,7 +78,9 @@ def query_stock_logic(ques: str) -> str:
         selected_tool = tool_mapping[tool_call["name"].lower()]
         print(tool_call["args"])
         tool_output = selected_tool.invoke(dict(tool_call["args"]))
-        print(type(tool_output), tool_output)
+        # if isinstance(tool_output, (dict, list)):
+        #     tool_output = json.dumps(tool_output)
         messages.append(ToolMessage(tool_output, tool_call_id=tool_call["id"]))
-    response =agent.chain.invoke(messages).content
+    res =agent.chain.invoke(messages)
+    response=str(res.content)
     return response

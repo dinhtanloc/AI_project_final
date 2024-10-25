@@ -34,13 +34,12 @@ class SQLAgent:
 
     """
 
-    def __init__(self, llm: str, sqldb_directory: str, llm_temerature: float) -> None:
+    def __init__(self, llm: str, llm_temerature: float) -> None:
         """
         Khởi tạo SQLAgent với các cấu hình cần thiết.
 
         Tham số:
             llm (str): Tên của mô hình ngôn ngữ sẽ được sử dụng để tạo ra và diễn giải các truy vấn SQL.
-            sqldb_directory (str): Đường dẫn đến thư mục nơi cơ sở dữ liệu SQLite được lưu trữ.
             llm_temperature (float): Cài đặt nhiệt độ cho mô hình ngôn ngữ, kiểm soát độ ngẫu nhiên của phản hồi.
         """
         self.name='query_stock_sqldb'
@@ -76,7 +75,6 @@ def query_stock_sqldb(query: str) -> str:
     """Truy vấn dữ liệu thị trường chứng khoán Việt Nam từ cơ sở dữ liệu SQL Vnstock và truy cập toàn bộ thông tin công ty, sự kiện. Đầu vào nên là một truy vấn tìm kiếm."""
     agent = SQLAgent(
         llm=TOOLS_CFG.sqlagent_llm,
-        sqldb_directory=TOOLS_CFG.sqldb_directory,
         llm_temerature=TOOLS_CFG.sqlagent_llm_temperature
     )
     response = agent.chain.invoke({"question": query})

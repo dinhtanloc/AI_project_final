@@ -60,7 +60,8 @@ def calculate_portfolio_return(returns: List[float], weights: List[float]) -> fl
         returns: Danh sách lợi nhuận lịch sử của các tài sản trong danh mục đầu tư.
         weights: Danh sách tỷ trọng đại diện cho phần trăm của từng tài sản trong danh mục.
     """
-    return np.dot(returns.mean(), weights) * 252
+    returns_array = np.array(returns)
+    return np.dot(returns_array.mean(), weights) * 252
 
 @tool
 def calculate_portfolio_volatility(returns: List[float], weights: List[float]) -> float:
@@ -230,11 +231,11 @@ def get_company_information(symbol):
         officers = company.officers()
         
         result = {
-            "overview": overview,
-            "profile": profile,
-            "shareholders": shareholders,
-            "subsidiaries": subsidiaries,
-            "officers": officers
+            "overview": overview.to_dict() if isinstance(overview, pd.DataFrame) else overview,
+            "profile": profile.to_dict() if isinstance(profile, pd.DataFrame) else profile,
+            "shareholders": shareholders.to_dict() if isinstance(shareholders, pd.DataFrame) else shareholders,
+            "subsidiaries": subsidiaries.to_dict() if isinstance(subsidiaries, pd.DataFrame) else subsidiaries,
+            "officers": officers.to_dict() if isinstance(officers, pd.DataFrame) else officers
         }
     except Exception as e:
         result = {"error": str(e)}

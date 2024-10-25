@@ -50,8 +50,6 @@ class ChatBot:
                             Mỗi mục là một tuple gồm tin nhắn của người dùng và phản hồi của bot.
             message (str): Tin nhắn của người dùng để xử lý.
 
-            user_id (int): Mã định danh của người dùng tham gia tương tác.
-
         Trả về:
             Tuple: Trả về một chuỗi rỗng (đại diện cho placeholder cho đầu vào mới của người dùng)
                    và lịch sử hội thoại đã được cập nhật.

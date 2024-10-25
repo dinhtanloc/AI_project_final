@@ -13,11 +13,12 @@ load_dotenv(find_dotenv())
 
 # from model.chatbot_backend import ChatBot
 class ChatbotViewSet(viewsets.ViewSet):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
+    chatbots = {}
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.chatbot = ChatBot()  
+    # def __init__(self, user_id=None, **kwargs):
+    #     super().__init__(**kwargs)
+    #     self.user_id = user_id
 
     @action(detail=False, methods=['post'])
     def interact(self, request):
@@ -25,17 +26,21 @@ class ChatbotViewSet(viewsets.ViewSet):
         Handle the chatbot interaction via POST request, process user input, and return a response.
         """
         user_message = request.data.get('message', '')
+        user_id = request.user.id
 
         if not user_message:
             return Response({'error': 'No message provided'}, status=400)
 
-        thread_id = request.data.get('thread_id', str(uuid4()))
-
+        if user_id not in self.chatbots:
+            thread_id = request.data.get('thread_id', str(uuid4()))
+            # thread_id = str(uuid4())  
+            self.chatbots[user_id] = ChatBot(user_id=user_id, thread_id=thread_id)
+        chatbot = self.chatbots[user_id]
         # _, updated_chat = ChatBot.respond(chatbot, user_message)
         # _, updated_chat = ''
         chatbot_history = []
         try:
-            _, updated_chat = self.chatbot.respond(chatbot_history, user_message, request.user.id, thread_id)
+            _, updated_chat = chatbot.respond(chatbot_history, user_message, request.user.id, thread_id)
             bot_response = updated_chat[-1][1] if updated_chat else 'No response'
         except Exception as e:
             return Response({'error': f'Error processing request: {str(e)}'}, status=500)

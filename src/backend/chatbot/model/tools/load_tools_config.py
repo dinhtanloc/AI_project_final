@@ -38,7 +38,7 @@ class LoadToolsConfig:
         # History RAG configs
         self.history_rag_llm_temperature = float(
             app_config["chatbot_history"]["llm_temperature"])
-        self.history_rag_embedding_model = app_config["chatbot_history"]["embedding_model"]
+        # self.history_rag_embedding_model = app_config["chatbot_history"]["embedding_model"]
         # self.history_rag_vectordb_directory = str(here(
         #     app_config["chatbot_history"]["vectordb"]))  # needs to be strin for summation in chromadb backend: self._settings.require("persist_directory") + "/chroma.sqlite3"
         self.history_rag_k = app_config["chatbot_history"]["k"]
@@ -53,7 +53,13 @@ class LoadToolsConfig:
         self.sqlagent_llm_temperature = float(
             app_config["sqlagent_configs"]["llm_temperature"])
 
+        #SQL Agent configs
+        self.funcagent_llm = app_config["funcagent_configs"]["llm"]
+        self.funcagent_llm_temperature = float(
+            app_config["funcagent_configs"]["llm_temperature"])
 
         # Graph configs
         self.thread_id = str(
             app_config["graph_configs"]["thread_id"])
+        
+LoadToolsConfig()

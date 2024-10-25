@@ -133,13 +133,12 @@ def predict_future_prices(symbols, n):
     """
     data=get_api_portfolio(symbols)
 
-    try:
+    if isinstance(data, str):
         df = pd.DataFrame(eval(data))
-    except ValueError as e:
-        print(f"Error creating DataFrame: {e}")
-        return
+    else:
+        df = pd.DataFrame(data)
     
-    if df.empty or not {'idx_time', 'AAA', 'A32'}.issubset(df.columns):
+    if df.empty:
         print("Data không hợp lệ. Đảm bảo dữ liệu chứa các cột 'idx_time', 'AAA', và 'A32'.")
         return
     
