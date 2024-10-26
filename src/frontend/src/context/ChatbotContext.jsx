@@ -150,8 +150,10 @@ const ChatbotContextProvider = (props) => {
 
     const getChatbotAnswer = async (prompt) => {
         try {
-            const response = await axiosInstance.post("/chatbot/answer", { prompt });
-            return response.data.answer; // Đảm bảo backend trả về dưới dạng `{ answer: "..." }`
+            const response = await axiosInstance.post("/chatbot/chatbot/interact/", {'message': prompt });
+            console.log(prompt);
+            console.log(response)
+            return response.data.response; // Đảm bảo backend trả về dưới dạng `{ answer: "..." }`
         } catch (error) {
             console.error("Lỗi khi lấy câu trả lời từ backend:", error);
             return "Xin lỗi, đã xảy ra lỗi. Vui lòng thử lại.";

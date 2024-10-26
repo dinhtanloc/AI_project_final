@@ -27,7 +27,7 @@ class ChatbotViewSet(viewsets.ViewSet):
         """
         user_message = request.data.get('message', '')
         user_id = request.user.id
-
+        print(user_message,user_id)
         if not user_message:
             return Response({'error': 'No message provided'}, status=400)
 
@@ -35,14 +35,17 @@ class ChatbotViewSet(viewsets.ViewSet):
             thread_id = request.data.get('thread_id', str(uuid4()))
             # thread_id = str(uuid4())  
             self.chatbots[user_id] = ChatBot(user_id=user_id, thread_id=thread_id)
+        print('ok')
         chatbot = self.chatbots[user_id]
         # _, updated_chat = ChatBot.respond(chatbot, user_message)
         # _, updated_chat = ''
         chatbot_history = []
         try:
-            _, updated_chat = chatbot.respond(chatbot_history, user_message, request.user.id, thread_id)
+            print(chatbot_history, user_message, request.user.id, thread_id)
+            _, updated_chat = chatbot.respond(chatbot_history, user_message)
             bot_response = updated_chat[-1][1] if updated_chat else 'No response'
         except Exception as e:
+            print(e)
             return Response({'error': f'Error processing request: {str(e)}'}, status=500)
 
 

@@ -15,26 +15,26 @@ const Chatbot = () => {
     const [fileUrl, setFileUrl] = useState('');
     const chatbot = useAxios();
 
-    useEffect(() => {
-        const fetchAnswer = async () => {
-            try {
-                const res = await chatbot.post("/stock/stocktracking/tracking_stockinformation/", {
-                    symbol: stockSymbol, 
-                  });
-                console.log(res.data);
-                setMessage(res.data)
+    // useEffect(() => {
+    //     const fetchAnswer = async () => {
+    //         try {
+    //             const res = await chatbot.post("/stock/stocktracking/tracking_stockinformation/", {
+    //                 symbol: stockSymbol, 
+    //               });
+    //             console.log(res.data);
+    //             setMessage(res.data)
 
-            } catch (error) {
-                console.error('Có lỗi xảy ra khi truy cập dữ liệu:', error);
+    //         } catch (error) {
+    //             console.error('Có lỗi xảy ra khi truy cập dữ liệu:', error);
                 
-            }
+    //         }
             
-          };
+    //       };
 
-          fetchAnswer();
+    //       fetchAnswer();
       
         
-    }, []);
+    // }, []);
 
 
 
