@@ -77,7 +77,7 @@ export default function DateStockPicker() {
     (1000 * 3600 * 24);
 
   useEffect(() => {
-    if (totalDays > 365 && stock !== "") {
+    if (totalDays > 10 && stock !== "") {
       getResourceData({
         query: `?start=${startDate}&end=${endDate}&symbol=${stock}&interval=${interval}`,
       });

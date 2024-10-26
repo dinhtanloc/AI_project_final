@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from 'react';
+import { useContext, useRef, useState, useEffect } from 'react';
 import '@client/styles/chatbot.css';
 import { useTheme } from "@mui/material";
 import { assets } from '@assets/chatbot/assets';
@@ -13,7 +13,31 @@ const Chatbot = () => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [message, setMessage] = useState('');
     const [fileUrl, setFileUrl] = useState('');
-    const pdf = useAxios();
+    const chatbot = useAxios();
+
+    useEffect(() => {
+        const fetchAnswer = async () => {
+            try {
+                const res = await chatbot.post("/stock/stocktracking/tracking_stockinformation/", {
+                    symbol: stockSymbol, 
+                  });
+                console.log(res.data);
+                setMessage(res.data)
+
+            } catch (error) {
+                console.error('Có lỗi xảy ra khi truy cập dữ liệu:', error);
+                
+            }
+            
+          };
+
+          fetchAnswer();
+      
+        
+    }, []);
+
+
+
 
     const onFileChange = (e) => {
         setSelectedFile(e.target.files[0]);
@@ -26,15 +50,15 @@ const Chatbot = () => {
             console.log('Uploading file...');
 
             try {
-                const res = await pdf.post('/chatbot/upload/pdf/', formData);
-                setMessage('File uploaded successfully!');
+                const res = await chatbot.post('/chatbot/upload/pdf/', formData);
+                // setMessage('File uploaded successfully!');
                 setFileUrl(res.data.file_url);
             } catch (error) {
-                setMessage('Failed to upload file');
+                // setMessage('Failed to upload file');
                 console.error(error);
             }
         } else {
-            setMessage('Please select a file first.');
+            // setMessage('Please select a file first.');
         }
     };
 
