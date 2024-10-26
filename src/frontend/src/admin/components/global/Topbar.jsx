@@ -13,6 +13,9 @@ const Topbar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
+  const handleRedirect = () => {
+    window.location.href = 'http://localhost:8000/admin';
+  };
 
   return (
     <Box display="flex" justifyContent="space-between" p={2}>
@@ -44,7 +47,7 @@ const Topbar = () => {
           <SettingsOutlinedIcon />
         </IconButton>
         <IconButton>
-          <PersonOutlinedIcon />
+          <PersonOutlinedIcon onClick={handleRedirect} />
         </IconButton>
       </Box>
     </Box>

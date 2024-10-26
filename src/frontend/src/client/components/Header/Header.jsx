@@ -161,7 +161,7 @@ const Header = ({ onSearch }) => {
                     {/* <span>Welcome, {currentUser.name}</span> */}
                     {/* <span>{nameuser}</span>  */}
                     
-                    <Link to="/dashboard" className=" d-flex align-items-center gap-1">
+                    <Link to="/admin" className=" d-flex align-items-center gap-1">
                       <img src={img} style ={{width:'20px',height:'20px', marginBottom:'2px'}} alt="Default Image" ></img>
                       <span>{nameuser}</span>
                     </Link>

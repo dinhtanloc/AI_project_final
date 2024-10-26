@@ -151,7 +151,7 @@ const ProSidebar = (data) => {
             />
             <Item
               title="Chatbot Statistic"
-              to="/admin/chatbot"
+              to="/admin/chatbot-statistic"
               icon={<ReceiptOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
@@ -173,9 +173,9 @@ const ProSidebar = (data) => {
               setSelected={setSelected}
             />
             <Item
-              title="Activity"
+              title="Home"
               to="admin/order-dashboard"
-              icon={<HelpOutlineOutlinedIcon />}
+              icon={<PeopleOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />

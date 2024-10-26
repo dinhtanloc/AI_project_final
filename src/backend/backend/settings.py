@@ -40,7 +40,6 @@ ALLOWED_HOSTS = []
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
     'http://127.0.0.1:5173',
-    # 'https://api.chatengine.io',
     # 'http://0.0.0.0',
 ]
 
@@ -414,7 +413,7 @@ JAZZMIN_SETTINGS = {
     "copyright": "www.desphixs.com",
     "topmenu_links": [
         {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
-        # {"name": "React Admin", "url": "http://localhost:5173/admin", "new_window": False},
+        {"name": "React Admin", "url": "http://localhost:5173/admin", "new_window": False},
     ],
     "usermenu_links": [
         {"name": "Profile", "url": "admin:auth_user_change", "permissions": ["auth.view_user"]},
