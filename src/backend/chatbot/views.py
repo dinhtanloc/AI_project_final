@@ -41,7 +41,7 @@ class ChatbotViewSet(viewsets.ViewSet):
         # _, updated_chat = ''
         chatbot_history = []
         try:
-            print(chatbot_history, user_message, request.user.id, thread_id)
+            print(chatbot_history, user_message, request.user.id, chatbot.thread_id)
             _, updated_chat = chatbot.respond(chatbot_history, user_message)
             bot_response = updated_chat[-1][1] if updated_chat else 'No response'
         except Exception as e:
@@ -49,7 +49,7 @@ class ChatbotViewSet(viewsets.ViewSet):
             return Response({'error': f'Error processing request: {str(e)}'}, status=500)
 
 
-        return Response({'response': bot_response, 'thread_id': thread_id})
+        return Response({'response': bot_response, 'thread_id': chatbot.thread_id})
 
     @action(detail=False, methods=['get'])
     def history(self, request):

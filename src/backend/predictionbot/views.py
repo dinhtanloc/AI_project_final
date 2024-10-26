@@ -53,19 +53,23 @@ class StockDataViewSet(viewsets.ViewSet):
         if interval == '1m':
             num_predictions = 60 
             num_observations = 60 
-            timedelta = pd.Timedelta(minutes=1)  
+            timedelta = pd.Timedelta(minutes=1) 
+            cat='1min' 
         elif interval == '1D':
             num_predictions = 7 
             num_observations = 60 if len(scaled_data) >= 60 else len(scaled_data) - 1
             timedelta = pd.Timedelta(days=1)  
+            cat=interval 
         elif interval == '1W':
             num_predictions = 4  
             num_observations = 7 if len(scaled_data) >= 7 else len(scaled_data) - 1
-            timedelta = pd.Timedelta(weeks=1)  
+            timedelta = pd.Timedelta(weeks=1)
+            cat=interval 
         elif interval == '1M':
             num_predictions = 6  
             num_observations = 30 if len(scaled_data) >= 30 else len(scaled_data) - 1
             timedelta = pd.DateOffset(months=1)  
+            cat='1mon' 
         else:
             return Response({"error": "Invalid interval. Use '1m', '1d', '1w', or '1m'."},
                             status=status.HTTP_400_BAD_REQUEST)
@@ -81,8 +85,8 @@ class StockDataViewSet(viewsets.ViewSet):
 
         x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))
 
-        model = self.create_model(x_train)
-        model.load_weights(f'{MODEL_WEIGHTS_PATH}/model_weights_{interval}.weights.h5')
+        model = self.create_model(x_train) 
+        model.load_weights(f'{MODEL_WEIGHTS_PATH}/model_weights_{cat}.weights.h5')
         
         last_60_days = scaled_data[-num_observations:]  
         predictions = []
@@ -150,8 +154,9 @@ class StockDataViewSet(viewsets.ViewSet):
 
             df.rename(columns={'time': 'date'}, inplace=True)
             df.rename(columns={'close': 'value'}, inplace=True)
+            df=df.dropna()
 
-            # Huấn luyện mô hình và thực hiện dự đoán
+
             pred_price, rmse, train, valid = self.make_predictions(df,interval)
             print('khúc này chưa có lỗi')
             print( {
@@ -163,15 +168,16 @@ class StockDataViewSet(viewsets.ViewSet):
                     "price": pred_price,
                     "rmse": rmse
                 })
+            print({"rmse": round(rmse,2)})
+            rmse=round(rmse,2)
             return Response(
                 {
-
                     'prices': df['value'],
                     "time": df['date'],
                     "train": train,
                     "valid": valid,
                     "price": np.round(pred_price.flatten(), 2).tolist(),
-                    "rmse": round(rmse,2)
+                    "rmse": rmse
                 }
             )
         except Exception as e:
@@ -194,7 +200,13 @@ class StockDataViewSet(viewsets.ViewSet):
 
         model = self.create_model(x_train)
         model.fit(x_train, y_train, batch_size=1, epochs=1)
-        model.save_weights(f'{MODEL_WEIGHTS_PATH}/model_weights_{interval}.weights.h5')
+        if interval == '1m':
+            cat='1min' 
+        elif interval == '1M': 
+            cat='1mon' 
+        else:
+            cat=interval
+        model.save_weights(f'{MODEL_WEIGHTS_PATH}/model_weights_{cat}.weights.h5')
         print('scaled',scaled_data)
         test_data = scaled_data[training_data_len - 60:, :]
         x_test, y_test = self.prepare_test_data(test_data, dataset, training_data_len)
@@ -221,7 +233,8 @@ class StockDataViewSet(viewsets.ViewSet):
         pred_price = np.nan_to_num(pred_price, nan=0.0, posinf=0.0, neginf=0.0)
         # train = np.nan_to_num(train, nan=0.0, posinf=0.0, neginf=0.0)
         # valid = np.nan_to_num(valid, nan=0.0, posinf=0.0, neginf=0.0)
-
+        print(np.isinf(rmse))
+        print(np.isinf(pred_price))
         return pred_price, rmse, train, valid
 
     def prepare_training_data(self, train_data):
