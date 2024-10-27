@@ -1,10 +1,10 @@
 from langchain_openai import OpenAIEmbeddings
 from langchain_core.tools import tool
-from chatbot.model.tools.load_tools_config import LoadToolsConfig
+from config.load_tools_config import LoadToolsConfig
 import pytesseract
 from PIL import Image
 import io
-from chatbot.utils.prepare_vectodb import PrepareVectorDB
+from utils.prepare_vectodb import PrepareVectorDB
 import os
 from sentence_transformers import SentenceTransformer
 

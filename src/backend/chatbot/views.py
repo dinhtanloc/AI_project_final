@@ -8,8 +8,8 @@ import requests
 import os
 from dotenv import load_dotenv, find_dotenv
 from uuid import uuid4
-from .model.chatbot_backend import ChatBot
-from .utils.prepare_vectodb import PrepareVectorDB
+from models.chatbot.chatbot_backend import ChatBot
+from models.chatbot.utils.prepare_vectodb import PrepareVectorDB
 import pandas as pd
 from sqlalchemy import create_engine
 from backend.settings import PROJECT_CFG

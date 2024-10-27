@@ -1,19 +1,16 @@
 from typing import List, Tuple
 import uuid
-from chatbot.utils.load_config import LoadProjectConfig
-from chatbot.model.tools.load_tools_config import LoadToolsConfig
-from chatbot.model.agent_graph.build_full_graph import build_graph
-from chatbot.utils.app_utils import create_directory
-from chatbot.utils.memory import Memory
-# from chatbot.utils.langsmith_metrics import log_event
-from chatbot.utils.langsmith_metrics import *
+from config.load_tools_config import LoadToolsConfig
+from agent_graph.build_full_graph import build_graph
+from .utils.app_utils import create_directory
+from .utils.memory import Memory
+from utils.langsmith_metrics import *
 from datetime import datetime
 import pytesseract
 from PIL import Image
 URL = "https://github.com/Farzad-R/LLM-Zero-to-Hundred/tree/master/RAG-GPT"
 hyperlink = f"[RAG-GPT user guideline]({URL})"
 
-PROJECT_CFG = LoadProjectConfig()
 TOOLS_CFG = LoadToolsConfig()
 
 graph = build_graph()

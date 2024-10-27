@@ -7,15 +7,14 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'backend.settings'
 
 django.setup()
 from datetime import datetime
-from chatbot.utils.memory import Memory
+from utils.memory import Memory
 from typing import List, Tuple
-from chatbot.model.chatbot_backend import ChatBot 
-from chatbot.utils.load_config import LoadProjectConfig
-from chatbot.model.tools.load_tools_config import LoadToolsConfig
+from chatbot.chatbot_backend import ChatBot 
+from config.load_config import LoadToolsConfig
+
 # from model.tools.load_tools_config import LoadToolsConfig
 from django.test import TestCase
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
-PROJECT_CFG = LoadProjectConfig()
 TOOLS_CFG = LoadToolsConfig()
 
 class TestChatBot(TestCase):

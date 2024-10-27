@@ -15,7 +15,7 @@ import os
 from datetime import timedelta
 from dotenv import load_dotenv, find_dotenv
 from celery.schedules import crontab
-from chatbot.utils.load_config import LoadProjectConfig
+from config.load_config import LoadProjectConfig
 PROJECT_CFG=LoadProjectConfig()
 
 load_dotenv(find_dotenv())

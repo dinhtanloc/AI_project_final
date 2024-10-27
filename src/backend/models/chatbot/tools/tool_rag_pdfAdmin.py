@@ -2,8 +2,8 @@
 from langchain_openai import OpenAIEmbeddings
 from sentence_transformers import SentenceTransformer
 from langchain_core.tools import tool
-from chatbot.model.tools.load_tools_config import LoadToolsConfig
-from chatbot.utils.prepare_vectodb import PrepareVectorDB
+from config.load_tools_config import LoadToolsConfig
+from utils.prepare_vectodb import PrepareVectorDB
 import os
 from dotenv import find_dotenv, load_dotenv
 load_dotenv(find_dotenv())
