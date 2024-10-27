@@ -10,16 +10,12 @@ from chatbot.utils.langsmith_metrics import *
 from datetime import datetime
 import pytesseract
 from PIL import Image
-URL = "https://github.com/Farzad-R/LLM-Zero-to-Hundred/tree/master/RAG-GPT"
-hyperlink = f"[RAG-GPT user guideline]({URL})"
+
 
 PROJECT_CFG = LoadProjectConfig()
 TOOLS_CFG = LoadToolsConfig()
 
 graph = build_graph()
-# config = {"configurable": {"thread_id": TOOLS_CFG.thread_id}}
-
-# create_directory("memory")
 
 
 class ChatBot:
