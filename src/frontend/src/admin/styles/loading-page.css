@@ -6,7 +6,7 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #fff; /* Màu nền mặc định */
+    /* background-color: #fff; Màu nền mặc định */
     animation: changeColor 5s infinite alternate;
 }
 

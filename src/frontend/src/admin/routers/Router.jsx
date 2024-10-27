@@ -4,8 +4,6 @@ import Dashboard from "@admin/pages/Dashboardpage";
 import LoadingPage from "@admin/components/UI/LoadingPage";
 import PredictionDashboard from '@admin/pages/PredictionDashboard'
 import PrivateRoute from '@utils/PrivateRoute'
-import useAxios from "@utils/useAxios";
-// import StockMarket from "@pages/" 
 import ChatbotStatistic from '@admin/pages/ChatbotStatistic'
 const Routers = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -18,7 +16,7 @@ const Routers = () => {
 
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1000); // Giả lập thời gian tải trang
+    }, 1000); 
 
     return () => clearTimeout(timer);
   }, [location]);

@@ -27,7 +27,6 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
 
     >
       <Typography>{title}</Typography>
-      {/* <Link to={to} /> */}
     </MenuItem>
   );
 };
@@ -66,7 +65,6 @@ const ProSidebar = (data) => {
         collapsed={isCollapsed}
         backgroundColor="transparent">
         <Menu iconShape="square">
-          {/* LOGO AND MENU ICON */}
           <MenuItem
             onClick={() => setIsCollapsed(!isCollapsed)}
             icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
@@ -91,7 +89,6 @@ const ProSidebar = (data) => {
               </Box>
             )}
           </MenuItem>
-          {/* {console.log('meomeo',isCollapsed)} */}
           {!isCollapsed && (
             <Box mb="25px">
               <Box display="flex" justifyContent="center" alignItems="center">
@@ -112,9 +109,7 @@ const ProSidebar = (data) => {
                 >
                   {data.data.profile.full_name}
                 </Typography>
-                {/* <Typography variant="h5" color={colors.greenAccent[500]}>
-                  Shop Assistant
-                </Typography> */}
+            
               </Box>
             </Box>
           )}
@@ -135,13 +130,7 @@ const ProSidebar = (data) => {
             >
               Data
             </Typography>
-            {/* <Item
-              title=""
-              to="/dashboard"
-              icon={<PeopleOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            /> */}
+    
             <Item
               title="Training model"
               to="/admin/prediction"

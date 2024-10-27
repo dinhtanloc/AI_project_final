@@ -20,37 +20,10 @@ const Dashboard = () => {
   // window.location.reload()
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const [OrderInfo, checkOrderInfo] = useState([]);
-  const [ProductInfo, checkProductInfo] = useState([]);
-  const [orderRecent,setorderRecent] = useState([]);
-  const api = useAxios();
+
   
   
-  const handleDownload = async () => {
-    // try {
-    //     const response = await fetch(`${import.meta.env.VITE_DOMAIN_BACKEND}/orders/download-excel/`, {
-    //         method: 'GET',
-    //         headers: {
-    //             'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    //         },
-    //     });
 
-    //     if (!response.ok) {
-    //         throw new Error('Network response was not ok');
-    //     }
-
-    //     const blob = await response.blob();
-    //     const url = window.URL.createObjectURL(new Blob([blob]));
-    //     const link = document.createElement('a');
-    //     link.href = url;
-    //     link.setAttribute('download', 'orders.xlsx');
-    //     document.body.appendChild(link);
-    //     link.click();
-    //     link.parentNode.removeChild(link);
-    // } catch (error) {
-    //     console.error('Error downloading the file', error);
-    // }
-};
   
 
 
@@ -71,7 +44,6 @@ const Dashboard = () => {
               fontWeight: "bold",
               padding: "10px 20px",
             }}
-            onClick = {handleDownload}
           >
             <DownloadOutlinedIcon sx={{ mr: "10px" }} />
             Download Data

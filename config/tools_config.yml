@@ -5,7 +5,7 @@ primary_agent:
 document_rag_pdf:
   unstructured_docs: src/backend/media/data/docs/doc_pdf
   llm: gpt-4o-mini
-  collection_name: rag-mongo
+  collection_name: rag-docs
   db_name: docpdf
   embedding_model: text-embedding-3-small
   k: 2

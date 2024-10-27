@@ -31,7 +31,6 @@ export default function DateStockPicker() {
     const ListVN30 = async () => {
       try {
         const res = await ticket.get("/stock/stocktracking/list_companyVN30/");
-        // console.log(res.data.companies);
         setstockMenu(res.data.companies)
       } catch (error) {
           console.error('Có lỗi xảy ra khi truy cập dữ liệu:', error);

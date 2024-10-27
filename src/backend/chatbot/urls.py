@@ -10,5 +10,6 @@ urlpatterns = router.urls
 
 
 urlpatterns = [
-    path('upload/pdf/', views.upload_pdf, name='upload_pdf'),  # Thêm URL cho hàm upload_pdf
+    path('upload/pdf/', views.upload_file, name='upload_pdf'),  
+    path('upload/file/', views.upload_admindata, name='upload_admin'),  
 ] + router.urls

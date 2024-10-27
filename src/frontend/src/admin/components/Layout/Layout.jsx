@@ -24,8 +24,6 @@ const Layout =() =>{
     const fetchStaffChecking = async () => {
         try {
             const response = await isStaff.get('accounts/user/staff/');
-            // setUserProfile(response.data);
-            console.log(response)
             checkStaff(response.data.is_staff);
             ListstaffInfo(response.data.staff)
             

@@ -11,8 +11,6 @@ import commentImg from "/media/member/Loc_Dinh.jpg";
 import "@client/styles/blog-details.css";
 
 const BlogDetails = () => {
-  // console.log(blogData)
-  // return(<><div>Hello</div></>)
   const { slug } = useParams();
   const blog = blogData.find((blog) => blog.title === slug);
 

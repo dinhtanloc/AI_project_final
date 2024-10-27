@@ -11,11 +11,9 @@ import { tokens } from "@theme";
 export default function PredictionDashboard() {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  console.log(colors.lightPred[100])
 
   const { priceHistory, parseData, loading } = useData();
-  // console.log(priceHistory)
-  // console.log(loading)
+
   return (
     <div className="prediction-main">
 

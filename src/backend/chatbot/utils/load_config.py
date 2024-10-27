@@ -16,3 +16,12 @@ class LoadProjectConfig:
         os.environ["LANGCHAIN_TRACING_V2"] = app_config["langsmith"]["tracing"]
         os.environ["LANGCHAIN_PROJECT"] = app_config["langsmith"]["project_name"]
         self.memory_dir = here(app_config["memory"]["directory"])
+
+        #adminData
+        self.admindata_docdir= app_config["admindata"]["doc_dir"]
+        self.admindata_chunksize= app_config["admindata"]["chunk_size"]
+        self.admindata_chunk_overlap= app_config["admindata"]["chunk_overlap"]
+        self.admindata_dbname= app_config["admindata"]["db_name"]
+        self.admindata_collection=app_config["admindata"]["collection_name"]
+        self.admindata_mongodb_uri = os.getenv('MONGODB_URL')
+
