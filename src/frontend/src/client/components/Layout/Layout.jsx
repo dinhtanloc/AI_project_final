@@ -7,6 +7,7 @@ import Routers from "@client/routers/Routers";
 import axios from 'axios';
 import backgroundImage from '/media/background_login.png'; 
 import "@client/styles/page.css"
+import AdminPage from "@admin/AdminPage"
 // import Topbar from "../global/Topbar"
 // import ProSidebar from "../global/ProSidebar"
 import Header from "@client/components/Header/Header";
@@ -76,10 +77,12 @@ const Layout = () => {
   };
 
   const isLoginPage = location.pathname === "/login" || location.pathname === "/register";
-  // const isDashboard = location.pathname === "/dashboard";
-  const isChatbot = location.pathname.startsWith("/chatbot");
+  const isChatbot = location.pathname === "/chatbot";
+  const isAdminPage = location.pathname.startsWith("/admin");
 
-
+  if (isAdminPage) {
+    return <AdminPage />;
+  }
 
   return (
     <>
@@ -106,7 +109,6 @@ const Layout = () => {
           <Fragment>
             <Header onSearch={handleSearch} />
             <Routers />
-            {/* <ChatPopup /> */}
             <Footer />
           </Fragment>
         )

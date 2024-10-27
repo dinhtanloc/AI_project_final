@@ -13,28 +13,27 @@ const Chatbot = () => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [message, setMessage] = useState('');
     const [fileUrl, setFileUrl] = useState('');
+    const [img,setImage]=useState('');
     const chatbot = useAxios();
 
-    // useEffect(() => {
-    //     const fetchAnswer = async () => {
-    //         try {
-    //             const res = await chatbot.post("/stock/stocktracking/tracking_stockinformation/", {
-    //                 symbol: stockSymbol, 
-    //               });
-    //             console.log(res.data);
-    //             setMessage(res.data)
-
-    //         } catch (error) {
-    //             console.error('Có lỗi xảy ra khi truy cập dữ liệu:', error);
-                
-    //         }
-            
-    //       };
-
-    //       fetchAnswer();
+    useEffect(() => {
+        const fetchProfile = async () => {
+            try {
+              const res = await chatbot.get("accounts/user/profile/");
+              const profile = res.data;
+              var imgUrl = profile.image
+              setImage(imgUrl)
+              console.log(res)
+              // setName(profile)
+            } catch (error) {
+              console.error('Có lỗi xảy ra khi truy cập dữ liệu:', error);
+      
+            }
+          };
+          fetchProfile();
       
         
-    // }, []);
+    }, []);
 
 
 
@@ -107,7 +106,7 @@ const Chatbot = () => {
                                 {historyMessage.map((pair, index) => (
                                     <div key={index}>
                                         <div className="result-title">
-                                            <img src={assets.user_icon} alt="User" />
+                                            <img src={img} alt="User" />
                                             <p dangerouslySetInnerHTML={{ __html: pair.user.message }}></p>
                                         </div>
                                         <div className="result-data">
@@ -119,7 +118,7 @@ const Chatbot = () => {
                             </div>
                         )}
                         <div className="result-title">
-                            <img src={assets.user_icon} alt="" />
+                            <img src={img} alt="" />
                             <p>{recentPrompt}</p>
                         </div>
                         <div className="result-data">

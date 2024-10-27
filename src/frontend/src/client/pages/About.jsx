@@ -9,6 +9,8 @@ import OurMembers from "@client/components/UI/OurMembers";
 import "@client/styles/about.css";
 import OrgStructure from '@client/components/UI/OrgStructure';
 import OurFeature from "@client/components/UI/OurFeature";
+
+// window.location.reload()
 const About = () => {
   return (
     <Helmet title="About">

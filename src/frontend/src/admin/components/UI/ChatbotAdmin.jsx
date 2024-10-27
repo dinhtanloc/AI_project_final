@@ -1,4 +1,4 @@
-import { useState, useContext, useRef } from 'react';
+import { useState, useContext, useRef, useEffect } from 'react';
 import '@admin/styles/chatbotadmin.css';
 import { useTheme } from "@mui/material";
 import { assets } from '@assets/chatbot/assets';
@@ -12,11 +12,31 @@ const ChatbotAdmin = () => {
     const msgEnd = useRef(null);
     const api = useAxios();
     const [isUploading, setIsUploading] = useState(false);
+    const [img,setImage]=useState('');
 
 
     const [files, setFiles] = useState([]);
     const [responseMessage, setResponseMessage] = useState("");
     const fileInputRef = useRef(null);
+
+    useEffect(() => {
+        const fetchProfile = async () => {
+            try {
+              const res = await api.get("accounts/user/profile/");
+              const profile = res.data;
+              var imgUrl = profile.image
+              setImage(imgUrl)
+              console.log(res)
+              // setName(profile)
+            } catch (error) {
+              console.error('Có lỗi xảy ra khi truy cập dữ liệu:', error);
+      
+            }
+          };
+          fetchProfile();
+      
+        
+    }, []);
 
     const handleEnter = async (e) => {
         if (e.key === 'Enter') {
@@ -72,8 +92,8 @@ const ChatbotAdmin = () => {
     }
 
     return (
-        <div className='main'>
-            <div className="main-container">
+        <div className='admin'>
+            <div className="admin-container">
                 <input 
                     id='file'
                     type="file" 
@@ -114,7 +134,7 @@ const ChatbotAdmin = () => {
                                 {historyMessage.map((pair, index) => (
                                     <div key={index}>
                                         <div className="result-title">
-                                            <img src={assets.user_icon} alt="User" />
+                                            <img src={img} alt="User" />
                                             <p dangerouslySetInnerHTML={{ __html: pair.user.message }}></p>
                                         </div>
                                         <div className="result-data">
@@ -126,7 +146,7 @@ const ChatbotAdmin = () => {
                             </div>
                         )}
                         <div className="result-title">
-                            <img src={assets.user_icon} alt="" />
+                            <img src={img} alt="" />
                             <p>{recentPrompt}</p>
                         </div>
                         <div className="result-data">
@@ -143,7 +163,7 @@ const ChatbotAdmin = () => {
                     </div>
                 )}
 
-                <div className="main-bottom">
+                <div className="admin-bottom">
                     <div className="search-box" style={theme.palette.mode === 'dark' ? { backgroundColor: '#707a82', color: '' } : { backgroundColor: '', color: 'black' }}>
                         <input onChange={(e) => setInput(e.target.value)} onKeyDown={handleEnter} value={input} type="text" placeholder='Enter a prompt here ' />
                         <div>

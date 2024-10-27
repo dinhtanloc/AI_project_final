@@ -1,4 +1,4 @@
-.main {
+.admin {
     flex: 1;
     min-height: 75vh;
     padding-bottom: 15vh;
@@ -7,7 +7,7 @@
 
 }
 
-.main .nav {
+.admin .nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -17,17 +17,17 @@
     color: #585858;
 }
 
-.main .nav img {
+.admin .nav img {
     width: 40px;
     border-radius: 50%;
 }
 
-.main-container {
+.admin-container {
     max-width: 900px;
     margin: auto;
 }
 
-.main .greet {
+.admin .greet {
     margin: 17px 0px;
     font-size: 56px;
     color: #c4c7c5;
@@ -35,20 +35,20 @@
     padding: 20px;
 }
 
-.main .greet span {
+.admin .greet span {
     background: -webkit-linear-gradient(16deg, #4b90ff, #ff5546);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
-.main .cards {
+.admin .cards {
     display: grid;
     grid-template-columns: repeat(auto-fill,minmax(180px,1fr));
     gap: 15px;
     padding: 20px;
 }
 
-.main .card {
+.admin .card {
     height: 200PX;
     padding: 15px;
     background-color: #f0f4f9;
@@ -56,7 +56,7 @@
     cursor: pointer;
 }
 
-.main .card img {
+.admin .card img {
     width: 35px;
     padding: 5px;
     position: absolute;
@@ -65,16 +65,16 @@
     bottom: 10px;
     right: 10px;
 }
-.main .card p {
+.admin .card p {
     color: #585858;
     font-size: 17px;
 }
 
-.main .card:hover {
+.admin .card:hover {
     background-color: #dfe4ea;
 }
 
-.main-bottom {
+.admin-bottom {
     position: absolute;
     bottom: 0;
     width: 100%;
@@ -113,7 +113,7 @@
     gap: 15px;
 }
 
-.main .bottom-info {
+.admin .bottom-info {
     font-size: 13px;
     margin: 15px auto;
     text-align: center;
@@ -183,11 +183,11 @@
 }
 
 @media (max-width:600px) {
-    .main-bottom input {
+    .admin-bottom input {
         flex: none;
         width: 150px;
     }
-    .main-bottom img {
+    .admin-bottom img {
         width: 20px;
     }
     .search-box {
