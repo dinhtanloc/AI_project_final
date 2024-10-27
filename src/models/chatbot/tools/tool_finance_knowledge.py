@@ -10,10 +10,9 @@ from langchain_openai import ChatOpenAI
 from langchain_core.messages import AIMessage, ToolMessage, HumanMessage
 from datetime import datetime
 from langchain_core.prompts import ChatPromptTemplate
-from chatbot.model.tools.finance_toollists import tool_mapping, tools
-from chatbot.model.tools.load_tools_config import LoadToolsConfig
+from tools.finance_toollists import tool_mapping, tools
+from config.load_tools_config import TOOLS_CFG
 import json
-TOOLS_CFG = LoadToolsConfig()
 
 class FinanceAgent:
     """SQLAgent cho phép mô hình học hỏi từ ví dụ về các truy vấn SQL trước khi trả lời."""

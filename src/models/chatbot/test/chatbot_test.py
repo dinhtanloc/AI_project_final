@@ -1,23 +1,26 @@
-import unittest
 import sys
 import os
-import django
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
-os.environ['DJANGO_SETTINGS_MODULE'] = 'backend.settings'  
+__script_path=os.path.abspath(globals().get('__file__','../..'))
+__script_dir = os.path.dirname(__script_path)
+root_dir = os.path.abspath(os.path.dirname(f'{__script_dir}')).replace("\\", "/")
+print(root_dir)
+notebook_dir    = os.path.join(root_dir, "notebook").replace("\\", "/")
+include_dirs  = [__script_dir]
+import unittest
+for lib in include_dirs:
+    if lib not in sys.path: sys.path.insert(0, lib)
 
-django.setup()
 from datetime import datetime
-from utils.memory import Memory
+from chatbot.utils.memory import Memory
 from typing import List, Tuple
 from chatbot.chatbot_backend import ChatBot 
-from config.load_config import LoadToolsConfig
+from config.load_tools_config import LoadToolsConfig
 
 # from model.tools.load_tools_config import LoadToolsConfig
-from django.test import TestCase
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 TOOLS_CFG = LoadToolsConfig()
 
-class TestChatBot(TestCase):
+class TestChatBot(unittest.TestCase):
     def setUp(self):
         self.chatbot = []
         self.message = "Xin chào chatbot!"

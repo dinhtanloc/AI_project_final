@@ -10,9 +10,9 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
 from operator import itemgetter
 from langchain_openai import ChatOpenAI
-from chatbot.model.tools.load_tools_config import LoadToolsConfig
+from config.load_tools_config import TOOLS_CFG
 
-TOOLS_CFG = LoadToolsConfig()
+
 
 
 class SQLAgent:

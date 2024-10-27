@@ -2,13 +2,12 @@
 from langchain_openai import OpenAIEmbeddings
 from sentence_transformers import SentenceTransformer
 from langchain_core.tools import tool
-from config.load_tools_config import LoadToolsConfig
+from config.load_tools_config import TOOLS_CFG
 from utils.prepare_vectodb import PrepareVectorDB
 import os
 from dotenv import find_dotenv, load_dotenv
 load_dotenv(find_dotenv())
 # Load cấu hình từ file config
-TOOLS_CFG = LoadToolsConfig()
 
 class AdminDocumentRAGTool:
     """

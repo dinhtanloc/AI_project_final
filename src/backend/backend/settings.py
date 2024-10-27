@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'chatbot',
     'predictionbot',
     'stock',
+    'models',
 
     # Third Party
     'channels',

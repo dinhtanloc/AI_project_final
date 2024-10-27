@@ -1,6 +1,6 @@
 from langchain_openai import OpenAIEmbeddings
 from langchain_core.tools import tool
-from config.load_tools_config import LoadToolsConfig
+from config.load_tools_config import TOOLS_CFG
 import pytesseract
 from PIL import Image
 import io
@@ -9,7 +9,6 @@ import os
 from sentence_transformers import SentenceTransformer
 
 
-TOOLS_CFG = LoadToolsConfig()
 
 
 class OCRTool:
