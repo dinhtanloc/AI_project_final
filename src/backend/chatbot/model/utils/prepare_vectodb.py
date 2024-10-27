@@ -2,8 +2,6 @@ import os
 import yaml
 from pyprojroot import here
 from langchain_community.document_loaders import PyPDFLoader
-from langchain_openai import OpenAIEmbeddings
-from sentence_transformers import SentenceTransformer
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 import pymongo
 from backend.settings import PROJECT_CFG
@@ -58,7 +56,7 @@ class PrepareVectorDB:
         self.doc_dir = doc_dir
         self.chunk_size = chunk_size
         self.chunk_overlap = chunk_overlap
-        self.embedding_model = SentenceTransformer("keepitreal/vietnamese-sbert")
+        self.embedding_model = PROJECT_CFG.embedding_model
         self.mongodb_uri = mongodb_uri
         self.db_name = db_name
         self.collection_name = collection_name

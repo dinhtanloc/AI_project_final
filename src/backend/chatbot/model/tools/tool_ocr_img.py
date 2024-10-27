@@ -1,12 +1,11 @@
-from langchain_openai import OpenAIEmbeddings
 from langchain_core.tools import tool
 from chatbot.model.config.load_tools_config import TOOLS_CFG
+from backend.settings import PROJECT_CFG
 import pytesseract
 from PIL import Image
 import io
 from chatbot.model.utils.prepare_vectodb import PrepareVectorDB
 import os
-from sentence_transformers import SentenceTransformer
 
 
 
@@ -16,7 +15,7 @@ class OCRTool:
     Công cụ để thực hiện OCR trên hình ảnh được tải lên và chuẩn bị thông tin cho RAG.
 
     Các thuộc tính:
-    embedding_model (str): Tên của mô hình embedding OpenAI để tạo ra các biểu diễn vector của văn bản đã trích xuất.
+    k (int): Số lượng tài liệu lân cận gần nhất sẽ được truy xuất dựa trên sự tương đồng của truy vấn.
     """
 
     def __init__(self, k:int) -> None:
@@ -24,10 +23,10 @@ class OCRTool:
         Khởi tạo công cụ OCRTool với cấu hình cần thiết.
 
         Tham số:
-        embedding_model (str): Tên của mô hình embedding OpenAI được sử dụng để chuyển đổi các văn bản đã trích xuất thành biểu diễn vector.
+        k (int): Số lượng tài liệu lân cận gần nhất sẽ được truy xuất dựa trên sự tương đồng của truy vấn.
         """
         self.name = "ocr_and_lookup"
-        self.embedding_model = SentenceTransformer("keepitreal/vietnamese-sbert")
+        self.embedding_model = PROJECT_CFG.embedding_model
         # self.embedding_model_instance = OpenAIEmbeddings(model=self.embedding_model)
         self.k=k
         self.image_dir = 'document/image'

@@ -23,8 +23,6 @@ const Chatbot = () => {
               const profile = res.data;
               var imgUrl = profile.image
               setImage(imgUrl)
-              console.log(res)
-              // setName(profile)
             } catch (error) {
               console.error('Có lỗi xảy ra khi truy cập dữ liệu:', error);
       
@@ -46,18 +44,14 @@ const Chatbot = () => {
         if (selectedFile) {
             const formData = new FormData();
             formData.append('pdf_file', selectedFile);
-            console.log('Uploading file...');
 
             try {
                 const res = await chatbot.post('/chatbot/upload/pdf/', formData);
-                // setMessage('File uploaded successfully!');
                 setFileUrl(res.data.file_url);
             } catch (error) {
-                // setMessage('Failed to upload file');
                 console.error(error);
             }
         } else {
-            // setMessage('Please select a file first.');
         }
     };
 

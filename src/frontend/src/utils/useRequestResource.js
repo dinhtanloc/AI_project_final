@@ -35,11 +35,7 @@ export default function useRequestResource() {
         .get(`${query}`)
         .then((res) => {
           // Update state with received data
-          // console.log(res)
-          // console.log((res.data.prices))
-          // console.log((res.data.train.timeTrain))
-          // console.log((res.data.train.value))
-
+        
           // History Prices
           getHistoryPrices(res.data.prices);
           getTimeSeries(res.data.time);

@@ -10,16 +10,13 @@ import Blog from "@client/pages/Blog";
 import About from "@client/pages/About";
 import MainLayout from "@client/components/UI/MainLayout";
 import RadarChart from "@client/components/UI/RadarChart";
-import BollingerStock from "@client/components/UI/BollingerStock";
 import Contact from "@client/pages/Contact";
 import TableComponent from "@client/components/UI/TableComponent"
 import ChatbotPage from "@client/pages/ChatbotPage"
-// import PredictionDashboard from '@client/pages/PredictionDashboard'
-// import Chatbot from '@client/components/UI/Chatbot'
+
 import PrivateRoute from '@utils/PrivateRoute'
 import useAxios from "@utils/useAxios";
 import StockDashboard from "@client/pages/StockDashboard";
-// import Market from "@pages/" 
 
 const Routers = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -74,15 +71,9 @@ const Routers = () => {
           <Route path="/about" element={<About />} />
           <Route path="/rada" element={<RadarChart />} />
           <Route path="/stock-market" element={<Market /> } />
-          <Route path="/bollinger" element={<BollingerStock />} />
           <Route path="/table" element={<TableComponent />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/stock-dashboard" element={
-            
-              <StockDashboard />
-            
-            // <StockDashboard />
-            } />
+          <Route path="/stock-dashboard" element={<StockDashboard />} />
      
           <Route exact path='/chatbot/' element={<PrivateRoute/>}>
             <Route exact path='/chatbot/'element={<ChatbotPage />}/>

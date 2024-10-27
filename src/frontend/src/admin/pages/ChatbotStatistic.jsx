@@ -18,7 +18,6 @@ const ChatbotStatistic = () => {
   
   const handleRedirect = () => {
     window.location.href = import.meta.env.VITE_LANGSMITH;
-    console.log(import.meta.env.VITE_LANGSMITH)
   };
 
   

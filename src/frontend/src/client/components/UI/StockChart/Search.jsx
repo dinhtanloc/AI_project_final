@@ -12,16 +12,7 @@ const Search = () => {
   const [bestMatches, setBestMatches] = useState([]);
 
   const updateBestMatches = async () => {
-    // try {
-    //   if (input) {
-    //     // const searchResults = await searchSymbol(input);
-    //     // const result = searchResults.result;
-    //     // setBestMatches(result);
-    //   }
-    // } catch (error) {
-    //   setBestMatches([]);
-    //   console.log(error);
-    // }
+
   };
 
   const clear = () => {

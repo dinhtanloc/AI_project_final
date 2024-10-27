@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react';
-// import ticker from "@assets/data/tickerData";  // Đảm bảo đường dẫn chính xác
 import "@client/styles/dropdown.css"
 import useAxios from '@utils/useAxios'
 import StockContext from "@context/StockContext";
@@ -10,41 +9,15 @@ const TickerDropdown = (props) => {
   const [ticker, setTicker]=useState([]);
   const company = useAxios();
   const [socket, setSocket] = useState(null);
-  // const { stockSymbol } = useContext(StockContext);
   const { setStockSymbol } = useContext(StockContext);
 
 
-  // useEffect(() => {
-  //     const socketConnection = new WebSocket('ws://localhost:8001/ws/stocks/');
-
-  //     socketConnection.onopen = () => {
-  //       console.log('WebSocket connection established');
-  //       // console.log(event.data)
-  //     };
-  //     socketConnection.onmessage = (event) => {
-  //       const data = JSON.parse(event.data);
-  //       // setStockData(prevData => [...prevData, ...data.new_data]); 
-  //       console.log('Received stock data:', event);
-  //       console.log('Received stock data:', event.data);
-  //   };
-
-  //   socketConnection.onclose = () => {
-  //     console.log('WebSocket connection closed');
-  //   };
-  //   setSocket(socketConnection);
-
-
-  //     return () => {
-  //       socketConnection.close(); // Đóng kết nối WebSocket khi component unmount
-  //     };
-  //   }, []);
 
 
   useEffect(() => {
     const ListVN30 = async () => {
       try {
         const res = await company.get("/stock/stocktracking/list_companyVN30/");
-        // console.log(res.data.companies);
         setTicker(res.data.companies)
       } catch (error) {
           console.error('Có lỗi xảy ra khi truy cập dữ liệu:', error);
@@ -55,19 +28,8 @@ const TickerDropdown = (props) => {
 
    }, []);
   const updateSymbol= async(symbol) => {
-    console.log(`chuan bi up date ${symbol}`)
     setStockSymbol(symbol)
-    // try {
-    //     const response = await company.post('/stock/stocktracking/update_symbol/', {
-    //         symbol: symbol,
-    //     });
-    //     console.log('đã cập nhật thành công')
-    //     if (socket) {
-    //       socket.send(JSON.stringify({ symbol: symbol })); // Gửi dữ liệu lên WebSocket
-    //     }
-    // } catch (error) {
-    //     console.error('There was an error fetching the data!', error);
-    // }
+    
 }
 
   const toggleDropdown = () => {
@@ -92,11 +54,11 @@ const TickerDropdown = (props) => {
         <div className="dropdown-menu">
           {ticker.map((tickerItem, index) => (
             <div
-              key={`${tickerItem}-${index}`} // Tạo key duy nhất
+              key={`${tickerItem}-${index}`} 
               className="dropdown-item"
-              onClick={() => handleSelect(tickerItem)} // Sử dụng tickerItem trực tiếp
+              onClick={() => handleSelect(tickerItem)} 
             >
-              {tickerItem} {/* Hiển thị tickerItem trực tiếp */}
+              {tickerItem} 
             </div>
           ))}
         </div>

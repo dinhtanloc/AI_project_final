@@ -14,22 +14,19 @@ import { faFacebookF, faGoogle, faGithub } from '@fortawesome/free-brands-svg-ic
 const Login = () => {
   const {loginUser} = useContext(AuthContext);
   const { registerUser } = useContext(AuthContext);
-  const {user, logoutUser} = useContext(AuthContext);
   const { showLogin } = useContext(AuthLoginContext);
   const [isSignUpActive, setIsSignUpActive] = useState(!showLogin);
 
 
   const [currentUser, setCurrentUser] = useState();
-  const [registrationToggle, setRegistrationToggle] = useState(true);
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [show, setShow] = useState(false);
 
     useEffect(() => {
         setTimeout(() => {
           setIsSignUpActive(showLogin);
-        }, 100); // Delay một chút để đảm bảo hiệu ứng hoạt động
+        }, 100); 
     }, []);
   
 
@@ -51,26 +48,21 @@ const Login = () => {
 
   function submitLogin(e) {
     e.preventDefault();
-    console.log(email,password)
     if (email.length > 0) {
         loginUser(email, password); 
         setCurrentUser(true);
-    } else {
-        console.log("Email or password is empty");
-    }
+    } 
 }
 
   const containerClassName = isSignUpActive ? 'container_title right-panel-active' : 'container_title';
   return (
     <>
       <div className={containerClassName}>
-      {/* // To sign up */}
         <div className="form-container sign-up-container">
           <form className='form_title' onSubmit={e => submitRegistration(e)}>
             <h1 className="h1_title">Create Account</h1>
             <div className="social-container">
             <a href="#" className="social">
-                {/* <i className="fab fa-facebook-f"></i> */}
                 <FontAwesomeIcon icon={faFacebookF} />
             </a>
             <a href="#" className="social">
@@ -88,13 +80,11 @@ const Login = () => {
           </form>
         </div>
 
-        {/* form signin */}
         <div className="form-container sign-in-container">
           <form className='form_title' action="#" onSubmit={e => submitLogin(e)}>
             <h1 className="h1_title">Sign in</h1>
             <div className="social-container">
               <a href="#" className="social">
-                {/* <i className="fab fa-facebook-f"></i> */}
                 <FontAwesomeIcon icon={faFacebookF} />
               </a>
               <a href="#" className="social">
@@ -132,7 +122,6 @@ const Login = () => {
           Created with <i className="fa fa-heart"></i> by
           <a className="a_title" target="_blank" href="https://www.facebook.com/profile.php?id=100010680972124"> Loc Dinh </a>
           - Read how I created this and give me ten points in Web programming subject
-          {/* <a className="a_title" target="_blank" href="https://www.florin-pop.com/blog/2019/03/double-slider-sign-in-up-form/">here</a>. */}
         </p>
       </footer>
     </>

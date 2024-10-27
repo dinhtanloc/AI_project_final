@@ -13,7 +13,6 @@ export function Provider({ children }) {
       payload: value,
     });
   };
-  console.log('import contexxt')
 
   const getTimeSeries = (value) => {
     dispatch({

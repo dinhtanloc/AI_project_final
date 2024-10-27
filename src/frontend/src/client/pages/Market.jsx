@@ -1,31 +1,22 @@
 import React, { useRef, useState, useEffect } from "react";
 import Helmet from "@client/components/Helmet/Helmet";
 import { Container, Row } from "reactstrap";
-import { Box, Button, Typography, Icon } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import "@client/styles/about.css";
 import InfoBase from "@client/components/UI/InfoBase";
-import CandleStickChartWithBollingerBandOverlay from "@client/components/UI/CandleStickChartWithBollingerBandOverlay";
-import getData from "@assets/data/stockData"
-import BollingerStock from "@client/components/UI/BollingerStock";
 import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
 
-import TableComponent from "@client/components/UI/TableComponent";
 import TickerDropdown from "@client/components/UI/TickerDropdown";
-import ChatIcon from '@mui/icons-material/Chat'; // Import icon Chat
-import { useNavigate } from "react-router-dom"; // Điều hướng
+import ChatIcon from '@mui/icons-material/Chat'; 
+import { useNavigate } from "react-router-dom"; 
 import { useContext } from "react";
 
 import StockAgChart from "@client/components/UI/StockAgChart";
 import StatBox from '@client/components/UI/StatBox'
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
-import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
-import InventoryIcon from '@mui/icons-material/Inventory';
 import useAxios from '@utils/useAxios'
 import StockContext from "@context/StockContext";
 
-// import { useNavigate } from 'react-router-dom';
 const Market = () => {
     const boxRef = useRef(null);
     const [chartWidth, setChartWidth] = useState(0);
@@ -42,10 +33,8 @@ const Market = () => {
                 const res = await stock.post("/stock/stocktracking/tracking_stockinformation/", {
                     symbol: stockSymbol, 
                   });
-                console.log(res.data);
                 setInfo(res.data)
 
-                // setName(profile)
             } catch (error) {
                 console.error('Có lỗi xảy ra khi truy cập dữ liệu:', error);
                 
@@ -53,8 +42,7 @@ const Market = () => {
             
           };
       
-        //   Tracking();
-        //   fetchStockTracking();
+
           fetchCompanyInfo();
         const handleResize = () => {
             if (boxRef.current) {
@@ -62,7 +50,7 @@ const Market = () => {
             }
         };
 
-        handleResize(); // Set initial width
+        handleResize();
 
         window.addEventListener('resize', handleResize);
 
@@ -70,21 +58,7 @@ const Market = () => {
         
     }, [stockData,stockSymbol, name]);
 
-    // const prediction = async(e) => {
-    //     //Thực hiện lệnh post request tới API
-    //     e.preventDefault()
-    //     try {
-    //         const response = await stock.post('/prediction/predict/', {
-    //             prompt: symbbol,
-    //         });
-    //     } catch (error) {
-    //         console.error('There was an error fetching the data!', error);
-    //     }
-        
-    // }
-    const stockDataFunc = ()=>{
-        return stockData
-    }
+ 
 
 
     return (

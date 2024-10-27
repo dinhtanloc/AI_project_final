@@ -11,8 +11,7 @@ import getData from "@assets/data/stockData"
 // import { AgFinancialChartOptions } from "ag-charts-enterprise";
 const StockAgChart = () => {
   const theme = useTheme();
-  console.log(theme.agCharts.theme)
-  // console.log(theme.palette.mode)
+
   const [options, setOptions] = useState({
     data: getData(),
     title: { text: "VIC Inc." },

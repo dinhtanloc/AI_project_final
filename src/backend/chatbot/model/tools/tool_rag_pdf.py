@@ -1,6 +1,5 @@
 # from langchain_Mongodb import Mongodb
-from langchain_openai import OpenAIEmbeddings
-from sentence_transformers import SentenceTransformer
+from backend.settings import PROJECT_CFG
 from langchain_core.tools import tool
 from chatbot.model.config.load_tools_config import TOOLS_CFG
 from chatbot.model.utils.prepare_vectodb import PrepareVectorDB
@@ -33,7 +32,7 @@ class UserDocumentRAGTool:
         collection_name (str): Tên của bộ sưu tập trong cơ sở dữ liệu vector chứa các tài liệu do người dùng tải lên.
         """
         self.name = "lookup_user_document"
-        self.embedding_model = SentenceTransformer("keepitreal/vietnamese-sbert")
+        self.embedding_model = PROJECT_CFG.embedding_model
         self.db_name=db_name
         self.mongodb_uri=mongodb_uri
         self.k = k

@@ -45,45 +45,16 @@ const StockDashboard = () => {
 
   const [stockDetails, setStockDetails] = useState({});
 
-  const [quote, setQuote] = useState({});
  
 
   useEffect(() => {
-      // const fetchStockTracking = async () => {
-      //   try {
-      //     const res = await stock.get("/stock/stocktracking/historicaldata/");
-          
-      //     const formattedData = res.data.price_data.map(item => ({
-      //       ...item,
-      //       date: new Date(item.date), // Chuyển chuỗi thành Date object
-      //       // open: parseFloat(item.open),
-      //       // high: parseFloat(item.high),
-      //       // low: parseFloat(item.low),
-      //       // close: parseFloat(item.close),
-      //       // volume: parseInt(item.volume, 10),
-      //     }))
-      //     // setName(res.data.company)
-      //     // .filter(item => 
-      //     //   item.high >= Math.max(item.open, item.close, item.low) &&
-      //     //   item.low <= Math.min(item.open, item.close, item.high) 
-      //     // );
-          
-      //     setQuote(formattedData);
-      //     // setName(res.data.company);
-      //   } catch (error) {
-      //     console.error('Có lỗi xảy ra khi truy cập dữ liệu:', error);
-      //   }
-      // };
-  
-      // fetchStockTracking();
+
 
     const updateStockDetails = async () => {
       try {
         const res = await stock.post("/stock/stocktracking/tracking_stockinformation/", {
           symbol: stockSymbol, 
         });
-      // console.log(res.data);
-      // setInfo(res.data)
         setStockDetails({
           name: res.data.overview.short_name,
           country: "Việt Nam",

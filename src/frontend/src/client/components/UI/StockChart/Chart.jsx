@@ -3,26 +3,21 @@ import ChartFilter from "./ChartFilter";
 import Card from "./Card";
 import {
   Area,
-  Line,
   XAxis,
   YAxis,
   ResponsiveContainer,
   AreaChart,
   Tooltip,
 } from "recharts";
-import ChatIcon from '@mui/icons-material/Chat'; // Import icon Chat
 
 import ThemeContext from "@context/ThemeContext";
 import StockContext from "@context/StockContext";
-import { Box, Button, Typography, Icon } from "@mui/material";
 import {
   createDate,
-  convertDateToUnixTimestamp,
-  convertUnixTimestampToDate,
 } from "@utils/date-helper";
 import { chartConfig } from "@constants/config";
 import useAxios from '@utils/useAxios';
-import { useNavigate } from "react-router-dom"; // Điều hướng
+import { useNavigate } from "react-router-dom"; 
 
 
 
@@ -37,8 +32,6 @@ const Chart = () => {
   const stock=useAxios();
 
   const formatData = (data, resolution) => {
-    console.log(data);
-    console.log(Array.isArray(data));
     return data.map((item) => {
       const date = new Date(item.date); 
   
@@ -65,39 +58,11 @@ const Chart = () => {
   
       return {
         ...item,
-        date: formattedDate, // Cập nhật trường date với định dạng tương ứng
+        date: formattedDate, 
       };
     });
   };
-
-  // useEffect(() => {
-
-  //   const socket = new WebSocket('ws://localhost:8001/ws/stocks/');
-  //   const resolution = chartConfig[filter].resolution;
-  //       socket.onopen = () => {
-  //           console.log('WebSocket connection established');
-  //           // const symbolData = JSON.stringify({ 
-  //           //   symbol: stockSymbol, 
-  //           //   start: startTimestampUnix, 
-  //           //   interval: resolution});
-  //           //   socket.send(symbolData);
-  //           //   console.log(symbolData);
-  //       };
-    
-  //       socket.onmessage = (event) => {
-  //           const res = JSON.parse(event.data);
-  //           setData(formatData(res,resolution));
-  //           console.log('Received data:', data);
-  //       };
-    
-  //       // socket.onclose = () => {
-  //       //     console.log('WebSocket connection closed');
-  //       // };
-    
-  //       // return () => {
-  //       //     socket.close();
-  //       // };
-  //   }, [filter]);
+  
 
   useEffect(() => {
     const getDateRange = () => {
@@ -120,19 +85,11 @@ const Chart = () => {
       return startDate
     };
     const startTimestampUnix  = getDateRange();
-    console.log(startTimestampUnix)
-    // console.log(endTimestampUnix)
     const resolution = chartConfig[filter].resolution;
     const updateChartData = async () => {
       try {
-        // const res = await stock.post("/stock/stocktracking/historicalclosedata/",
-        //       { 
-        //       symbol: stockSymbol, 
-        //       start: startTimestampUnix, 
-        //       interval: resolution}
-        // );
+      
         const response = await stock.get(`/prediction/predict/?start=${startTimestampUnix}&symbol=${stockSymbol}&interval=${resolution}`);
-        console.log(response.data.data)
         setData(formatData(response.data.data,resolution));
       
       } catch (error) {
@@ -144,7 +101,6 @@ const Chart = () => {
     updateChartData();
     const intervalId = setInterval(updateChartData, 60000);
 
-        // Dọn dẹp khi component unmount
     return () => clearInterval(intervalId);
   }, [filter]);
 

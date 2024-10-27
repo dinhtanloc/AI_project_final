@@ -26,7 +26,6 @@ const ChatbotAdmin = () => {
               const profile = res.data;
               var imgUrl = profile.image
               setImage(imgUrl)
-              console.log(res)
               // setName(profile)
             } catch (error) {
               console.error('Có lỗi xảy ra khi truy cập dữ liệu:', error);
