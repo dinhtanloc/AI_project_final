@@ -1,5 +1,5 @@
 import AtomicSpinner from 'atomic-spinner'
-import "@client/styles/loading-page.css"
+import "@admin/styles/loading-page.css"
 import { tokens } from "@theme";
 import { Box, Button, useTheme } from "@mui/material";
 const LoadingPage = () =>{

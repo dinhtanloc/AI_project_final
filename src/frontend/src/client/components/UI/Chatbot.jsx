@@ -159,7 +159,7 @@ const Chatbot = () => {
                         </div>
                     </div>
                     <p className="bottom-info">
-                        Gemiini may display inaccurate info, including about people, so double-click its responses. Your privacy and Gemini Apps
+                        Moketobot may display inaccurate info, including about people, so double-click its responses. Your privacy and Gemini Apps
                     </p>
                 </div>
             </div>

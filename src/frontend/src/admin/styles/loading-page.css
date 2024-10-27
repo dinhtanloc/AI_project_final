@@ -11,7 +11,7 @@
 }
 
 @keyframes changeColor {
-    0% { background-color: #202A40; }
-    50% { background-color: #1f2239; }
-    100% { background-color: #688081; }
+    0% { background-color: #0a183d; }
+    50% { background-color: #d8ddeb; }
+    100% { background-color: #6b83c4; }
 }

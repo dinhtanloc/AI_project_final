@@ -1,4 +1,3 @@
-import React, { useEffect, useContext,useState } from "react";
 import { Box, Button, useTheme } from "@mui/material";
 import { tokens } from "@theme";
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
@@ -14,13 +13,12 @@ const ChatbotStatistic = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
-  const [file, setFile] = useState(null);
-  const [responseMessage, setResponseMessage] = useState("");
-  const [fileInfo, setFileInfo] = useState(null);
+
   
   
   const handleRedirect = () => {
     window.location.href = import.meta.env.VITE_LANGSMITH;
+    console.log(import.meta.env.VITE_LANGSMITH)
   };
 
   
@@ -32,7 +30,7 @@ const ChatbotStatistic = () => {
     <Box m="20px">
       {/* HEADER */}
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Header title="Chatbot" subtitle="Evaluate and improve model chatbot" />
+        <Header title="" subtitle="" />
         <Box>
           <Button
             sx={{
