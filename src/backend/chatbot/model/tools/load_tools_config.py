@@ -1,9 +1,9 @@
 import os
 import yaml
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 from pyprojroot import here
 
-load_dotenv()
+load_dotenv(find_dotenv())
 
 
 class LoadToolsConfig:
@@ -27,14 +27,23 @@ class LoadToolsConfig:
             app_config["tavily_search_api"]["tavily_search_max_results"])
 
         # Document RAG configs
-        self.policy_rag_llm_temperature = float(
+        self.user_rag_llm_temperature = float(
             app_config["document_rag_pdf"]["llm_temperature"])
-        self.policy_rag_embedding_model = app_config["document_rag_pdf"]["embedding_model"]
-        # self.policy_rag_vectordb_directory = str(here(
-        #     app_config["document_rag_pdf"]["vectordb"]))  # needs to be strin for summation in chromadb backend: self._settings.require("persist_directory") + "/chroma.sqlite3"
-        self.policy_rag_k = app_config["document_rag_pdf"]["k"]
-        self.policy_rag_collection_name = app_config["document_rag_pdf"]["collection_name"]
+        self.user_rag_embedding_model = app_config["document_rag_pdf"]["embedding_model"]
+        self.user_rag_k = app_config["document_rag_pdf"]["k"]
+        self.user_db_name = app_config["document_rag_pdf"]["db_name"]
+        self.user_rag_collection_name = app_config["document_rag_pdf"]["collection_name"]
+        self.user_rag_mongodb_url=os.getenv(app_config["document_rag_pdf"]["mongodb_URL"])
 
+        # Document RAG Admin configs
+        self.admin_rag_llm_temperature = float(
+            app_config["document_rag_pdfAdmin"]["llm_temperature"])
+        self.admin_rag_embedding_model = app_config["document_rag_pdfAdmin"]["embedding_model"]
+        self.admin_db_name = app_config["document_rag_pdfAdmin"]["db_name"]
+        self.admin_rag_k = app_config["document_rag_pdfAdmin"]["k"]
+        self.admin_rag_collection_name = app_config["document_rag_pdfAdmin"]["collection_name"]
+        self.admin_rag_mongodb_url=os.getenv(app_config["document_rag_pdfAdmin"]["mongodb_URL"])
+        
         # History RAG configs
         self.history_rag_llm_temperature = float(
             app_config["chatbot_history"]["llm_temperature"])

@@ -7,12 +7,24 @@ document_rag_pdf:
   llm: gpt-4o-mini
   collection_name: rag-docs
   db_name: docpdf
+  mongodb_URL: "MONGODB_URL"
   embedding_model: text-embedding-3-small
   k: 2
   llm_temperature: 0.0
   chunk_size: 500
   chunk_overlap: 100
 
+document_rag_pdfAdmin:
+  unstructured_docs: src/backend/media/data/docs/doc_pdf
+  llm: gpt-4o-mini
+  collection_name: rag-admin
+  mongodb_URL: "MONGODB_URL"
+  db_name: docpdf
+  embedding_model: text-embedding-3-small
+  k: 2
+  llm_temperature: 0.0
+  chunk_size: 500
+  chunk_overlap: 100
 
 chatbot_history:
   llm: gpt-4o-mini

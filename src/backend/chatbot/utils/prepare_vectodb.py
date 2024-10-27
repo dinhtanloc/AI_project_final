@@ -145,8 +145,8 @@ class PrepareVectorDB:
                 print(f"Đã xóa tệp {file_name} khỏi thư mục.")
             except Exception as e:
                 print(f"Lỗi khi xóa tệp {file_name}: {e}")
-            finally:
-                self.client.close()
+            # finally:
+            #     self.client.close()
         print("Quá trình xử lý hoàn tất.")
         print("Số lượng vectors trong MongoDB collection:", self.collection.count_documents({}), "\n\n")
 

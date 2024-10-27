@@ -8,7 +8,7 @@ from chatbot.model.tools.tool_tavily_search import load_tavily_search_tool
 from chatbot.model.tools.tool_sqlagent import query_stock_sqldb
 from chatbot.model.tools.load_tools_config import LoadToolsConfig
 from chatbot.model.tools.tool_ocr_img import ocr_and_lookup
-from chatbot.model.tools.tool_history import chat_with_history
+from chatbot.model.tools.tool_memory import chat_with_history
 from chatbot.model.tools.tool_history_mongodb import chat_with_history_with_db_using_mongodb
 from chatbot.model.agent_graph.agent_backend import State, BasicToolNode, route_tools, plot_agent_schema
 

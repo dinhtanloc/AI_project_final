@@ -19,7 +19,7 @@ TOOLS_CFG = LoadToolsConfig()
 graph = build_graph()
 # config = {"configurable": {"thread_id": TOOLS_CFG.thread_id}}
 
-create_directory("memory")
+# create_directory("memory")
 
 
 class ChatBot:
