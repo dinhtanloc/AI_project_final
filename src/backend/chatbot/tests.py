@@ -17,13 +17,11 @@ from rest_framework import status
 import uuid
 from datetime import datetime
 from typing import List, Tuple
-from .utils.memory import Memory
+from .model.utils.memory import Memory
 from .model.chatbot_backend import ChatBot 
-from .utils.load_config import LoadProjectConfig
+from backend.settings import PROJECT_CFG
 from .model.tools.load_tools_config import LoadToolsConfig
-# from model.tools.load_tools_config import LoadToolsConfig
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
-PROJECT_CFG = LoadProjectConfig()
 TOOLS_CFG = LoadToolsConfig()
 
 class TestChatBot(TestCase):

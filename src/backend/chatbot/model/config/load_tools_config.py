@@ -71,4 +71,4 @@ class LoadToolsConfig:
         self.thread_id = str(
             app_config["graph_configs"]["thread_id"])
         
-LoadToolsConfig()
+TOOLS_CFG = LoadToolsConfig()

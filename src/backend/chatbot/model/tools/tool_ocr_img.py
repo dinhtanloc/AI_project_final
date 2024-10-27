@@ -1,15 +1,14 @@
 from langchain_openai import OpenAIEmbeddings
 from langchain_core.tools import tool
-from chatbot.model.tools.load_tools_config import LoadToolsConfig
+from backend.chatbot.model.config.load_tools_config import TOOLS_CFG
 import pytesseract
 from PIL import Image
 import io
-from chatbot.utils.prepare_vectodb import PrepareVectorDB
+from chatbot.model.utils.prepare_vectodb import PrepareVectorDB
 import os
 from sentence_transformers import SentenceTransformer
 
 
-TOOLS_CFG = LoadToolsConfig()
 
 
 class OCRTool:
