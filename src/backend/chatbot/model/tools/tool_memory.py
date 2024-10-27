@@ -9,11 +9,10 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_openai import ChatOpenAI
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.runnables.history import RunnableWithMessageHistory
-from backend.chatbot.model.config.load_tools_config import TOOLS_CFG
+from chatbot.model.config.load_tools_config import TOOLS_CFG
 import pymongo
 import os
-from dotenv import find_dotenv, load_dotenv
-load_dotenv(find_dotenv())
+
 
 
 class HistoryAgent:

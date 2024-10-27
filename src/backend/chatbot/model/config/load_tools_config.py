@@ -1,9 +1,8 @@
 import os
 import yaml
-from dotenv import load_dotenv, find_dotenv
 from pyprojroot import here
+from backend.settings import PROJECT_CFG
 
-load_dotenv(find_dotenv())
 
 
 class LoadToolsConfig:
@@ -13,9 +12,9 @@ class LoadToolsConfig:
             app_config = yaml.load(cfg, Loader=yaml.FullLoader)
 
         # Set environment variables
-        os.environ['OPENAI_API_KEY'] = os.getenv("OPEN_API_KEY")
-        os.environ['TAVILY_API_KEY'] = os.getenv("TAVILY_API_KEY")
-        self.stock_db = os.getenv("POSTGRESQL_DBMS_KEY")
+        os.environ['OPENAI_API_KEY'] = PROJECT_CFG.openai
+        os.environ['TAVILY_API_KEY'] = PROJECT_CFG.tavily
+        self.stock_db = PROJECT_CFG.postgrest_dbms
 
 
         # Primary agent
@@ -33,7 +32,7 @@ class LoadToolsConfig:
         self.user_rag_k = app_config["document_rag_pdf"]["k"]
         self.user_db_name = app_config["document_rag_pdf"]["db_name"]
         self.user_rag_collection_name = app_config["document_rag_pdf"]["collection_name"]
-        self.user_rag_mongodb_url=os.getenv(app_config["document_rag_pdf"]["mongodb_URL"])
+        self.user_rag_mongodb_url=PROJECT_CFG.mongodb_uri
 
         # Document RAG Admin configs
         self.admin_rag_llm_temperature = float(
@@ -42,7 +41,7 @@ class LoadToolsConfig:
         self.admin_db_name = app_config["document_rag_pdfAdmin"]["db_name"]
         self.admin_rag_k = app_config["document_rag_pdfAdmin"]["k"]
         self.admin_rag_collection_name = app_config["document_rag_pdfAdmin"]["collection_name"]
-        self.admin_rag_mongodb_url=os.getenv(app_config["document_rag_pdfAdmin"]["mongodb_URL"])
+        self.admin_rag_mongodb_url=PROJECT_CFG.mongodb_uri
         
         # History RAG configs
         self.history_rag_llm_temperature = float(

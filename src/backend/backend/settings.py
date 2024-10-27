@@ -13,12 +13,10 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 from datetime import timedelta
-from dotenv import load_dotenv, find_dotenv
 from celery.schedules import crontab
-from config.load_config import LoadProjectConfig
+from .config import LoadProjectConfig
 PROJECT_CFG=LoadProjectConfig()
 
-load_dotenv(find_dotenv())
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -32,7 +30,7 @@ WEIGHTS_DIR = os.path.join(PRJ_DIR.parent, 'models','weights')
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('DJANGO_keys')
+SECRET_KEY = PROJECT_CFG.djangoprj
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -143,11 +141,11 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_name'),
-        'USER': os.getenv('DB_user'),
-        'PASSWORD': os.getenv('DB_password'),
+        'NAME': PROJECT_CFG.dbname,
+        'USER': PROJECT_CFG.dbuser,
+        'PASSWORD': PROJECT_CFG.dbpassword,
         'HOST': 'localhost',
-        'PORT': os.getenv('DB_port'),
+        'PORT': PROJECT_CFG.dbport,
     }
 }
 

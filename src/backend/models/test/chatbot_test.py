@@ -2,15 +2,15 @@ import unittest
 import sys
 import os
 import django
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 os.environ['DJANGO_SETTINGS_MODULE'] = 'backend.settings'  
 
 django.setup()
 from datetime import datetime
-from chatbot.model.utils.memory import Memory
+from models.utils.memory import Memory
 from typing import List, Tuple
 from chatbot.model.chatbot_backend import ChatBot 
-from backend.backend.config.load_config import LoadProjectConfig
+from chatbot.utils.load_config import LoadProjectConfig
 from chatbot.model.config.load_tools_config import LoadToolsConfig
 # from model.tools.load_tools_config import LoadToolsConfig
 from django.test import TestCase

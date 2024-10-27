@@ -19,10 +19,7 @@ from datetime import datetime
 from typing import List, Tuple
 from .model.utils.memory import Memory
 from .model.chatbot_backend import ChatBot 
-from backend.settings import PROJECT_CFG
-from .model.tools.load_tools_config import LoadToolsConfig
-os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
-TOOLS_CFG = LoadToolsConfig()
+
 
 class TestChatBot(TestCase):
     def setUp(self):

@@ -5,9 +5,7 @@ from langchain_core.tools import tool
 from backend.chatbot.model.config.load_tools_config import TOOLS_CFG
 from chatbot.model.utils.prepare_vectodb import PrepareVectorDB
 import os
-from dotenv import find_dotenv, load_dotenv
-load_dotenv(find_dotenv())
-# Load cấu hình từ file config
+
 
 class UserDocumentRAGTool:
     """

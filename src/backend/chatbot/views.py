@@ -6,15 +6,17 @@ from .models import ChatHistory
 from .serializers import ChatHistorySerializer
 import requests
 import os
-from dotenv import load_dotenv, find_dotenv
 from uuid import uuid4
 from .model.chatbot_backend import ChatBot
-from model.utils.prepare_vectodb import PrepareVectorDB
+from .model.utils.prepare_vectodb import PrepareVectorDB
 import pandas as pd
 from sqlalchemy import create_engine
 from backend.settings import PROJECT_CFG
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.core.files.storage import FileSystemStorage
+from backend.settings import MEDIA_ROOT
 
-load_dotenv(find_dotenv())
 
 # from model.chatbot_backend import ChatBot
 class ChatbotViewSet(viewsets.ViewSet):
@@ -65,32 +67,8 @@ class ChatbotViewSet(viewsets.ViewSet):
         serializer = ChatHistorySerializer(chat_history, many=True)
         return Response(serializer.data)
     
-    @action(detail=False, methods=['get'])
-    def performance(self, request):
-        """
-        Get chatbot performance data from LangSmith API.
-        """
-        langsmith_api_url = "https://api.smith.langchain.com/performance"
-        headers = {
-            'Authorization': f"Bearer {os.getenv('LANGCHAIN_API_KEY')}",
-            'Content-Type': 'application/json'
-        }
-
-        try:
-            response = requests.get(langsmith_api_url, headers=headers)
-            response.raise_for_status()  
-
-            return Response(response.json(), status=response.status_code)
-
-        except requests.exceptions.RequestException as e:
-            return Response({'error': str(e)}, status=500)
 
 
-
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.core.files.storage import FileSystemStorage
-from backend.settings import MEDIA_ROOT
 
 
 @csrf_exempt
@@ -167,7 +145,7 @@ def upload_admindata(request):
             return JsonResponse({'message': 'PDF file uploaded successfully', 'file_url': file_url}, status=200)
 
         elif file_type in ['text/csv', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']:
-            engine = create_engine(os.getenv('POSTGRESQL_DBMS_KEY'))
+            engine = create_engine(PROJECT_CFG.postgrest_dbms)
 
             # Đọc và xử lý file CSV hoặc XLSX
             file_path = os.path.join(save_path, filename)

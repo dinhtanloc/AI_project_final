@@ -5,10 +5,9 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain_openai import OpenAIEmbeddings
 from sentence_transformers import SentenceTransformer
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from dotenv import load_dotenv, find_dotenv
 import pymongo
-load_dotenv(find_dotenv())
-os.environ['OPENAI_API_KEY'] = os.getenv("OPEN_API_KEY")
+from backend.settings import PROJECT_CFG
+os.environ['OPENAI_API_KEY'] = PROJECT_CFG.openai
 
 with open(here("config/tools_config.yml")) as cfg:
     app_config = yaml.load(cfg, Loader=yaml.FullLoader)

@@ -11,7 +11,7 @@ from langchain_core.messages import AIMessage, ToolMessage, HumanMessage
 from datetime import datetime
 from langchain_core.prompts import ChatPromptTemplate
 from chatbot.model.tools.finance_toollists import tool_mapping, tools
-from backend.chatbot.model.config.load_tools_config import TOOLS_CFG
+from chatbot.model.config.load_tools_config import TOOLS_CFG
 import json
 
 class FinanceAgent:

@@ -9,11 +9,11 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_openai import ChatOpenAI
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.runnables.history import RunnableWithMessageHistory
-from backend.chatbot.model.config.load_tools_config import TOOLS_CFG
+from chatbot.model.config.load_tools_config import TOOLS_CFG
+from backend.settings import PROJECT_CFG
 import pymongo
 import os
-from dotenv import find_dotenv, load_dotenv
-load_dotenv(find_dotenv())
+
 
 
 class HistoryMongoDBAgent:
@@ -147,7 +147,7 @@ def chat_with_history_with_db_using_mongodb(query: str,user_id:str, thread_id: s
         llm=TOOLS_CFG.history_agent_llm,
         llm_temperature=TOOLS_CFG.history_agent_llm_temperature,
         thread_id=thread_id,
-        mongodb_uri=os.getenv('MONGODB_URL'), 
+        mongodb_uri=PROJECT_CFG.mongodb_uri, 
         user_id=user_id,
         db_name=TOOLS_CFG.history_rag_db_name,  
         collection_name=TOOLS_CFG.history_rag_collection_name

@@ -7,6 +7,7 @@ from chatbot.model.utils.prepare_vectodb import PrepareVectorDB
 import os
 
 
+
 class AdminDocumentRAGTool:
     """
     Một công cụ để truy xuất các tài liệu liên quan được tải lên bởi người quản trị, đội ngũ công ty, sử dụng phương pháp Tạo Dữ Liệu Tăng Cường Truy Xuất (RAG) với các vector embeddings.
