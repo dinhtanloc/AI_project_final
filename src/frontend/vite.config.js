@@ -3,12 +3,15 @@ import react from '@vitejs/plugin-react'
 import path from 'path';
 import dotenv from 'dotenv';
 
+
 // https://vitejs.dev/config/
 const envPath = path.resolve(__dirname, '../../.env');
 dotenv.config({ path: envPath });
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+  ],
   define: {
     'process.env': process.env,
   },
@@ -38,6 +41,11 @@ export default defineConfig({
       '@theme': path.resolve(__dirname, 'theme.js'),
 
     },
+  },
+  test: {
+    environment: 'jsdom', 
+    globals: true,
+    setupFiles: './src/setupTests.jsx',
   },
  
 })
