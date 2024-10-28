@@ -67,11 +67,11 @@ class PrepareVectorDB:
 
         try:
             self.client = pymongo.MongoClient(self.mongodb_uri)
+            self.db = self.client[self.db_name]
+            self.collection = self.db[self.collection_name]
             print("Connection to MongoDB successful")
         except pymongo.errors.ConnectionFailure as e:
             print(f"Connection failed: {e}")
-        self.db = self.client[self.db_name]
-        self.collection = self.db[self.collection_name]
 
    
 
@@ -104,34 +104,29 @@ class PrepareVectorDB:
         Trả về:
             None
         """
-        text_splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
-                chunk_size=self.chunk_size, chunk_overlap=self.chunk_overlap
-            )
-        doc_splits = text_splitter.split_documents(response)
-        for doc_split in doc_splits:
-                try:
-                    vector = self.embedding_model.encode(doc_split.page_content).tolist()
-                except Exception as e:
-                    print(f"Lỗi khi nhúng đoạn văn bản trong tệp{e}")
-                    continue
 
-                document = {
-                    "response": response,  
-                    "content": doc_split.page_content,
-                    "user_id": userid,
-                    "vector": vector,
-                }
-                try:
-                    self.collection.insert_one(document)
-                except Exception as e:
-                    print(f"Lỗi khi lưu document vào MongoDB: {e}")
-                    continue
+        try:
+            vector = self.embedding_model.encode(response).tolist()
+        except Exception as e:
+            print(f"Lỗi khi nhúng đoạn văn bản trong tệp{e}")
+
+        document = {
+            "type": "history",
+            "response": response,  
+            "content": response,
+            "user_id": userid,
+            "vector": vector,
+        }
+        try:
+            self.collection.insert_one(document)
+        except Exception as e:
+            print(f"Lỗi khi lưu document vào MongoDB: {e}")
 
         print("Hoàn thành nhúng và phản hồi vào MongoDB.")
 
 
 
-    def run(self):
+    def run(self, type):
         """
         Thực hiện logic chính để tạo và lưu các nhúng tài liệu vào MongoDB.
 
@@ -170,6 +165,7 @@ class PrepareVectorDB:
                     continue
 
                 document = {
+                    "type" : type,
                     "file_name": file_name,  
                     "content": doc_split.page_content,
                     "vector": vector,

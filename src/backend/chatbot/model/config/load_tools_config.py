@@ -33,6 +33,9 @@ class LoadToolsConfig:
         self.user_db_name = app_config["document_rag_pdf"]["db_name"]
         self.user_rag_collection_name = app_config["document_rag_pdf"]["collection_name"]
         self.user_rag_mongodb_url=PROJECT_CFG.mongodb_uri
+        self.user_doc_rag_chunk_overlap=app_config["document_rag_pdf"]["chunk_overlap"]
+        self.user_doc_rag_chunk_size=app_config["document_rag_pdf"]["chunk_size"]
+        self.user_doc_rag_unstructured_docs=app_config["document_rag_pdf"]["unstructured_docs"]
 
         # Document RAG Admin configs
         self.admin_rag_llm_temperature = float(

@@ -42,7 +42,6 @@ class ChatbotViewSet(viewsets.ViewSet):
             thread_id = request.data.get('thread_id', str(uuid4()))
             # thread_id = str(uuid4())  
             self.chatbots[user_id] = ChatBot(user_id=user_id, thread_id=thread_id)
-        print('ok')
         chatbot = self.chatbots[user_id]
         # _, updated_chat = ChatBot.respond(chatbot, user_message)
         # _, updated_chat = ''
@@ -74,22 +73,34 @@ class ChatbotViewSet(viewsets.ViewSet):
 @csrf_exempt
 def upload_file(request):
     if request.method == 'POST' and request.FILES:
-        uploaded_file = request.FILES['file']
+        uploaded_file = request.FILES['pdf_file']
         file_type = uploaded_file.content_type
+        print('lưu file chưa')
 
         if file_type == 'application/pdf':
             directory = 'pdf'
+            save_path = os.path.join(MEDIA_ROOT,'documents', directory)
+            os.makedirs(save_path, exist_ok=True)
+
+            fs = FileSystemStorage(location=save_path)
+            filename = fs.save(uploaded_file.name, uploaded_file)
+            file_url = fs.url(filename)
+            if file_type == 'application/pdf':
+                prepare_vectordb = PrepareVectorDB(
+                    doc_dir=PROJECT_CFG.userdata_docdir,
+                    chunk_size=PROJECT_CFG.userdata_chunksize,
+                    chunk_overlap=PROJECT_CFG.userdata_chunk_overlap,
+                    mongodb_uri=PROJECT_CFG.userdata_mongodb_uri,
+                    db_name=PROJECT_CFG.userdata_dbname, 
+                    collection_name=PROJECT_CFG.userdata_collection,  
+                )
+                prepare_vectordb.run(type="user")
+            return JsonResponse({'message': 'PDF file uploaded successfully', 'file_url': file_url}, status=200)
         elif file_type.startswith('image/'):
             directory = 'images'
         else:
             return JsonResponse({'error': 'Unsupported file type'}, status=400)
 
-        save_path = os.path.join(MEDIA_ROOT,'documents', directory)
-        os.makedirs(save_path, exist_ok=True)
-
-        fs = FileSystemStorage(location=save_path)
-        filename = fs.save(uploaded_file.name, uploaded_file)
-        file_url = fs.url(filename)
 
         return JsonResponse({'file_url': file_url}, status=200)
 
@@ -140,7 +151,7 @@ def upload_admindata(request):
                 db_name=PROJECT_CFG.admindata_dbname, 
                 collection_name=PROJECT_CFG.admindata_collection,  
             )
-            prepare_vectordb.run()
+            prepare_vectordb.run(type=directory)
             return JsonResponse({'message': 'PDF file uploaded successfully', 'file_url': file_url}, status=200)
 
         elif file_type in ['text/csv', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']:

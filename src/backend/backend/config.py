@@ -42,3 +42,9 @@ class LoadProjectConfig:
         self.admindata_collection=app_config["admindata"]["collection_name"]
         self.admindata_mongodb_uri = os.getenv('MONGODB_URL')
 
+        self.userdata_docdir= app_config["userdata"]["doc_dir"]
+        self.userdata_chunksize= app_config["userdata"]["chunk_size"]
+        self.userdata_chunk_overlap= app_config["userdata"]["chunk_overlap"]
+        self.userdata_dbname= app_config["userdata"]["db_name"]
+        self.userdata_collection=app_config["userdata"]["collection_name"]
+        self.userdata_mongodb_uri = os.getenv('MONGODB_URL')

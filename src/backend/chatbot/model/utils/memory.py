@@ -83,7 +83,7 @@ class Memory:
                 for item in Memory.cache
             ])
             for item in Memory.cache:
-                Memory.vectodb.save_history_response_vectodb(userid=item['user'].user_id, response=item['response'])
+                Memory.vectodb.save_history_response_vectodb(userid=item['user'], response=item['response'])
 
             Memory.cache.clear()
 
@@ -109,7 +109,7 @@ class Memory:
             user_instance = User.objects.get(id=user)
         except User.DoesNotExist:
             print(f"User with id {user} does not exist.")
-            return  # hoặc xử lý theo cách khác
+            return  
         chat_history = ChatHistory(
             user=user_instance,
             thread_id=thread_id,
@@ -118,6 +118,7 @@ class Memory:
             timestamp=datetime.now()
         )
         chat_history.save()
+        Memory.vectodb.save_history_response_vectodb(userid=user, response=response)
 
     @staticmethod
     def get_chat_history(user, thread_id: str) -> List:

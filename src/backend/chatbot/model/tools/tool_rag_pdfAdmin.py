@@ -42,12 +42,11 @@ class AdminDocumentRAGTool:
             doc_dir=TOOLS_CFG.user_doc_rag_unstructured_docs,
             chunk_size=TOOLS_CFG.user_doc_rag_chunk_size,
             chunk_overlap=TOOLS_CFG.user_doc_rag_chunk_overlap,
-            embedding_model=self.embedding_model,
             mongodb_uri=self.mongodb_uri,
             db_name=self.db_name,
             collection_name=collection_name
         )
-        print("Number of vectors in vectordb: ", self.vectordb.collection.count(), "\n\n")
+        # print("Number of vectors in vectordb: ", self.vectordb.collection.count(), "\n\n")
 
     def similarity_search(self, query: str, k: int = None):
         """
@@ -73,7 +72,7 @@ class AdminDocumentRAGTool:
             "$vectorSearch": {
                 "index": "vector_index",
                 "queryVector": query_vector,
-                "path": "embedding",
+                "path": "vector",
                 "numCandidates": 400,
                 "limit": k,
                 }
@@ -85,7 +84,6 @@ class AdminDocumentRAGTool:
 
         project_stage = {
             "$project": {
-                "_id": 0,
                 "content": 1,
                 "score": {
                     "$meta": "vectorSearchScore"
@@ -98,16 +96,17 @@ class AdminDocumentRAGTool:
         # Execute the search
         try:
             results = self.vectordb.collection.aggregate(pipeline)
-            self.vectordb.client.close()
+            return list(results)
+            # self.vectordb.client.close()
         except Exception as e:
             print(e)
-        return list(results)
+            return []
 
 
 
-@tool('lookup_user_document')
-def lookup_user_document(query: str) -> str:
-    """Tìm kiếm các tài liệu đã tải lên của người dùng để tìm thông tin liên quan dựa trên truy vấn."""
+@tool('lookup_admin_document')
+def lookup_admin_document(query: str) -> str:
+    """Tìm kiếm các tài liệu đã tải lên từ người quản trị cho mục đích huấn luyện để tìm thông tin liên quan dựa trên truy vấn."""
     rag_tool = AdminDocumentRAGTool(
         mongodb_uri= TOOLS_CFG.admin_rag_mongodb_url,
         db_name=TOOLS_CFG.admin_db_name,
@@ -116,4 +115,8 @@ def lookup_user_document(query: str) -> str:
     )
     results = rag_tool.similarity_search(query, k=rag_tool.k)
     # return "\n\n".join([doc.page_content for doc in docs])
-    return "\n\n".join(results)
+    search_result = ""
+    for result in results:
+        print('---result', result)
+        search_result += f"Content: {result.get('content', 'N/A')}\n"
+    return search_result

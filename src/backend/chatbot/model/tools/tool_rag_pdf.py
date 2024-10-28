@@ -40,12 +40,11 @@ class UserDocumentRAGTool:
             doc_dir=TOOLS_CFG.user_doc_rag_unstructured_docs,
             chunk_size=TOOLS_CFG.user_doc_rag_chunk_size,
             chunk_overlap=TOOLS_CFG.user_doc_rag_chunk_overlap,
-            embedding_model=self.embedding_model,
             mongodb_uri=self.mongodb_uri,
             db_name=self.db_name,
             collection_name=collection_name
         )
-        print("Number of vectors in vectordb: ", self.vectordb.collection.count(), "\n\n")
+        # print("Number of vectors in vectordb: ", self.vectordb.collection.count(), "\n\n")
 
     def similarity_search(self, query: str, k: int = None):
         """
@@ -71,7 +70,7 @@ class UserDocumentRAGTool:
             "$vectorSearch": {
                 "index": "vector_index",
                 "queryVector": query_vector,
-                "path": "embedding",
+                "path": "vector",
                 "numCandidates": 400,
                 "limit": k,
                 }
@@ -83,7 +82,6 @@ class UserDocumentRAGTool:
 
         project_stage = {
             "$project": {
-                "_id": 0,
                 "content": 1,
                 "score": {
                     "$meta": "vectorSearchScore"
@@ -113,5 +111,8 @@ def lookup_user_document(query: str) -> str:
         collection_name=TOOLS_CFG.user_rag_collection_name
     )
     results = rag_tool.similarity_search(query, k=rag_tool.k)
-    # return "\n\n".join([doc.page_content for doc in docs])
-    return "\n\n".join(results)
+    search_result = ""
+    for result in results:
+        print('---result', result)
+        search_result += f"Content: {result.get('content', 'N/A')}\n"
+    return search_result

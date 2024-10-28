@@ -413,15 +413,15 @@ JAZZMIN_SETTINGS = {
     "copyright": "www.desphixs.com",
     "topmenu_links": [
         {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
-        {"name": "React Admin", "url": "http://localhost:5173/admin", "new_window": False},
+        {"name": "Model Admin", "url": "http://localhost:5173/admin", "new_window": False},
     ],
     "usermenu_links": [
         {"name": "Profile", "url": "admin:auth_user_change", "permissions": ["auth.view_user"]},
-        # {"name": "React Admin", "url": "http://localhost:5173/admin", "new_window": False},
+        {"name": "Model Admin", "url": "http://localhost:5173/admin", "new_window": False},
     ],
     "custom_links": {
         "app_name": [
-            # {"name": "React Admin", "url": "http://localhost:5173/admin", "icon": "fas fa-external-link-alt", "permissions": ["auth.view_user"]},
+            {"name": "Model Admin", "url": "http://localhost:5173/admin", "icon": "fas fa-external-link-alt", "permissions": ["auth.view_user"]},
         ]
     },
     

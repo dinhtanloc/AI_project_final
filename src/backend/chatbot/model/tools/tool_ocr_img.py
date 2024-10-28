@@ -18,7 +18,7 @@ class OCRTool:
     k (int): Số lượng tài liệu lân cận gần nhất sẽ được truy xuất dựa trên sự tương đồng của truy vấn.
     """
 
-    def __init__(self, k:int) -> None:
+    def __init__(self, mongodb_uri:str, db_name:str, k: int, collection_name: str) -> None:
         """
         Khởi tạo công cụ OCRTool với cấu hình cần thiết.
 
@@ -29,12 +29,14 @@ class OCRTool:
         self.embedding_model = PROJECT_CFG.embedding_model
         # self.embedding_model_instance = OpenAIEmbeddings(model=self.embedding_model)
         self.k=k
+        self.mongodb_uri=mongodb_uri
+        self.db_name=db_name
+        self.collection_name=collection_name
         self.image_dir = 'document/image'
         self.vectordb = PrepareVectorDB(
             doc_dir=TOOLS_CFG.user_doc_rag_unstructured_docs,
             chunk_size=TOOLS_CFG.user_doc_rag_chunk_size,
             chunk_overlap=TOOLS_CFG.user_doc_rag_chunk_overlap,
-            embedding_model=self.embedding_model,
             mongodb_uri=self.mongodb_uri,
             db_name=self.db_name,
             collection_name=self.collection_name
@@ -112,7 +114,7 @@ class OCRTool:
             "$vectorSearch": {
                 "index": "vector_index",
                 "queryVector": query_vector,
-                "path": "embedding",
+                "path": "vector",
                 "numCandidates": 400,
                 "limit": k,
                 }
@@ -124,7 +126,6 @@ class OCRTool:
 
         project_stage = {
             "$project": {
-                "_id": 0,
                 "content": 1,
                 "score": {
                     "$meta": "vectorSearchScore"
@@ -142,12 +143,19 @@ class OCRTool:
 @tool('ocr_and_lookup')
 def ocr_and_lookup(query: str) -> str:
     """Thực hiện OCR trên hình ảnh và tìm kiếm tài liệu liên quan dựa trên văn bản đã trích xuất."""
-    ocr_tool = OCRTool(k=TOOLS_CFG.user_doc_rag_k)
+    ocr_tool = OCRTool(
+        mongodb_uri= TOOLS_CFG.user_rag_mongodb_url,
+        db_name=TOOLS_CFG.user_db_name,
+        k=TOOLS_CFG.user_rag_k,
+        collection_name=TOOLS_CFG.user_rag_collection_name)
     extracted_texts = ocr_tool.extract_images()
     combined_text = ' '.join(extracted_texts)
     prompt = f"{query} {combined_text}"
     # vector = ocr_tool.embed_text(extracted_text)
     results = ocr_tool.similarity_search(prompt, k=ocr_tool.k)
 
-    return "\n\n".join(results)
-    # return "\n\n".join([doc.page_content for doc in results])
+    search_result = ""
+    for result in results:
+        print('---result', result)
+        search_result += f"Content: {result.get('content', 'N/A')}\n"
+    return search_result

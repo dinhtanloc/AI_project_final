@@ -59,7 +59,7 @@ class BasicToolNode:
             )
             outputs.append(
                 ToolMessage(
-                    content=json.dumps(tool_result),
+                    content=json.dumps(tool_result, ensure_ascii=False),
                     name=tool_call["name"],
                     tool_call_id=tool_call["id"],
                 )

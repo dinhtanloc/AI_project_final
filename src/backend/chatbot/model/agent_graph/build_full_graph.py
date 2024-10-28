@@ -4,6 +4,7 @@ from langchain_openai import ChatOpenAI
 # from agent_graph.tool_chinook_sqlagent import query_chinook_sqldb
 from chatbot.model.tools.tool_finance_knowledge import query_stock_logic
 from chatbot.model.tools.tool_rag_pdf import lookup_user_document
+from chatbot.model.tools.tool_rag_pdfAdmin import lookup_admin_document
 from chatbot.model.tools.tool_tavily_search import load_tavily_search_tool
 from chatbot.model.tools.tool_sqlagent import query_stock_sqldb
 from chatbot.model.config.load_tools_config import LoadToolsConfig
@@ -53,14 +54,16 @@ def build_graph():
     graph_builder = StateGraph(State)
     # Load tools with their proper configs
     search_tool = load_tavily_search_tool(tavily_search_max_results=TOOLS_CFG.tavily_search_max_results)
-    tools = [search_tool,
+    tools = [
+            lookup_admin_document,
             lookup_user_document,
             query_stock_logic,
             query_stock_sqldb,
             chat_with_history,
             chat_with_history_with_db_using_mongodb,
             # load_tavily_search_tool,
-            ocr_and_lookup
+            ocr_and_lookup,
+            search_tool,
              ]
     # Tell the LLM which tools it can call
     primary_llm_with_tools = primary_llm.bind_tools(tools)
@@ -72,14 +75,15 @@ def build_graph():
     graph_builder.add_node("chatbot", chatbot)
     tool_node = BasicToolNode(
         tools=[
-            search_tool,
+            lookup_admin_document,
             lookup_user_document,
             query_stock_logic,
             query_stock_sqldb,
             chat_with_history,
             chat_with_history_with_db_using_mongodb,
             # load_tavily_search_tool,
-            ocr_and_lookup
+            ocr_and_lookup,
+            search_tool,
         ])
     graph_builder.add_node("tools", tool_node)
     # The `tools_condition` function returns "tools" if the chatbot asks to use a tool, and "__end__" if
