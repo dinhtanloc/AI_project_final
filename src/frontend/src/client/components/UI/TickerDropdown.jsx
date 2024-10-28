@@ -18,6 +18,7 @@ const TickerDropdown = (props) => {
     const ListVN30 = async () => {
       try {
         const res = await company.get("/stock/stocktracking/list_companyVN30/");
+        console.log(res)
         setTicker(res.data.companies)
       } catch (error) {
           console.error('Có lỗi xảy ra khi truy cập dữ liệu:', error);

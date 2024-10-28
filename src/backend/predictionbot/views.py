@@ -116,8 +116,8 @@ class StockDataViewSet(viewsets.ViewSet):
             'predict_value': None 
         })
         
-        print(predictions)
-        print(predictions.shape)
+        # print(predictions)
+        # print(predictions.shape)
 
         for i in range(num_predictions):
             predicted_date = df['date'].iloc[-1] + timedelta * (i + 1) 
@@ -210,16 +210,16 @@ class StockDataViewSet(viewsets.ViewSet):
         print('scaled',scaled_data)
         test_data = scaled_data[training_data_len - 60:, :]
         x_test, y_test = self.prepare_test_data(test_data, dataset, training_data_len)
-        print(x_test)
+        # print(x_test)
         predictions = model.predict(x_test)
-        print(predictions)
+        # print(predictions)
         predictions = scaler.inverse_transform(predictions)
         rmse = np.sqrt(np.mean((predictions - y_test) ** 2))
         train = data[:training_data_len]
         train['timeTrain'] = time[:training_data_len]
-        print(train.isnull().sum())
+        # print(train.isnull().sum())
         valid = data[training_data_len:]
-        print(valid.isnull().sum())
+        # print(valid.isnull().sum())
         valid['Predictions'] = predictions
         valid['timeValid'] = time[training_data_len:]
         last_60_days = data[-60:].values
@@ -233,8 +233,8 @@ class StockDataViewSet(viewsets.ViewSet):
         pred_price = np.nan_to_num(pred_price, nan=0.0, posinf=0.0, neginf=0.0)
         # train = np.nan_to_num(train, nan=0.0, posinf=0.0, neginf=0.0)
         # valid = np.nan_to_num(valid, nan=0.0, posinf=0.0, neginf=0.0)
-        print(np.isinf(rmse))
-        print(np.isinf(pred_price))
+        # print(np.isinf(rmse))
+        # print(np.isinf(pred_price))
         return pred_price, rmse, train, valid
 
     def prepare_training_data(self, train_data):

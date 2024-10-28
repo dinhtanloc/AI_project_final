@@ -70,11 +70,14 @@ const Routers = () => {
           <Route path="/blogs/:slug" element={<BlogDetails />} />
           <Route path="/about" element={<About />} />
           <Route path="/rada" element={<RadarChart />} />
-          <Route path="/stock-market" element={<Market /> } />
+          {/* <Route path="/stock-market" element={<Market /> } /> */}
           <Route path="/table" element={<TableComponent />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/stock-dashboard" element={<StockDashboard />} />
      
+          <Route exact path='/stock-market' element={<PrivateRoute/>}>
+            <Route exact path='/stock-market'element={<Market />}/>
+          </Route>
           <Route exact path='/chatbot/' element={<PrivateRoute/>}>
             <Route exact path='/chatbot/'element={<ChatbotPage />}/>
           </Route>
