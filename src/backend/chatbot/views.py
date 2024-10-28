@@ -132,7 +132,6 @@ def upload_admindata(request):
         file_url = fs.url(filename)
 
         if file_type == 'application/pdf':
-            print('ok')
             prepare_vectordb = PrepareVectorDB(
                 doc_dir=PROJECT_CFG.admindata_docdir,
                 chunk_size=PROJECT_CFG.admindata_chunksize,
@@ -146,13 +145,11 @@ def upload_admindata(request):
 
         elif file_type in ['text/csv', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']:
             engine = create_engine(PROJECT_CFG.postgrest_dbms)
-
-            # Đọc và xử lý file CSV hoặc XLSX
             file_path = os.path.join(save_path, filename)
             try:
                 if file_type == 'text/csv':
                     data = pd.read_csv(file_path)
-                else:  # file_type là XLSX
+                else:  
                     data = pd.read_excel(file_path)
 
                 # Logic xử lý data

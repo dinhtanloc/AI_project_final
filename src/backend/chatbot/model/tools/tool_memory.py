@@ -17,7 +17,7 @@ import os
 
 class HistoryAgent:
     """
-    Quản lý lịch sử hội thoại cho chatbot, ghi nhớ và xử lý tin nhắn từ người dùng để duy trì ngữ cảnh.
+    Quản lý lịch sử hội thoại cho chatbot, ghi nhớ và xử lý tin nhắn từ người dùng để duy trì ngữ cảnh trong cùng một phiên chat. Tin nhắn lịch sử không thể lưu trữ từ phiên này sang phiên khác
 
     Thuộc tính:
         history_agent_llm (ChatOpenAI): Mô hình ngôn ngữ dùng để tạo phản hồi.

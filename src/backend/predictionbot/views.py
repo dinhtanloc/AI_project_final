@@ -85,8 +85,14 @@ class StockDataViewSet(viewsets.ViewSet):
 
         x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))
 
-        model = self.create_model(x_train) 
-        model.load_weights(f'{MODEL_WEIGHTS_PATH}/model_weights_{cat}.weights.h5')
+        model = self.create_model(x_train)
+        try:
+            model.load_weights(f'{MODEL_WEIGHTS_PATH}/model_weights_{cat}.weights.h5')
+        except Exception as e:
+            print(e)
+            return Response({"error": f"No model for {interval}"},
+                                status=status.HTTP_400_BAD_REQUEST)
+
         
         last_60_days = scaled_data[-num_observations:]  
         predictions = []

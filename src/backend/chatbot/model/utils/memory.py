@@ -4,6 +4,8 @@ from typing import List
 from datetime import datetime, date
 from chatbot.models import ChatHistory
 from accounts.models import User
+from chatbot.model.utils.prepare_vectodb import PrepareVectorDB
+from chatbot.model.config.load_tools_config import TOOLS_CFG
 class Memory:
     """
         Lớp này chịu trách nhiệm xử lý việc lưu trữ lịch sử hội thoại của chatbot.
@@ -28,6 +30,14 @@ class Memory:
                 Sau khi ghi xong, bộ nhớ tạm thời sẽ được xóa để giải phóng bộ nhớ.
       """
     cache = []
+    vectodb=PrepareVectorDB(
+                doc_dir='',
+                chunk_size=500,
+                chunk_overlap=100,
+                mongodb_uri=TOOLS_CFG.admin_rag_mongodb_url,
+                db_name=TOOLS_CFG.history_rag_db_name, 
+                collection_name=TOOLS_CFG.history_rag_collection_name,  
+            )
 
     @staticmethod
     def write_chat_history_to_cache(gradio_chatbot: List, thread_id: str, user) -> None:
@@ -72,6 +82,9 @@ class Memory:
                 )
                 for item in Memory.cache
             ])
+            for item in Memory.cache:
+                Memory.vectodb.save_history_response_vectodb(userid=item['user'].user_id, response=item['response'])
+
             Memory.cache.clear()
 
 

@@ -35,7 +35,8 @@ class TestChatBot(TestCase):
             "Năm 2024 có những sự kiện gì nổi bật đối với công ty mã A32?", 
             "Hôm nay thời tiết như thế nào?", 
             "Hiện nay, một danh mục đầu tư của tôi bao gồm các mã cổ phiếu của sàn VNINDEX như là AAA, A32 và risk free state là 0.01. Tôi nên phân bổ vốn của mình như nào để tối ưu hóa danh mục đầu tư sao cho lợi nhuận được tối đa nhất trong chiến lược đầu tư dài hạn 6 tháng tới như thế nào?", 
-            "Hãy tìm kiếm trên mạng, Vnstock là gì"
+            "Hãy tìm kiếm trên mạng, Vnstock là gì",
+            ""
         ]
         self.user_id = 1
         self.bot = ChatBot( thread_id=self.thread_id, user_id=self.user_id)

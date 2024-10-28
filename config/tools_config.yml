@@ -28,9 +28,8 @@ document_rag_pdfAdmin:
 
 chatbot_history:
   llm: gpt-4o-mini
-  collection_name: rag_history
+  collection_name: rag-history
   db_name: docpdf
-  # embedding_model: text-embedding-3-small
   k: 2
   llm_temperature: 0.0
   chunk_size: 500

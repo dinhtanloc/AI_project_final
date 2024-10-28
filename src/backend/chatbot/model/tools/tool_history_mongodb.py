@@ -18,7 +18,7 @@ import os
 
 class HistoryMongoDBAgent:
     """
-    Quản lý lịch sử hội thoại cho chatbot sử dụng mongoDB, ghi nhớ và xử lý tin nhắn từ người dùng để duy trì ngữ cảnh.
+    Quản lý lịch sử hội thoại cho chatbot sử dụng mongoDB, ghi nhớ và xử lý tin nhắn từ người dùng để duy trì ngữ cảnh. Cho dù không cùng một phiên, chatbot vẫn có khả năng trích xuất tin nhắn lịch sử từ cùng một người dùng, để trò chuyện về chủ đề trước đó
 
     Thuộc tính:
         history_agent_llm (ChatOpenAI): Mô hình ngôn ngữ dùng để tạo phản hồi.
