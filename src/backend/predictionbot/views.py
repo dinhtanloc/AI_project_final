@@ -51,8 +51,8 @@ class StockDataViewSet(viewsets.ViewSet):
         scaled_data = scaler.fit_transform(dataset)
 
         if interval == '1m':
-            num_predictions = 60 
-            num_observations = 60 
+            num_predictions = 60
+            num_observations = 5 
             timedelta = pd.Timedelta(minutes=1) 
             cat='1min' 
         elif interval == '1D':
@@ -87,6 +87,7 @@ class StockDataViewSet(viewsets.ViewSet):
 
         model = self.create_model(x_train)
         try:
+            print('chạy được tới đây')
             model.load_weights(f'{MODEL_WEIGHTS_PATH}/model_weights_{cat}.weights.h5')
         except Exception as e:
             print(e)
@@ -156,7 +157,7 @@ class StockDataViewSet(viewsets.ViewSet):
 
             df = self.stock.quote.history(start=start, end=end, interval=interval)
             df.reset_index(inplace=True)
-            print(df)
+            # print(df)
 
             df.rename(columns={'time': 'date'}, inplace=True)
             df.rename(columns={'close': 'value'}, inplace=True)
@@ -164,17 +165,6 @@ class StockDataViewSet(viewsets.ViewSet):
 
 
             pred_price, rmse, train, valid = self.make_predictions(df,interval)
-            print('khúc này chưa có lỗi')
-            print( {
-
-                    'prices': df['value'],
-                    "time": df['date'],
-                    "train": train,
-                    "valid": valid,
-                    "price": pred_price,
-                    "rmse": rmse
-                })
-            print({"rmse": round(rmse,2)})
             rmse=round(rmse,2)
             return Response(
                 {
@@ -213,19 +203,14 @@ class StockDataViewSet(viewsets.ViewSet):
         else:
             cat=interval
         model.save_weights(f'{MODEL_WEIGHTS_PATH}/model_weights_{cat}.weights.h5')
-        print('scaled',scaled_data)
         test_data = scaled_data[training_data_len - 60:, :]
         x_test, y_test = self.prepare_test_data(test_data, dataset, training_data_len)
-        # print(x_test)
         predictions = model.predict(x_test)
-        # print(predictions)
         predictions = scaler.inverse_transform(predictions)
         rmse = np.sqrt(np.mean((predictions - y_test) ** 2))
         train = data[:training_data_len]
         train['timeTrain'] = time[:training_data_len]
-        # print(train.isnull().sum())
         valid = data[training_data_len:]
-        # print(valid.isnull().sum())
         valid['Predictions'] = predictions
         valid['timeValid'] = time[training_data_len:]
         last_60_days = data[-60:].values

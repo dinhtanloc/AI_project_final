@@ -166,7 +166,6 @@ class StockTracking(viewsets.ViewSet):
     #     return Response({'price_data': df[['value','date']].to_dict(orient='records'), 'company':df.name}, status=status.HTTP_200_OK)
     @action(detail=False, methods=['post'])
     def historicalclosedata(self, request):
-        # Lấy các tham số từ request body
         symbol = request.data.get('symbol')
         start = request.data.get('start') 
         end = request.data.get('end', datetime.now().strftime('%Y-%m-%d'))
@@ -174,14 +173,16 @@ class StockTracking(viewsets.ViewSet):
         print(f"{start}-----{end}-----------{interval}")
         self.stock = get_vnstock_VCI(symbol) 
 
-        # Gọi API lấy dữ liệu lịch sử giá cổ phiếu
+        
         df = self.stock.quote.history(start=start, end=end, interval=interval)
+        if df.empty() and interval=="1m":
+            df = self.stock.quote.history(start=end, end=end, interval=interval)
 
-        # Đổi tên các cột cho phù hợp
+
+
         df.rename(columns={'time': 'date'}, inplace=True)
         df.rename(columns={'close': 'value'}, inplace=True)
 
-        # Trả về kết quả dưới dạng JSON
         return Response(
             {'price_data': df[['value', 'date']].to_dict(orient='records'), 'company': df.name},
             status=status.HTTP_200_OK

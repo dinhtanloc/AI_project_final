@@ -32,7 +32,7 @@ class OCRTool:
         self.mongodb_uri=mongodb_uri
         self.db_name=db_name
         self.collection_name=collection_name
-        self.image_dir = 'document/image'
+        self.image_dir = 'documents/images'
         self.vectordb = PrepareVectorDB(
             doc_dir=TOOLS_CFG.user_doc_rag_unstructured_docs,
             chunk_size=TOOLS_CFG.user_doc_rag_chunk_size,
