@@ -12,7 +12,16 @@ class AdminDocumentRAGTool:
     Một công cụ để truy xuất các tài liệu liên quan được tải lên bởi người quản trị, đội ngũ công ty, sử dụng phương pháp Tạo Dữ Liệu Tăng Cường Truy Xuất (RAG) với các vector embeddings.
 
     Công cụ này sử dụng một mô hình embedding của OpenAI đã được huấn luyện trước để chuyển đổi các truy vấn thành các biểu diễn dạng vector. Các vector này sau đó được sử dụng để truy vấn cơ sở dữ liệu vector MongoDB nhằm truy xuất top-k tài liệu hoặc mục nhập có liên quan nhất từ một bộ sưu tập cụ thể.
-    Công cụ này giúp cho admin có thể cung cấp và bổ sung kiến thức cho chatbot một cách nhanh chóng và gọn lẹ. Dữ liệu trong đây có thể được chia sẻ cho tất cả người dùng
+    Công cụ này giúp cho admin có thể cung cấp và bổ sung kiến thức cho chatbot một cách nhanh chóng và gọn lẹ. Dữ liệu trong đây có thể được chia sẻ cho tất cả người dùng.
+    Dữ liệu trong cơ sở dữ liệu MongoDB sẽ được trả về theo cấu trúc sau:
+        document = {
+                "type"(str) : Phân loại  trong cơ sở dữ liệu, nếu type=user thì dữ liệu trong cơ sở dữ liệu sẽ được bảo mật với nhau, nếu type="admin" thì dữ liệu có thể được phân bổ rộng rãi 
+                "filetype" (str): Định dạng loại dữ liệu, "img" hoặc "pdf",
+                "file_name" (str): Tên file được lưu dô cơ sở dữ liệu
+                "content" (str): Nội dung văn bản được lưu
+                "user_id" (int): mã số user, nếu type="admin" thì user_id=0
+                "vector" (array): vector database
+        }
 
     Các thuộc tính:
     embedding_model (str): Tên của mô hình embedding OpenAI được sử dụng để tạo ra các biểu diễn vector của các truy vấn.

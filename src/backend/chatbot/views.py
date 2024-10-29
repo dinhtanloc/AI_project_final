@@ -16,6 +16,11 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.files.storage import FileSystemStorage
 from backend.settings import MEDIA_ROOT
+import pytesseract
+from PIL import Image
+from pyprojroot import here
+
+
 
 
 # from model.chatbot_backend import ChatBot
@@ -75,50 +80,60 @@ def upload_file(request):
     if request.method == 'POST' and request.FILES:
         uploaded_file = request.FILES['pdf_file']
         file_type = uploaded_file.content_type
-        print('lưu file chưa')
-
         if file_type == 'application/pdf':
             directory = 'pdf'
+            prepare_vectordb = PrepareVectorDB(
+                doc_dir=f"{PROJECT_CFG.userdata_docdir}/{directory}",
+                chunk_size=PROJECT_CFG.userdata_chunksize,
+                chunk_overlap=PROJECT_CFG.userdata_chunk_overlap,
+                mongodb_uri=PROJECT_CFG.userdata_mongodb_uri,
+                db_name=PROJECT_CFG.userdata_dbname, 
+                collection_name=PROJECT_CFG.userdata_collection,  
+            )
             save_path = os.path.join(MEDIA_ROOT,'documents', directory)
             os.makedirs(save_path, exist_ok=True)
-
             fs = FileSystemStorage(location=save_path)
             filename = fs.save(uploaded_file.name, uploaded_file)
             file_url = fs.url(filename)
-            if file_type == 'application/pdf':
-                prepare_vectordb = PrepareVectorDB(
-                    doc_dir=PROJECT_CFG.userdata_docdir,
-                    chunk_size=PROJECT_CFG.userdata_chunksize,
-                    chunk_overlap=PROJECT_CFG.userdata_chunk_overlap,
-                    mongodb_uri=PROJECT_CFG.userdata_mongodb_uri,
-                    db_name=PROJECT_CFG.userdata_dbname, 
-                    collection_name=PROJECT_CFG.userdata_collection,  
-                )
-                prepare_vectordb.run(type="user")
+            prepare_vectordb.run(userid=request.user.id,type="user")
+            try:
+                os.remove(f"{PROJECT_CFG.userdata_docdir}/{directory}/{filename}")
+                print(f"Đã xóa tệp {filename} khỏi thư mục.")
+            except Exception as e:
+                print(f"Lỗi khi xóa tệp {filename}: {e}")
             return JsonResponse({'message': 'PDF file uploaded successfully', 'file_url': file_url}, status=200)
         elif file_type.startswith('image/'):
             directory = 'images'
-        else:
-            return JsonResponse({'error': 'Unsupported file type'}, status=400)
+            prepare_vectordb = PrepareVectorDB(
+                doc_dir=f"{PROJECT_CFG.userdata_docdir}/{directory}",
+                chunk_size=PROJECT_CFG.userdata_chunksize,
+                chunk_overlap=PROJECT_CFG.userdata_chunk_overlap,
+                mongodb_uri=PROJECT_CFG.userdata_mongodb_uri,
+                db_name=PROJECT_CFG.userdata_dbname, 
+                collection_name=PROJECT_CFG.userdata_collection,  
+            )
+            save_path = os.path.join(MEDIA_ROOT,'documents', directory)
+            os.makedirs(save_path, exist_ok=True)
+            fs = FileSystemStorage(location=save_path)
+            filename = fs.save(uploaded_file.name, uploaded_file)
+            file_url = fs.url(filename)
+            prepare_vectordb.ocr(userid=request.user.id, type="user")
+            try:
+                os.remove(f"{PROJECT_CFG.userdata_docdir}/{directory}/{filename}")
+                print(f"Đã xóa tệp {filename} khỏi thư mục.")
+            except Exception as e:
+                print(f"Lỗi khi xóa tệp {filename}: {e}")
+            return JsonResponse({'message': 'PDF file uploaded successfully', 'file_url': file_url}, status=200)
+
+          
+    else:
+        return JsonResponse({'error': 'Unsupported file type'}, status=400)
 
 
-        return JsonResponse({'file_url': file_url}, status=200)
+        # return JsonResponse({'file_url': file_url}, status=200)
 
     return JsonResponse({'error': 'No file uploaded'}, status=400)
 
-# @csrf_exempt 
-# def upload_pdf(request):
-#     if request.method == 'POST' and request.FILES['pdf_file']:
-#         pdf_file = request.FILES['pdf_file']
-#         print(f'{MEDIA_ROOT}/documents')
-#         fs = FileSystemStorage(location=f'{MEDIA_ROOT}/documents')
-#         filename = fs.save(pdf_file.name, pdf_file)
-
-#         file_url = fs.url(filename)
-
-#         return JsonResponse({'file_url': file_url}, status=200)
-
-#     return JsonResponse({'error': 'No file uploaded'}, status=400)
 
 
 
@@ -135,7 +150,6 @@ def upload_admindata(request):
         file_type = uploaded_file.content_type
         directory = 'admin'
         save_path = os.path.join(MEDIA_ROOT, 'documents', directory)
-        print(save_path)
         os.makedirs(save_path, exist_ok=True)
 
         fs = FileSystemStorage(location=save_path)
@@ -163,7 +177,6 @@ def upload_admindata(request):
                 else:  
                     data = pd.read_excel(file_path)
 
-                # Logic xử lý data
                 rows, cols = data.shape
                 table_name = os.path.splitext(os.path.basename(file_path))[0]
                 data.to_sql(table_name, engine, if_exists='replace', index=False)

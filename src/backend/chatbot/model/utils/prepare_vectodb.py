@@ -6,6 +6,8 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 import pymongo
 from backend.settings import PROJECT_CFG
 os.environ['OPENAI_API_KEY'] = PROJECT_CFG.openai
+from PIL import Image
+import pytesseract
 
 with open(here("config/tools_config.yml")) as cfg:
     app_config = yaml.load(cfg, Loader=yaml.FullLoader)
@@ -112,6 +114,7 @@ class PrepareVectorDB:
 
         document = {
             "type": "history",
+            "filetype":"historical_response",
             "response": response,  
             "content": response,
             "user_id": userid,
@@ -124,9 +127,38 @@ class PrepareVectorDB:
 
         print("Hoàn thành nhúng và phản hồi vào MongoDB.")
 
+    def ocr(self,userid,type):
+        file_list = [fn for fn in os.listdir(here(self.doc_dir)) if fn.endswith('.png') or fn.endswith('.jpg')]
+        for file_name in file_list:
+            image = Image.open(self.path_maker(file_name, self.doc_dir))
+            extracted_text = pytesseract.image_to_string(image)
+            try:
+                vector = self.embedding_model.encode(extracted_text).tolist()
+            except Exception as e:
+                print(f"Lỗi khi nhúng đoạn văn bản trong tệp{e}")
+
+            document = {
+                "type": type,
+                "filetype":"img",
+                "file_name": file_name,
+                "content": extracted_text,
+                "user_id": userid,
+                "vector": vector,
+                }
+            try:
+                self.collection.insert_one(document)
+            except Exception as e:
+                print(f"Lỗi khi lưu document vào MongoDB: {e}")
+            try:
+                os.remove(self.path_maker(file_name, self.doc_dir))
+                print(f"Đã xóa tệp {file_name} khỏi thư mục.")
+            except Exception as e:
+                print(f"Lỗi khi xóa tệp {file_name}: {e}")
+
+            print("Hoàn thành nhúng và phản hồi vào MongoDB.")
 
 
-    def run(self, type):
+    def run(self, type, userid=0):
         """
         Thực hiện logic chính để tạo và lưu các nhúng tài liệu vào MongoDB.
 
@@ -163,11 +195,13 @@ class PrepareVectorDB:
                 except Exception as e:
                     print(f"Lỗi khi nhúng đoạn văn bản trong tệp {file_name}: {e}")
                     continue
-
+                
                 document = {
                     "type" : type,
+                    "filetype":"pdf",
                     "file_name": file_name,  
                     "content": doc_split.page_content,
+                    "user_id": userid,
                     "vector": vector,
                 }
                 try:

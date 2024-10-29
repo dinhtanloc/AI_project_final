@@ -15,7 +15,7 @@ admindata:
   collection_name: "rag-admin"
 
 userdata:
-  doc_dir: "src/frontend/public/media/documents/pdf"
+  doc_dir: "src/frontend/public/media/documents"
   chunk_size: 500
   chunk_overlap: 100
   db_name: "docpdf"
