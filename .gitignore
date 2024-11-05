@@ -12,5 +12,5 @@ Ngoc_Le.png
 *.bak
 *.dat
 *.dir
-*.pdf
+# *.pdf
 *.weights.h5
