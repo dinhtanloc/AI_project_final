@@ -29,7 +29,6 @@ class FinanceAgent:
         self.llm = ChatOpenAI(
             model=llm, temperature=llm_temperature)
         self.sql_agent_llm=self.llm.bind_tools(tools)
-        # Few-shot prompt examples
         self.examples = [
 
 
@@ -43,7 +42,6 @@ class FinanceAgent:
             AIMessage(content="Có thể thấy, sau khi chạy mô hình dự đoán của hệ thống, tình hình cổ phiếu sẽ có sự biến động khá cao. Như vậy dựa vào kết quả dự đoán tình hình từng mã sau 6 tháng tới, bạn cần phân bố đều vốn cá nhân 50% ứng với mỗi loại cổ phiếu, để có được lợi nhuận cao nhất", name="example_assistant1"),
 
         ]
-        # Prompt Template for few-shot
         self.system_role = f"""Bạn là một chuyên gia chơi chứng khoán trong lĩnh vực kinh tế đầu tư tại thị trường chứng khoán Việt Nam. Hôm nay là ngày {datetime.now().strftime('%Y-%m-%d')}. Sử dụng các tool được cung cấp như một ví dụ để đưa ra những lời khuyên hữu ích để người chơi mới tại Việt Nam lựa chọn và tối ưu hóa danh mục đầu tư, đầu tư chứng khoán thành công
         """
 
